@@ -15,6 +15,7 @@ dependencies:
   animated_splash_screen:
   cupertino_icons: ^1.0.2
   google_fonts: ^4.0.3
+  google_maps_flutter: ^2.2.5
 
 dev_dependencies:
   flutter_test:
@@ -29,5 +30,6 @@ flutter:
   uses-material-design: true
   assets:
     - images/
+    - images/icon/
 
  
