@@ -38,7 +38,8 @@ class _MapsState extends State<Maps> {
                      ],
                    ),
                    child: Icon(
-                       Icons.menu
+                       Icons.menu,
+                     size: 25,
                    ),
                  ),
                ),
