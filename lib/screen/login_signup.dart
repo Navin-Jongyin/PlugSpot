@@ -82,7 +82,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               Text(
                                 "SIGN IN",
                                 style: GoogleFonts.montserrat(
-                                  fontSize: 16,
+                                  fontSize: 17,
                                   fontWeight: FontWeight.w500,
                                   color: !isSignupScreen
                                       ? Palette.backgroundColor
