@@ -16,6 +16,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^4.0.3
   google_maps_flutter: ^2.2.5
+  qrscan: ^0.3.3
+  geolocator: ^9.0.2
+  lite_rolling_switch: ^1.0.1
 
 dev_dependencies:
   flutter_test:

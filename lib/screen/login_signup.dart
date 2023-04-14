@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/screen/homepage.dart';
+import 'package:plugspot/screen/maps.dart';
 import 'package:plugspot/screen/wallet.dart';
 
 class LoginSignupScreen extends StatefulWidget {
@@ -150,7 +151,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                 onTap: (){
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MyHomePage())
+                      MaterialPageRoute(builder: (context) => MapSample())
                   );
                 },
                 child: Container(
