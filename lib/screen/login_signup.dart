@@ -61,7 +61,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               duration: Duration(milliseconds: 300),
               curve: Curves.easeIn,
               padding: EdgeInsets.all(20),
-              height: isSignupScreen ? 450 : 330,
+              height: isSignupScreen ? 500 : 330,
               width: MediaQuery.of(context).size.width - 40,
               margin: EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
@@ -118,8 +118,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                     fontWeight: FontWeight.w500,
                                     color: isSignupScreen
                                         ? Palette.backgroundColor
-                                        : Palette.greyColor
-                                ),
+                                        : Palette.greyColor),
                               ),
                               if (isSignupScreen)
                                 Container(
@@ -143,16 +142,14 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           AnimatedPositioned(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeIn,
-            top: isSignupScreen ? 570 : 450,
+            top: isSignupScreen ? 620 : 450,
             right: 0,
             left: 0,
             child: Center(
               child: InkWell(
-                onTap: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MapSample())
-                  );
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MapSample()));
                 },
                 child: Container(
                   height: 50,
@@ -253,6 +250,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             Icons.lock,
             "Confirm Password",
             true,
+            false,
+          ),
+          buildTextField(
+            Icons.phone,
+            "Phone Number",
+            false,
             false,
           ),
         ],
