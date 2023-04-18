@@ -10,6 +10,8 @@ class MyCar extends StatefulWidget {
 }
 
 class _MyCarState extends State<MyCar> {
+  String brandValue = 'Select Brand';
+  String modelValue = 'Select Model';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,45 +29,51 @@ class _MyCarState extends State<MyCar> {
       ),
       body: Stack(
         children: [
-          Positioned(
-            top: 60,
-            right: 30,
-            left: 30,
-            child: Container(
-              height: 400,
-              decoration: BoxDecoration(
-                color: Palette.greyColor,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Column(
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 15),
-                    child: Text("My Car"),
-                  ),
-                  ImageIcon(
-                    AssetImage("images/icon/car.png"),
-                    size: 30,
-                    color: Palette.yellowTheme,
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        hintText: "Search",
-                        hintStyle: GoogleFonts.audiowide(fontSize: 18)),
-                  ),
-                  SizedBox(
-                    width: 150,
-                    height: 50,
-                    child: FloatingActionButton(
-                      onPressed: () {},
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
+                    margin: EdgeInsets.all(30),
+                    child: Text(
+                      "Add New Car",
+                      style: GoogleFonts.montserrat(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                  )
+                  ),
                 ],
               ),
-            ),
+              Container(
+                margin: EdgeInsets.only(left: 30, right: 30),
+                height: 300,
+                width: 400,
+                decoration: BoxDecoration(
+                    color: Palette.whiteBackgroundColor,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(1, 3),
+                          color: Palette.greyColor,
+                          blurRadius: 7,
+                          spreadRadius: 3),
+                    ]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                      child: Text(
+                        "Car Brand",
+                        style: GoogleFonts.montserrat(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+
+                  ],
+                ),
+              )
+            ],
           )
         ],
       ),

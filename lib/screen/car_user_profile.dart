@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/screen/change_password.dart';
 import 'package:plugspot/screen/edit_profile.dart';
 import 'package:plugspot/screen/login_signup.dart';
 
@@ -302,7 +303,9 @@ class _CarUserProfileState extends State<CarUserProfile> {
                   height: 50,
                   width: 300,
                   child: FloatingActionButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> ChangePassword()));
+                    },
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
