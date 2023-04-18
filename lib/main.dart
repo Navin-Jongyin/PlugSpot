@@ -14,20 +14,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      debugShowCheckedModeBanner: false,
+      home: AnimatedSplashScreen(
+        splash: Container(
+          child: Transform.scale(
+              scale: 1.5, child: Image.asset('images/PlugSpot_logonew.png')),
         ),
-        home: AnimatedSplashScreen(
-          splash: Container(
-            child: Transform.scale(
-                scale: 1.5, child: Image.asset('images/PlugSpot_logonew.png')),
-          ),
-          duration: 3000,
-          nextScreen: LoginSignupScreen(),
-          splashTransition: SplashTransition.scaleTransition,
-          backgroundColor: Palette.backgroundColor,
-        ));
+        duration: 3000,
+        nextScreen: LoginSignupScreen(),
+        splashTransition: SplashTransition.scaleTransition,
+        backgroundColor: Palette.backgroundColor,
+      ),
+    );
   }
 }

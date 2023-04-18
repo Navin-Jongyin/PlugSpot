@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/screen/edit_profile.dart';
+import 'package:plugspot/screen/login_signup.dart';
 
 class CarUserProfile extends StatefulWidget {
   const CarUserProfile({Key? key}) : super(key: key);
@@ -13,181 +15,63 @@ class _CarUserProfileState extends State<CarUserProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Palette.whiteBackgroundColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        iconTheme: IconThemeData(color: Palette.backgroundColor),
-        backgroundColor: Palette.yellowTheme,
-        title: Text(
-          "User Profile",
-          style: GoogleFonts.montserrat(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Palette.backgroundColor),
-        ),
-      ),
       body: Stack(
         children: [
           Positioned(
-            top: 70,
-            left: 30,
-            right: 30,
+            top: -800,
+            left: -500,
+            right: -500,
             child: Container(
-              height: 500,
+              height: 1000,
+              width: 1000,
               decoration: BoxDecoration(
-                color: Palette.whiteBackgroundColor,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(0, 2),
-                    blurRadius: 7.0,
-                    spreadRadius: 1,
-                  ),
-                ],
-              ),
+                  color: Palette.yellowTheme,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(0, 2),
+                      blurRadius: 7.0,
+                      spreadRadius: 1,
+                    ),
+                  ]),
+            ),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            child: Transform.translate(
+              offset: Offset(0, 120),
               child: Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 25),
-                    height: 120,
-                    width: 120,
+                    margin: EdgeInsets.only(bottom: 10),
+                    height: 130,
+                    width: 130,
                     decoration: BoxDecoration(
-                      image: DecorationImage(
+                        color: Palette.backgroundColor,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(0, 2),
+                            blurRadius: 7.0,
+                            spreadRadius: 1,
+                          ),
+                        ]),
+                    child: ClipOval(
+                      child: Image(
                         image: AssetImage("images/nicky.png"),
                         fit: BoxFit.cover,
                       ),
-                      shape: BoxShape.circle,
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 20, right: 20, bottom: 10, top: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.person,
-                                color: Palette.yellowTheme,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "Name",
-                                style: GoogleFonts.montserrat(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Palette.backgroundColor),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Text("Sample Firstname"),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.person,
-                                color: Palette.yellowTheme,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "Last Name",
-                                style: GoogleFonts.montserrat(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Palette.backgroundColor),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Text("Sample Lastname"),
-                        )
-                      ],
-                    ),
-                  ),
-                  Divider(),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.mail,
-                                color: Palette.yellowTheme,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "Email",
-                                style: GoogleFonts.montserrat(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Palette.backgroundColor),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Text("sample@email.com"),
-                        )
-                      ],
-                    ),
-                  ),
-                  Divider(),
-                  Container(
-                    margin: EdgeInsets.only(left: 20, right: 20, top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.phone,
-                                color: Palette.yellowTheme,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                "Phone",
-                                style: GoogleFonts.montserrat(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Palette.backgroundColor),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Text("Sample Lastname"),
-                        )
-                      ],
+                  Text(
+                    "Navin Jongyin",
+                    style: GoogleFonts.montserrat(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Palette.backgroundColor,
                     ),
                   ),
                 ],
@@ -195,23 +79,215 @@ class _CarUserProfileState extends State<CarUserProfile> {
             ),
           ),
           Positioned(
-            top: 490,
-            left: 60,
-            right: 60,
-            child: Container(
-              child: FloatingActionButton(
-                onPressed: () {},
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+            top: 70,
+            left: 30,
+            child: GestureDetector(
+              child: InkWell(
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Palette.backgroundColor,
+                  size: 25,
                 ),
-                backgroundColor: Palette.backgroundColor,
-                child: Text(
-                  "Edit Profile",
-                  style: GoogleFonts.montserrat(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Palette.yellowTheme,
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ),
+          Positioned(
+            top: 70,
+            right: 30,
+            child: GestureDetector(
+              child: InkWell(
+                child: Icon(
+                  Icons.logout,
+                  color: Palette.backgroundColor,
+                  size: 28,
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => LoginSignupScreen())));
+                },
+              ),
+            ),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            child: Transform.translate(
+              offset: Offset(0, 300),
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
+                    height: 50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.person,
+                              color: Palette.yellowTheme,
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              "First Name :",
+                              style: GoogleFonts.montserrat(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Palette.backgroundColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          "Test Name",
+                          style: GoogleFonts.montserrat(
+                              fontSize: 16, color: Palette.backgroundColor),
+                        ),
+                      ],
+                    ),
                   ),
+                  Divider(),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    height: 50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.person,
+                              color: Palette.yellowTheme,
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              "Last Name :",
+                              style: GoogleFonts.montserrat(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Palette.backgroundColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          "Test Last Name",
+                          style: GoogleFonts.montserrat(
+                              fontSize: 16, color: Palette.backgroundColor),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    height: 50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.mail,
+                              color: Palette.yellowTheme,
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              "Email :",
+                              style: GoogleFonts.montserrat(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Palette.backgroundColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          "Test@gmail.com",
+                          style: GoogleFonts.montserrat(
+                            fontSize: 16,
+                            color: Palette.backgroundColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    height: 50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.phone,
+                              color: Palette.yellowTheme,
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              "Mobile No. :",
+                              style: GoogleFonts.montserrat(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Palette.backgroundColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          "0812345678",
+                          style: GoogleFonts.montserrat(
+                            fontSize: 16,
+                            color: Palette.backgroundColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider()
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: 700,
+            left: 100,
+            right: 100,
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditProfile(),
+                  ),
+                );
+              },
+              elevation: 10,
+              backgroundColor: Palette.yellowTheme,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                "Edit Profile",
+                style: GoogleFonts.montserrat(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Palette.backgroundColor,
                 ),
               ),
             ),

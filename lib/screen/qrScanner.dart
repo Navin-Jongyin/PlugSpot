@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:plugspot/config/palette.dart';
+
 class QRScanner extends StatefulWidget {
   const QRScanner({Key? key}) : super(key: key);
 
@@ -11,9 +13,11 @@ class _QRScannerState extends State<QRScanner> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            "QR Scanner"
-        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        automaticallyImplyLeading: true,
+        iconTheme: IconThemeData(color: Palette.yellowTheme),
+        title: Text("QR Scanner"),
       ),
     );
   }

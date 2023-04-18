@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:plugspot/screen/homepage.dart';
 import 'package:plugspot/screen/maps.dart';
 import 'package:plugspot/screen/wallet.dart';
 
@@ -48,7 +47,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                   fontSize: 40,
                                   color: Palette.whiteBackgroundColor))
                         ]),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -96,7 +95,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 Container(
                                   margin: EdgeInsets.only(top: 3),
                                   height: 2,
-                                  width: 55,
+                                  width: 100,
                                   color: Palette.yellowTheme,
                                 )
                             ],
@@ -124,7 +123,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 Container(
                                   margin: EdgeInsets.only(top: 3),
                                   height: 2,
-                                  width: 55,
+                                  width: 100,
                                   color: Palette.yellowTheme,
                                 )
                             ],

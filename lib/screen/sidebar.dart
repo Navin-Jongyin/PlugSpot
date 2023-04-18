@@ -18,6 +18,7 @@ class _SideBarState extends State<SideBar> {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
+        physics: NeverScrollableScrollPhysics(),
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
@@ -113,7 +114,7 @@ class _SideBarState extends State<SideBar> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 10),
+            margin: EdgeInsets.only(bottom: 220),
             child: ListTile(
               leading: ImageIcon(
                 AssetImage('images/icon/car.png'),
@@ -128,27 +129,6 @@ class _SideBarState extends State<SideBar> {
                     fontWeight: FontWeight.w500),
               ),
               onTap: () => null,
-            ),
-          ),
-          Divider(),
-          Container(
-            margin: EdgeInsets.only(
-              bottom: 140,
-            ),
-            child: ListTile(
-              leading: Icon(
-                Icons.settings,
-                size: 35,
-                color: Palette.yellowTheme,
-              ),
-              title: Text(
-                "Account Setting",
-                style: GoogleFonts.montserrat(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Palette.backgroundColor,
-                ),
-              ),
             ),
           ),
           Container(
