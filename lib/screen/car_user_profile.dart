@@ -121,7 +121,7 @@ class _CarUserProfileState extends State<CarUserProfile> {
               child: Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.fromLTRB(20, 20, 20, 10),
+                    margin: EdgeInsets.fromLTRB(20, 20, 20, 5),
                     height: 50,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,7 +155,7 @@ class _CarUserProfileState extends State<CarUserProfile> {
                   ),
                   Divider(),
                   Container(
-                    margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
                     height: 50,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -189,7 +189,7 @@ class _CarUserProfileState extends State<CarUserProfile> {
                   ),
                   Divider(),
                   Container(
-                    margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
                     height: 50,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -225,7 +225,7 @@ class _CarUserProfileState extends State<CarUserProfile> {
                   ),
                   Divider(),
                   Container(
-                    margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    margin: EdgeInsets.fromLTRB(20, 5, 20, 5),
                     height: 50,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -265,31 +265,58 @@ class _CarUserProfileState extends State<CarUserProfile> {
             ),
           ),
           Positioned(
-            top: 700,
-            left: 100,
-            right: 100,
-            child: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditProfile(),
+            top: 640,
+            left: 70,
+            right: 70,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 50,
+                  width: 300,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditProfile(),
+                        ),
+                      );
+                    },
+                    elevation: 10,
+                    backgroundColor: Palette.yellowTheme,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      "Edit Profile",
+                      style: GoogleFonts.montserrat(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Palette.backgroundColor,
+                      ),
+                    ),
                   ),
-                );
-              },
-              elevation: 10,
-              backgroundColor: Palette.yellowTheme,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                "Edit Profile",
-                style: GoogleFonts.montserrat(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Palette.backgroundColor,
                 ),
-              ),
+                SizedBox(height: 20),
+                SizedBox(
+                  height: 50,
+                  width: 300,
+                  child: FloatingActionButton(
+                    onPressed: () {},
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    backgroundColor: Palette.backgroundColor,
+                    child: Text(
+                      "Password Settings",
+                      style: GoogleFonts.montserrat(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Palette.yellowTheme),
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
         ],
