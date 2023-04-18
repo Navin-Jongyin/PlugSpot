@@ -5,6 +5,7 @@ import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/screen/car_user_profile.dart';
 import 'package:plugspot/screen/login_signup.dart';
+import 'package:plugspot/screen/my_car.dart';
 import 'package:plugspot/screen/wallet.dart';
 
 class SideBar extends StatefulWidget {
@@ -128,7 +129,14 @@ class _SideBarState extends State<SideBar> {
                     color: Palette.backgroundColor,
                     fontWeight: FontWeight.w500),
               ),
-              onTap: () => null,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyCar(),
+                  ),
+                );
+              },
             ),
           ),
           Container(
