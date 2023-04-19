@@ -40,6 +40,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Enter Current Password',
+                hintStyle: GoogleFonts.montserrat(fontSize: 16),
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
               ),
@@ -58,6 +59,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Enter New Password',
+                hintStyle: GoogleFonts.montserrat(fontSize: 16),
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
               ),
@@ -76,6 +78,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Confirm New Password',
+                hintStyle: GoogleFonts.montserrat(fontSize: 16),
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
               ),

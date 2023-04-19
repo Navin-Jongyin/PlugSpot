@@ -261,24 +261,39 @@ class _TopupState extends State<Topup> {
                   ),
                 ],
               ),
-              SizedBox(
-                height: 20,
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: "Enter Amount",
-                  prefixIcon: SizedBox(
-                    width: 15,
-                    height: 15,
-                    child: ImageIcon(
-                      AssetImage("images/icon/thaibaht.png"),
-
-                    ),
+              Container(
+                margin: EdgeInsets.fromLTRB(15, 20, 15, 20),
+                child: TextField(
+                  cursorColor: Palette.yellowTheme,
+                  decoration: InputDecoration(
+                    hintText: "Enter Amount",
+                    hintStyle: GoogleFonts.montserrat(
+                        fontSize: 16, fontWeight: FontWeight.w500),
+                    hintTextDirection: TextDirection.rtl,
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    prefixIcon: Icon(Icons.currency_bitcoin,
+                        color: Palette.yellowTheme, size: 30),
                   ),
+                  textAlign: TextAlign.right,
                 ),
               )
             ],
-          )
+          ),
+          SizedBox(
+            height: 150,
+          ),
+          Container(
+            height: 50,
+            width: 320,
+            margin: EdgeInsets.all(20),
+            child: FloatingActionButton(
+              onPressed: (){},
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              backgroundColor: Palette.yellowTheme,
+              child: Text('Top Up', style: GoogleFonts.montserrat(fontWeight: FontWeight.bold,fontSize: 20,color: Palette.backgroundColor),),
+            ),
+          ),
         ],
       ),
     );
