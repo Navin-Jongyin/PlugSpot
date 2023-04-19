@@ -10,7 +10,7 @@ import 'package:plugspot/screen/qrScanner.dart';
 import 'package:plugspot/screen/sidebar.dart';
 import 'package:plugspot/screen/wallet.dart';
 
-import 'car_user_profile.dart';
+import 'user_profile.dart';
 
 class MapSample extends StatefulWidget {
   const MapSample({Key? key}) : super(key: key);

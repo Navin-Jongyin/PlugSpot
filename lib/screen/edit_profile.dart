@@ -141,31 +141,6 @@ class _EditProfileState extends State<EditProfile> {
                     height: 10,
                   ),
                   Text(
-                    "Email",
-                    style: GoogleFonts.montserrat(
-                        fontSize: 16,
-                        color: Palette.backgroundColor,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    child: TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          hintText: "Email",
-                          hintStyle: GoogleFonts.montserrat(
-                              fontSize: 14, color: Palette.greyColor)),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
                     "Mobile No.",
                     style: GoogleFonts.montserrat(
                         fontSize: 16,

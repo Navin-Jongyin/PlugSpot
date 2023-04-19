@@ -261,7 +261,6 @@ class _TopupState extends State<Topup> {
                   ),
                 ],
               ),
-<<<<<<< HEAD
               Container(
                 margin: EdgeInsets.fromLTRB(15, 20, 15, 20),
                 child: TextField(
@@ -289,28 +288,17 @@ class _TopupState extends State<Topup> {
             width: 320,
             margin: EdgeInsets.all(20),
             child: FloatingActionButton(
-              onPressed: (){},
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              onPressed: () {},
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
               backgroundColor: Palette.yellowTheme,
-              child: Text('Top Up', style: GoogleFonts.montserrat(fontWeight: FontWeight.bold,fontSize: 20,color: Palette.backgroundColor),),
-=======
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          TextField(
-            decoration: InputDecoration(
-              hintText: "Enter Amount",
-              prefixIcon: SizedBox(
-                height: 5,
-                child: Icon(
-                  Icons.currency_yuan,
-                  color: Palette.yellowTheme,
-                  size: 30,
-                ),
+              child: Text(
+                'Top Up',
+                style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Palette.backgroundColor),
               ),
->>>>>>> 56f5c1c (edit)
             ),
           ),
         ],
