@@ -97,11 +97,11 @@ class _WalletState extends State<Wallet> {
                               style: GoogleFonts.montserrat(
                                   fontSize: 24,
                                   color: Palette.whiteBackgroundColor),
-                            )
+                            ),
                           ],
                         )
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -156,15 +156,16 @@ class _WalletState extends State<Wallet> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                      margin: EdgeInsets.fromLTRB(30, 0, 30, 20),
-                      child: Text(
-                        "Transactions",
-                        style: GoogleFonts.montserrat(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          color: Palette.backgroundColor,
-                        ),
-                      )),
+                    margin: EdgeInsets.fromLTRB(30, 0, 30, 20),
+                    child: Text(
+                      "Transactions",
+                      style: GoogleFonts.montserrat(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: Palette.backgroundColor,
+                      ),
+                    ),
+                  ),
                 ],
               )
             ],
