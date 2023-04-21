@@ -116,7 +116,7 @@ class _SideBarState extends State<SideBar> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 220),
+            margin: EdgeInsets.only(bottom: 270),
             child: ListTile(
               leading: ImageIcon(
                 AssetImage('images/icon/car.png'),
@@ -138,35 +138,6 @@ class _SideBarState extends State<SideBar> {
                   ),
                 );
               },
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(right: 10, bottom: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  "Switch Mode",
-                  style: GoogleFonts.montserrat(
-                      fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CupertinoSwitch(
-                    trackColor: Palette.yellowTheme,
-                    activeColor: Palette.yellowTheme,
-                    value: _isSwitchedOn,
-                    onChanged: (value) {
-                      setState(() {
-                        _isSwitchedOn = value;
-                      });
-                      if (value) {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Wallet()));
-                      }
-                    }),
-              ],
             ),
           ),
           Divider(),
