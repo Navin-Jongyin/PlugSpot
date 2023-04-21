@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/screen/maps.dart';
+import 'package:plugspot/screen/selectRole.dart';
 import 'package:plugspot/screen/wallet.dart';
 
 class LoginSignupScreen extends StatefulWidget {
@@ -26,7 +27,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             right: 0,
             left: 0,
             child: Container(
-              padding: EdgeInsets.only(top: 97),
+              padding: EdgeInsets.only(top: 120),
               height: 380,
               decoration: BoxDecoration(
                 color: Palette.backgroundColor,
@@ -60,7 +61,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               duration: Duration(milliseconds: 300),
               curve: Curves.easeIn,
               padding: EdgeInsets.all(20),
-              height: isSignupScreen ? 500 : 330,
+              height: isSignupScreen ? 420 : 330,
               width: MediaQuery.of(context).size.width - 40,
               margin: EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
@@ -141,14 +142,19 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           AnimatedPositioned(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeIn,
-            top: isSignupScreen ? 620 : 450,
+            top: isSignupScreen ? 550 : 450,
             right: 0,
             left: 0,
             child: Center(
               child: InkWell(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MapSample()));
+                  if (isSignupScreen) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SelectRole()));
+                  } else {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MapSample()));
+                  }
                 },
                 child: Container(
                   height: 50,
@@ -249,12 +255,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             Icons.lock,
             "Confirm Password",
             true,
-            false,
-          ),
-          buildTextField(
-            Icons.phone,
-            "Phone Number",
-            false,
             false,
           ),
         ],
