@@ -15,7 +15,6 @@ class SideBar extends StatefulWidget {
 }
 
 class _SideBarState extends State<SideBar> {
-  bool _isSwitchedOn = false;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -116,7 +115,8 @@ class _SideBarState extends State<SideBar> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 270),
+            margin: EdgeInsets.only(bottom: 10),
+            alignment: Alignment.bottomCenter,
             child: ListTile(
               leading: ImageIcon(
                 AssetImage('images/icon/car.png'),
@@ -140,7 +140,6 @@ class _SideBarState extends State<SideBar> {
               },
             ),
           ),
-          Divider(),
           Container(
             child: ListTile(
               leading: Icon(
