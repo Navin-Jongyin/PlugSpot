@@ -60,6 +60,7 @@ class MapSampleState extends State<MapSample> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
+      extendBodyBehindAppBar: true,
       drawer: SideBar(),
       body: Stack(
         children: [
@@ -90,7 +91,7 @@ class MapSampleState extends State<MapSample> {
             },
           ),
           Positioned(
-            top: 700,
+            bottom: 50,
             right: 20,
             child: Column(
               children: [
@@ -119,11 +120,9 @@ class MapSampleState extends State<MapSample> {
               ],
             ),
           ),
-          Positioned(
-            top: 70,
-            left: 25,
-            right: 25,
+          SafeArea(
             child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 25),
               padding: EdgeInsets.all(10),
               height: 60,
               decoration: BoxDecoration(
