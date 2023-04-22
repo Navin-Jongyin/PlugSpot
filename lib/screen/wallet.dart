@@ -15,161 +15,138 @@ class _WalletState extends State<Wallet> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: true,
+        backgroundColor: Palette.yellowTheme,
         iconTheme: IconThemeData(color: Palette.backgroundColor),
         title: Text(
-          "Wallet",
+          "Top up",
           style: GoogleFonts.montserrat(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Palette.backgroundColor,
-          ),
+              fontSize: 20,
+              color: Palette.backgroundColor,
+              fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Palette.yellowTheme,
       ),
-      body: Stack(
+      body: Column(
         children: [
-          Column(
-            children: [
-              Container(
-                margin: EdgeInsets.fromLTRB(15, 30, 15, 15),
-                padding: EdgeInsets.all(15),
-                height: 150,
-                width: 363,
-                decoration: BoxDecoration(
-                  color: Palette.backgroundColor,
-                  borderRadius: BorderRadius.circular(20),
+          Container(
+            margin: EdgeInsets.fromLTRB(25, 30, 25, 15),
+            padding: EdgeInsets.all(15),
+            height: 150,
+            width: 400,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Palette.backgroundColor,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Plug",
+                          style: GoogleFonts.audiowide(
+                            fontSize: 26,
+                            color: Palette.yellowTheme,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "Spot",
+                          style: GoogleFonts.audiowide(
+                            fontSize: 26,
+                            color: Palette.whiteBackgroundColor,
+                          ),
+                        ),
+                        TextSpan(
+                          text: " Wallet",
+                          style: GoogleFonts.audiowide(
+                            fontSize: 26,
+                            color: Palette.whiteBackgroundColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "Plug",
-                            style: GoogleFonts.audiowide(
-                              fontSize: 26,
-                              color: Palette.yellowTheme,
-                            ),
-                          ),
-                          TextSpan(
-                            text: "Spot",
-                            style: GoogleFonts.audiowide(
-                              fontSize: 26,
-                              color: Palette.whiteBackgroundColor,
-                            ),
-                          ),
-                          TextSpan(
-                            text: " Wallet",
-                            style: GoogleFonts.audiowide(
-                              fontSize: 26,
-                              color: Palette.whiteBackgroundColor,
-                            ),
-                          ),
-                        ],
+                    Container(
+                      child: Text(
+                        "Balance",
+                        style: GoogleFonts.montserrat(
+                            fontSize: 20, color: Palette.whiteBackgroundColor),
                       ),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Balance",
-                          style: GoogleFonts.montserrat(
-                            fontSize: 24,
-                            color: Palette.whiteBackgroundColor,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        ImageIcon(
+                          AssetImage("images/icon/thaibaht.png"),
+                          color: Palette.whiteBackgroundColor,
+                          size: 20,
                         ),
-                        Row(
-                          children: [
-                            ImageIcon(
-                              AssetImage("images/icon/thaibaht.png"),
-                              color: Palette.whiteBackgroundColor,
-                              size: 24,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              "0.00",
-                              style: GoogleFonts.montserrat(
-                                  fontSize: 24,
-                                  color: Palette.whiteBackgroundColor),
-                            ),
-                          ],
+                        Text(
+                          "0.00",
+                          style: GoogleFonts.montserrat(
+                              fontSize: 20,
+                              color: Palette.whiteBackgroundColor),
                         )
                       ],
-                    ),
+                    )
                   ],
                 ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 50,
+            width: 200,
+            child: FloatingActionButton(
+              backgroundColor: Palette.yellowTheme,
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Topup()));
+              },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
               ),
-              SizedBox(
-                width: 180,
-                height: 50,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Topup(),
-                      ),
-                    );
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  backgroundColor: Palette.yellowTheme,
-                  elevation: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.add,
-                        size: 25,
-                        color: Palette.backgroundColor,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        "Top Up",
-                        style: GoogleFonts.montserrat(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Palette.backgroundColor,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Divider(),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    margin: EdgeInsets.fromLTRB(30, 0, 30, 20),
-                    child: Text(
-                      "Transactions",
-                      style: GoogleFonts.montserrat(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        color: Palette.backgroundColor,
-                      ),
+                  Icon(
+                    Icons.add,
+                    size: 18,
+                    color: Palette.backgroundColor,
+                  ),
+                  Text(
+                    "Top Up",
+                    style: GoogleFonts.montserrat(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Palette.backgroundColor,
                     ),
                   ),
                 ],
-              )
-            ],
+              ),
+            ),
           ),
+          SizedBox(height: 15),
+          Divider(
+            color: Palette.greyColor,
+            thickness: 0.5,
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Transactions",
+              style: GoogleFonts.montserrat(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Palette.backgroundColor),
+            ),
+          )
         ],
       ),
     );
