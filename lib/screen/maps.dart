@@ -95,6 +95,7 @@ class MapSampleState extends State<MapSample> {
             child: Column(
               children: [
                 FloatingActionButton(
+                  heroTag: 'uniqueTag',
                   onPressed: () async {
                     final Position position = await _getLocation();
                     mapController.animateCamera(
