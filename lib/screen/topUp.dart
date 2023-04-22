@@ -264,27 +264,42 @@ class _TopupState extends State<Topup> {
                 )
               ],
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(35, 180, 35, 30),
-              height: 60,
-              width: 400,
-              child: FloatingActionButton(
-                heroTag: 'uniqueTag',
-                onPressed: () {},
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                backgroundColor: Palette.yellowTheme,
-                child: Text(
-                  "Top Up",
-                  style: GoogleFonts.montserrat(
-                      fontSize: 20,
-                      color: Palette.backgroundColor,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-            )
           ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 110,
+        padding: EdgeInsets.fromLTRB(25, 20, 25, 40),
+        child: Container(
+          height: 50,
+          child: FloatingActionButton(
+            heroTag: 'uniqueTag',
+            onPressed: () {},
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            backgroundColor: Palette.yellowTheme,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ImageIcon(
+                  AssetImage("images/icon/car.png"),
+                  size: 25,
+                  color: Palette.backgroundColor,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "Add New EV",
+                  style: GoogleFonts.montserrat(
+                      color: Palette.backgroundColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
