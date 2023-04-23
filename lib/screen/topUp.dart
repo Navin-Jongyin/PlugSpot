@@ -282,8 +282,8 @@ class _TopupState extends State<Topup> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ImageIcon(
-                  AssetImage("images/icon/car.png"),
+                Icon(
+                  Icons.wallet_rounded,
                   size: 25,
                   color: Palette.backgroundColor,
                 ),
@@ -291,7 +291,7 @@ class _TopupState extends State<Topup> {
                   width: 10,
                 ),
                 Text(
-                  "Add New EV",
+                  "Top Up",
                   style: GoogleFonts.montserrat(
                       color: Palette.backgroundColor,
                       fontSize: 18,

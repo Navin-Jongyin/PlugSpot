@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/screen/edit_profile.dart';
 import 'package:plugspot/screen/login_signup.dart';
+import 'package:plugspot/screen/wallet.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -15,6 +17,7 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         automaticallyImplyLeading: true,
         backgroundColor: Palette.yellowTheme,
         actions: [
@@ -27,7 +30,10 @@ class _UserProfileState extends State<UserProfile> {
                 ),
               );
             },
-            icon: Icon(Icons.logout),
+            icon: Icon(
+              Icons.logout,
+              color: Colors.red,
+            ),
           ),
         ],
         iconTheme: IconThemeData(
@@ -42,43 +48,155 @@ class _UserProfileState extends State<UserProfile> {
           ),
         ),
       ),
-      body: Column(children: [
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 30, horizontal: 25),
-          padding: EdgeInsets.all(15),
-          child: Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 15),
-                child: CircleAvatar(
-                  radius: 55,
-                  backgroundImage: AssetImage('images/nicky.png'),
+      body: Column(
+        children: [
+          Container(
+            height: 200,
+            child: Stack(
+              children: [
+                Positioned(
+                  top: -900,
+                  left: -500,
+                  right: -500,
+                  child: Container(
+                    height: 1000,
+                    width: 1000,
+                    decoration: BoxDecoration(
+                      color: Palette.yellowTheme,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0, 2),
+                          blurRadius: 7.0,
+                          spreadRadius: 1,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Navin Jongyin",
-                      style: GoogleFonts.montserrat(
-                          color: Palette.backgroundColor, fontSize: 20),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  child: Transform.translate(
+                    offset: Offset(0, 20),
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 15),
+                          height: 130,
+                          width: 130,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(0, 2),
+                                blurRadius: 7.0,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                          ),
+                          child: ClipOval(
+                            child: Image(
+                              image: AssetImage("images/nicky.png"),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          "Navin Jongyin",
+                          style: GoogleFonts.montserrat(
+                              fontSize: 20,
+                              color: Palette.backgroundColor,
+                              fontWeight: FontWeight.w600),
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "nicky220245@gmail.com",
-                      style: GoogleFonts.montserrat(color: Colors.grey),
-                    ),
-                  ],
+                  ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
-        ),
-      ]),
+          Container(
+            margin: EdgeInsets.fromLTRB(25, 30, 25, 15),
+            padding: EdgeInsets.all(15),
+            height: 70,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Palette.whiteBackgroundColor,
+                border: Border.all(color: Palette.greyColor)),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditProfile()));
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.edit,
+                        color: Palette.yellowTheme,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Edit Profile",
+                        style: GoogleFonts.montserrat(
+                            fontSize: 16, color: Palette.backgroundColor),
+                      ),
+                    ],
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: Palette.yellowTheme,
+                  )
+                ],
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(25, 0, 25, 15),
+            padding: EdgeInsets.all(15),
+            height: 70,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Palette.whiteBackgroundColor,
+                border: Border.all(color: Palette.greyColor)),
+            child: InkWell(
+              onTap: () {},
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.settings,
+                        color: Palette.yellowTheme,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Account Setting",
+                        style: GoogleFonts.montserrat(
+                            fontSize: 16, color: Palette.backgroundColor),
+                      ),
+                    ],
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: Palette.yellowTheme,
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -26,42 +26,22 @@ class _EditProfileState extends State<EditProfile> {
               color: Palette.backgroundColor),
         ),
       ),
-      body: Stack(
-        children: [
-          Positioned(
-            top: -900,
-            left: -500,
-            right: -500,
-            child: Container(
-              height: 1000,
-              width: 1000,
-              decoration: BoxDecoration(
-                color: Palette.yellowTheme,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(0, 2),
-                    blurRadius: 7.0,
-                    spreadRadius: 1,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            child: Transform.translate(
-              offset: Offset(0, 20),
-              child: Column(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 180,
+              child: Stack(
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 10),
-                    height: 130,
-                    width: 130,
-                    decoration: BoxDecoration(
-                        color: Palette.backgroundColor,
+                  Positioned(
+                    top: -900,
+                    left: -500,
+                    right: -500,
+                    child: Container(
+                      height: 1000,
+                      width: 1000,
+                      decoration: BoxDecoration(
+                        color: Palette.yellowTheme,
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
@@ -70,130 +50,153 @@ class _EditProfileState extends State<EditProfile> {
                             blurRadius: 7.0,
                             spreadRadius: 1,
                           ),
-                        ]),
-                    child: ClipOval(
-                      child: Image(
-                        image: AssetImage("images/nicky.png"),
-                        fit: BoxFit.cover,
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    child: Transform.translate(
+                      offset: Offset(0, 20),
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            height: 130,
+                            width: 130,
+                            decoration: BoxDecoration(
+                                color: Palette.backgroundColor,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    offset: Offset(0, 2),
+                                    blurRadius: 7.0,
+                                    spreadRadius: 1,
+                                  ),
+                                ]),
+                            child: ClipOval(
+                              child: Image(
+                                image: AssetImage("images/nicky.png"),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-          Positioned(
-            top: 180,
-            right: 30,
-            left: 30,
-            child: Container(
-              height: 500,
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "First Name",
-                    style: GoogleFonts.montserrat(
-                        fontSize: 16,
-                        color: Palette.backgroundColor,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 8,
+                    style: GoogleFonts.montserrat(fontSize: 14),
                   ),
                   Container(
+                    margin: EdgeInsets.only(top: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(15)),
                     child: TextField(
+                      cursorColor: Palette.yellowTheme,
                       decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          hintText: "First Name",
-                          hintStyle: GoogleFonts.montserrat(
-                              fontSize: 14, color: Palette.greyColor)),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Last Name",
-                    style: GoogleFonts.montserrat(
-                        fontSize: 16,
-                        color: Palette.backgroundColor,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        hintText: "Last Name",
-                        hintStyle: GoogleFonts.montserrat(
-                            fontSize: 14, color: Palette.greyColor),
+                        border: InputBorder.none,
                       ),
+                      style: GoogleFonts.montserrat(fontSize: 18),
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "Mobile No.",
-                    style: GoogleFonts.montserrat(
-                        fontSize: 16,
-                        color: Palette.backgroundColor,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    child: TextField(
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          hintText: "Mobile No.",
-                          hintStyle: GoogleFonts.montserrat(
-                              fontSize: 14, color: Palette.greyColor)),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 48,
-                        width: 200,
-                        child: FloatingActionButton(
-                          onPressed: () {},
-                          backgroundColor: Palette.yellowTheme,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            "Save",
-                            style: GoogleFonts.montserrat(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Palette.backgroundColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
                 ],
               ),
             ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Last Name",
+                    style: GoogleFonts.montserrat(fontSize: 14),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(15)),
+                    child: TextField(
+                      cursorColor: Palette.yellowTheme,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                      ),
+                      style: GoogleFonts.montserrat(fontSize: 18),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Phone Number",
+                    style: GoogleFonts.montserrat(fontSize: 14),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(15)),
+                    child: TextField(
+                      cursorColor: Palette.yellowTheme,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                      ),
+                      style: GoogleFonts.montserrat(fontSize: 18),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        margin: EdgeInsets.symmetric(horizontal: 50, vertical: 25),
+        height: 50,
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: Palette.yellowTheme,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
           ),
-        ],
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Icon(
+              Icons.save,
+              color: Palette.backgroundColor,
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            Text(
+              "Save",
+              style: GoogleFonts.montserrat(
+                  fontSize: 18,
+                  color: Palette.backgroundColor,
+                  fontWeight: FontWeight.bold),
+            )
+          ]),
+        ),
       ),
     );
   }
