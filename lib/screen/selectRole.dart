@@ -79,7 +79,7 @@ class _SelectRoleState extends State<SelectRole> {
                     padding: EdgeInsets.only(left: 20, top: 15),
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Select Your Row",
+                      "Select Your Role",
                       style: GoogleFonts.montserrat(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
