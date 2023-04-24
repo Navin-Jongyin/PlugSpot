@@ -76,7 +76,7 @@ class _SideBarState extends State<SideBar> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 10),
+            margin: EdgeInsets.only(bottom: 15),
             child: ListTile(
               leading: Icon(
                 Icons.wallet_outlined,
