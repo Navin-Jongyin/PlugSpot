@@ -158,6 +158,7 @@ class _EditProfileState extends State<EditProfile> {
                         border: Border.all(),
                         borderRadius: BorderRadius.circular(15)),
                     child: TextField(
+                      keyboardType: TextInputType.number,
                       cursorColor: Palette.yellowTheme,
                       decoration: InputDecoration(
                         border: InputBorder.none,

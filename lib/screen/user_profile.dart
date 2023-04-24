@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/screen/accountSettings.dart';
 import 'package:plugspot/screen/edit_profile.dart';
 import 'package:plugspot/screen/login_signup.dart';
 import 'package:plugspot/screen/wallet.dart';
@@ -167,7 +168,10 @@ class _UserProfileState extends State<UserProfile> {
                 color: Palette.whiteBackgroundColor,
                 border: Border.all(color: Palette.greyColor)),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AccountSetting()));
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -181,7 +185,7 @@ class _UserProfileState extends State<UserProfile> {
                         width: 10,
                       ),
                       Text(
-                        "Account Setting",
+                        "Account Settings",
                         style: GoogleFonts.montserrat(
                             fontSize: 16, color: Palette.backgroundColor),
                       ),
