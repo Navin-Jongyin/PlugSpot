@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/provider%20screen/provider_sidebar.dart';
 import 'package:plugspot/screen/maps.dart';
 
 class SelectRole extends StatefulWidget {
@@ -150,7 +151,7 @@ class _SelectRoleState extends State<SelectRole> {
                               blurRadius: 4,
                               spreadRadius: 2)
                         ]),
-                    child: InkWell(
+                    child: InkWell(onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => ProviderSidebar()));},
                         child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
