@@ -10,8 +10,7 @@ class AddNewCar extends StatefulWidget {
 }
 
 class _AddNewCarState extends State<AddNewCar> {
-  String? item = 'Select Car Brand';
-  List items = ['Toyota', 'Honda', 'Mazda'];
+  String _selectedButton = 'Select Car Brand';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,12 +55,70 @@ class _AddNewCarState extends State<AddNewCar> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Car Barnd"),
-                  Container(
-                    margin: EdgeInsets.only(top: 8),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(color: Palette.greyColor)),
+                  Text(
+                    "Car Brand",
+                    style: GoogleFonts.montserrat(
+                        fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                            padding: EdgeInsets.all(50),
+                            height: 300.0,
+                            color: Colors.white,
+                            child: ListWheelScrollView(
+                              itemExtent: 50,
+                              children: [
+                                Container(
+                                  color: Palette.yellowTheme,
+                                  child: Text("Test"),
+                                ),
+                                Container(
+                                  color: Palette.yellowTheme,
+                                  child: Text("Test"),
+                                ),
+                                Container(
+                                  color: Palette.yellowTheme,
+                                  child: Text("Test"),
+                                ),
+                                Container(
+                                  color: Palette.yellowTheme,
+                                  child: Text("Test"),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 50,
+                      width: 400,
+                      margin: EdgeInsets.only(top: 8),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: Palette.greyColor),
+                          color: Palette.whiteBackgroundColor,
+                          boxShadow: [
+                            BoxShadow(
+                              offset: Offset(1, 3),
+                              color: Palette.greyColor,
+                              blurRadius: 4,
+                              spreadRadius: 1.5,
+                            ),
+                          ]),
+                      child: Text(
+                        _selectedButton,
+                        style: GoogleFonts.montserrat(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Palette.backgroundColor),
+                      ),
+                    ),
                   ),
                 ],
               ),
