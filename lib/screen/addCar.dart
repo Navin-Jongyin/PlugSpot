@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/data/carBrands.dart';
+import 'package:plugspot/data/carModels.dart';
 import 'package:plugspot/screen/my_car.dart';
 
 class AddCar extends StatefulWidget {
@@ -11,6 +13,9 @@ class AddCar extends StatefulWidget {
 }
 
 class _AddCarState extends State<AddCar> {
+  String _selectedBrand = "Select Brand";
+  String _selectedModel = "Select Model";
+  int _selectedBrandIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,54 +64,107 @@ class _AddCarState extends State<AddCar> {
                     margin: EdgeInsets.only(bottom: 10),
                     child: Text("Car Brand"),
                   ),
-                  Container(
-                    height: 50,
-                    width: 400,
-                    margin: EdgeInsets.only(bottom: 15),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Palette.greyColor),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: InkWell(
+                  InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                            height: 300,
+                            child: ListView.builder(
+                              itemCount: CarBrands.getBrands().length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                  title: Text(CarBrands.getBrands()[index]),
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedBrand =
+                                          CarBrands.getBrands()[index];
+                                      _selectedBrandIndex = index;
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 400,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Palette.greyColor),
+                          borderRadius: BorderRadius.circular(15)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Select Brand"),
+                          Text(_selectedBrand),
                           Icon(Icons.arrow_drop_down_sharp)
                         ],
                       ),
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(bottom: 10),
+                    margin: EdgeInsets.only(bottom: 10, top: 15),
                     child: Text("Car Model"),
                   ),
-                  Container(
-                    height: 50,
-                    width: 400,
-                    margin: EdgeInsets.only(bottom: 15),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Palette.greyColor),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: InkWell(
+                  InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                            height: 300,
+                            child: ListView.builder(
+                              itemCount: CarBrands.getBrands().length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                  title: Text(
+                                      CarModels.getModels()[_selectedBrandIndex]
+                                          [index]),
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedModel = CarModels.getModels()[
+                                          _selectedBrandIndex][index];
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 400,
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Palette.greyColor),
+                          borderRadius: BorderRadius.circular(15)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Select Model"),
+                          Text(_selectedModel),
                           Icon(Icons.arrow_drop_down_sharp)
                         ],
                       ),
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(bottom: 10),
+                    margin: EdgeInsets.only(bottom: 10, top: 15),
                     child: Text("Car Plate"),
                   ),
                   Container(
                     height: 50,
                     width: 400,
-                    margin: EdgeInsets.only(bottom: 15),
+                    margin: EdgeInsets.only(
+                      bottom: 15,
+                    ),
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     decoration: BoxDecoration(
                         border: Border.all(color: Palette.greyColor),
@@ -131,14 +189,7 @@ class _AddCarState extends State<AddCar> {
         height: 50,
         width: 400,
         child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyCar(),
-              ),
-            );
-          },
+          onPressed: () {},
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
