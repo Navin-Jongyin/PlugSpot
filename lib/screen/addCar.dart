@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/data/carBrands.dart';
+import 'package:plugspot/data/carModels.dart';
 
 class AddNewCar extends StatefulWidget {
   const AddNewCar({super.key});
@@ -11,6 +13,26 @@ class AddNewCar extends StatefulWidget {
 
 class _AddNewCarState extends State<AddNewCar> {
   String _selectedButton = 'Select Car Brand';
+  String _selectedModels = 'Select Model';
+  void _updateSelectedButton(String newValue) {
+    setState(() {
+      _selectedButton = newValue;
+    });
+  }
+
+  void _updateModelButton(String newValue) {
+    setState(() {
+      _selectedModels = newValue;
+    });
+  }
+
+  List<String> brands = CarBrands.getBrands();
+  List<List<String>> models = CarModels.getModels();
+
+  int selectedIndex = 0;
+
+  int selectedModelIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,27 +88,79 @@ class _AddNewCarState extends State<AddNewCar> {
                         context: context,
                         builder: (BuildContext context) {
                           return Container(
-                            padding: EdgeInsets.all(50),
-                            height: 300.0,
+                            padding: EdgeInsets.fromLTRB(25, 20, 25, 20),
+                            height: 400.0,
                             color: Colors.white,
-                            child: ListWheelScrollView(
-                              itemExtent: 50,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Container(
-                                  color: Palette.yellowTheme,
-                                  child: Text("Test"),
+                                  height: 200,
+                                  child: Stack(
+                                    children: [
+                                      ListWheelScrollView(
+                                        physics: FixedExtentScrollPhysics(),
+                                        diameterRatio: 2,
+                                        onSelectedItemChanged: (index) {
+                                          setState(() {
+                                            selectedIndex = index;
+                                          });
+                                        },
+                                        itemExtent: 50,
+                                        children: [
+                                          for (String brand in brands)
+                                            Container(
+                                              child: Text(
+                                                brand,
+                                                style: GoogleFonts.montserrat(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                      Positioned(
+                                        top: 60,
+                                        child: IgnorePointer(
+                                          child: Center(
+                                            child: Container(
+                                              width: 400,
+                                              height: 50,
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey
+                                                    .withOpacity(0.3),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
                                 ),
                                 Container(
-                                  color: Palette.yellowTheme,
-                                  child: Text("Test"),
-                                ),
-                                Container(
-                                  color: Palette.yellowTheme,
-                                  child: Text("Test"),
-                                ),
-                                Container(
-                                  color: Palette.yellowTheme,
-                                  child: Text("Test"),
+                                  height: 50,
+                                  width: 400,
+                                  child: FloatingActionButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      _updateSelectedButton(
+                                          brands[selectedIndex]);
+                                    },
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    backgroundColor: Palette.yellowTheme,
+                                    child: Text(
+                                      "Confirm",
+                                      style: GoogleFonts.montserrat(
+                                          fontSize: 18,
+                                          color: Palette.backgroundColor),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -122,7 +196,7 @@ class _AddNewCarState extends State<AddNewCar> {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
