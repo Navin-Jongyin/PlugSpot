@@ -14,33 +14,36 @@ class _MyCarState extends State<MyCar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        iconTheme: IconThemeData(color: Palette.backgroundColor),
-        backgroundColor: Palette.yellowTheme,
-        title: Text(
-          "My Car",
-          style: GoogleFonts.montserrat(
-              fontSize: 18,
-              color: Palette.backgroundColor,
-              fontWeight: FontWeight.bold),
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          iconTheme: IconThemeData(color: Palette.backgroundColor),
+          backgroundColor: Palette.yellowTheme,
+          title: Text(
+            "My Car",
+            style: GoogleFonts.montserrat(
+                fontSize: 18,
+                color: Palette.backgroundColor,
+                fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        height: 110,
-        padding: EdgeInsets.fromLTRB(25, 20, 25, 40),
-        child: Container(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(),
+          ],
+        ),
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.all(25),
           height: 50,
+          width: 400,
           child: FloatingActionButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddNewCar()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddCar(),
+                ),
+              );
             },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
@@ -51,24 +54,21 @@ class _MyCarState extends State<MyCar> {
               children: [
                 ImageIcon(
                   AssetImage("images/icon/car.png"),
-                  size: 25,
                   color: Palette.backgroundColor,
                 ),
                 SizedBox(
-                  width: 10,
+                  width: 15,
                 ),
                 Text(
-                  "Add New EV",
+                  "Add New Car",
                   style: GoogleFonts.montserrat(
                       color: Palette.backgroundColor,
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500),
-                )
+                ),
               ],
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

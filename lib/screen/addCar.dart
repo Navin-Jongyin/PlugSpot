@@ -1,38 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
-import 'package:plugspot/data/carBrands.dart';
-import 'package:plugspot/data/carModels.dart';
+import 'package:plugspot/screen/my_car.dart';
 
-class AddNewCar extends StatefulWidget {
-  const AddNewCar({super.key});
+class AddCar extends StatefulWidget {
+  const AddCar({super.key});
 
   @override
-  State<AddNewCar> createState() => _AddNewCarState();
+  State<AddCar> createState() => _AddCarState();
 }
 
-class _AddNewCarState extends State<AddNewCar> {
-  String _selectedButton = 'Select Car Brand';
-  String _selectedModels = 'Select Model';
-  void _updateSelectedButton(String newValue) {
-    setState(() {
-      _selectedButton = newValue;
-    });
-  }
-
-  void _updateModelButton(String newValue) {
-    setState(() {
-      _selectedModels = newValue;
-    });
-  }
-
-  List<String> brands = CarBrands.getBrands();
-  List<List<String>> models = CarModels.getModels();
-
-  int selectedIndex = 0;
-
-  int selectedModelIndex = 0;
-
+class _AddCarState extends State<AddCar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,162 +20,136 @@ class _AddNewCarState extends State<AddNewCar> {
           color: Palette.backgroundColor,
         ),
         title: Text(
-          "Add New Car",
+          "My Car",
           style: GoogleFonts.montserrat(
-            fontSize: 18,
             color: Palette.backgroundColor,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
-      body: Container(
-        margin: EdgeInsets.all(30),
-        height: 400,
-        width: 400,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Palette.whiteBackgroundColor,
-          border: Border.all(
-            color: Palette.greyColor,
-          ),
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(1, 3),
-              blurRadius: 7,
-              spreadRadius: 2,
-              color: Palette.greyColor,
-            ),
-          ],
-        ),
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: EdgeInsets.fromLTRB(20, 30, 20, 15),
+              margin: EdgeInsets.all(25),
+              child: Text(
+                "Add Your Car",
+                style: GoogleFonts.montserrat(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: Palette.backgroundColor,
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(15),
+              margin: EdgeInsets.symmetric(horizontal: 25),
+              height: 310,
+              width: 400,
+              decoration: BoxDecoration(
+                border: Border.all(color: Palette.greyColor, width: 1.5),
+                borderRadius: BorderRadius.circular(15),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Car Brand",
-                    style: GoogleFonts.montserrat(
-                        fontSize: 16, fontWeight: FontWeight.w600),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    child: Text("Car Brand"),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Container(
-                            padding: EdgeInsets.fromLTRB(25, 20, 25, 20),
-                            height: 400.0,
-                            color: Colors.white,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Container(
-                                  height: 200,
-                                  child: Stack(
-                                    children: [
-                                      ListWheelScrollView(
-                                        physics: FixedExtentScrollPhysics(),
-                                        diameterRatio: 2,
-                                        onSelectedItemChanged: (index) {
-                                          setState(() {
-                                            selectedIndex = index;
-                                          });
-                                        },
-                                        itemExtent: 50,
-                                        children: [
-                                          for (String brand in brands)
-                                            Container(
-                                              child: Text(
-                                                brand,
-                                                style: GoogleFonts.montserrat(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                      Positioned(
-                                        top: 60,
-                                        child: IgnorePointer(
-                                          child: Center(
-                                            child: Container(
-                                              width: 400,
-                                              height: 50,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey
-                                                    .withOpacity(0.3),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Container(
-                                  height: 50,
-                                  width: 400,
-                                  child: FloatingActionButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      _updateSelectedButton(
-                                          brands[selectedIndex]);
-                                    },
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    backgroundColor: Palette.yellowTheme,
-                                    child: Text(
-                                      "Confirm",
-                                      style: GoogleFonts.montserrat(
-                                          fontSize: 18,
-                                          color: Palette.backgroundColor),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 50,
-                      width: 400,
-                      margin: EdgeInsets.only(top: 8),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: Palette.greyColor),
-                          color: Palette.whiteBackgroundColor,
-                          boxShadow: [
-                            BoxShadow(
-                              offset: Offset(1, 3),
-                              color: Palette.greyColor,
-                              blurRadius: 4,
-                              spreadRadius: 1.5,
-                            ),
-                          ]),
-                      child: Text(
-                        _selectedButton,
-                        style: GoogleFonts.montserrat(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Palette.backgroundColor),
+                  Container(
+                    height: 50,
+                    width: 400,
+                    margin: EdgeInsets.only(bottom: 15),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Palette.greyColor),
+                        borderRadius: BorderRadius.circular(15)),
+                    child: InkWell(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Select Brand"),
+                          Icon(Icons.arrow_drop_down_sharp)
+                        ],
                       ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    child: Text("Car Model"),
+                  ),
+                  Container(
+                    height: 50,
+                    width: 400,
+                    margin: EdgeInsets.only(bottom: 15),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Palette.greyColor),
+                        borderRadius: BorderRadius.circular(15)),
+                    child: InkWell(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Select Model"),
+                          Icon(Icons.arrow_drop_down_sharp)
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    child: Text("Car Plate"),
+                  ),
+                  Container(
+                    height: 50,
+                    width: 400,
+                    margin: EdgeInsets.only(bottom: 15),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Palette.greyColor),
+                        borderRadius: BorderRadius.circular(15)),
+                    child: TextField(
+                      cursorColor: Palette.yellowTheme,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "ex. 1กก1234",
+                          hintStyle:
+                              GoogleFonts.montserrat(color: Palette.greyColor)),
                     ),
                   ),
                 ],
               ),
             ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        margin: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+        height: 50,
+        width: 400,
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyCar(),
+              ),
+            );
+          },
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          backgroundColor: Palette.yellowTheme,
+          child: Text(
+            "Save",
+            style: GoogleFonts.montserrat(
+                color: Palette.backgroundColor,
+                fontSize: 17,
+                fontWeight: FontWeight.w500),
+          ),
         ),
       ),
     );

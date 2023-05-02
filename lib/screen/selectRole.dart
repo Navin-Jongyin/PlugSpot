@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
-import 'package:plugspot/provider%20screen/provider_main_page.dart';
+import 'package:plugspot/provider%20screen/bookingQueue.dart';
 import 'package:plugspot/provider%20screen/provider_sidebar.dart';
 import 'package:plugspot/screen/maps.dart';
 
@@ -152,32 +152,39 @@ class _SelectRoleState extends State<SelectRole> {
                               blurRadius: 4,
                               spreadRadius: 2)
                         ]),
-                    child: InkWell(onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => ProviderMainPage()));},
+                    child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BookingQueue()));
+                        },
                         child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "Charger Provider",
-                              style: GoogleFonts.montserrat(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Palette.backgroundColor,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  "Charger Provider",
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Palette.backgroundColor,
+                                  ),
+                                ),
+                                Text(
+                                  "Become charger provider \nwith PlugSpot",
+                                  style: GoogleFonts.montserrat(
+                                      fontSize: 14,
+                                      color: Palette.backgroundColor),
+                                )
+                              ],
                             ),
-                            Text(
-                              "Become charger provider \nwith PlugSpot",
-                              style: GoogleFonts.montserrat(
-                                  fontSize: 14, color: Palette.backgroundColor),
-                            )
+                            Icon(Icons.arrow_forward_ios)
                           ],
-                        ),
-                        Icon(Icons.arrow_forward_ios)
-                      ],
-                    )),
+                        )),
                   ),
                 ],
               ),

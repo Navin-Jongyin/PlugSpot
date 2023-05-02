@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plugspot/screen/login_signup.dart';
 
 import '../config/palette.dart';
+import '../screen/user_profile.dart';
 
 class ProviderSidebar extends StatefulWidget {
   const ProviderSidebar({Key? key}) : super(key: key);
@@ -19,20 +21,20 @@ class _ProviderSidebarState extends State<ProviderSidebar> {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-              accountName: Text(
-                'Yanapat Emdee',
-                style: GoogleFonts.montserrat(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Palette.whiteBackgroundColor),
-              ),
-              accountEmail: Text(
-                'test.email.com',
-                style: GoogleFonts.montserrat(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Palette.whiteBackgroundColor),
-              ),
+            accountName: Text(
+              'Yanapat Emdee',
+              style: GoogleFonts.montserrat(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: Palette.whiteBackgroundColor),
+            ),
+            accountEmail: Text(
+              'test.email.com',
+              style: GoogleFonts.montserrat(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Palette.whiteBackgroundColor),
+            ),
             currentAccountPicture: CircleAvatar(
               child: ClipOval(
                 child: Image.asset(
@@ -65,10 +67,10 @@ class _ProviderSidebarState extends State<ProviderSidebar> {
                     color: Palette.backgroundColor,
                     fontWeight: FontWeight.w500),
               ),
-              // onTap: () {
-              //   Navigator.push(context,
-              //       MaterialPageRoute(builder: (context) => UserProfile()));
-              // },
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => UserProfile()));
+              },
             ),
           ),
           Container(
@@ -86,10 +88,6 @@ class _ProviderSidebarState extends State<ProviderSidebar> {
                     color: Palette.backgroundColor,
                     fontWeight: FontWeight.w500),
               ),
-              // onTap: () {
-              //   Navigator.push(
-              //       context, MaterialPageRoute(builder: (context) => Wallet()));
-              // },
             ),
           ),
           Container(
@@ -110,7 +108,6 @@ class _ProviderSidebarState extends State<ProviderSidebar> {
               // onTap: () => null,
             ),
           ),
-
           Container(
             margin: EdgeInsets.only(bottom: 10),
             child: ListTile(
@@ -129,7 +126,6 @@ class _ProviderSidebarState extends State<ProviderSidebar> {
               // onTap: () => null,
             ),
           ),
-
           Container(
             margin: EdgeInsets.only(bottom: 10),
             child: ListTile(
@@ -148,7 +144,31 @@ class _ProviderSidebarState extends State<ProviderSidebar> {
               // onTap: () => null,
             ),
           ),
-
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: ListTile(
+              leading: Icon(
+                Icons.logout,
+                color: Colors.red,
+                size: 35,
+              ),
+              title: Text(
+                'Log Out',
+                style: GoogleFonts.montserrat(
+                    fontSize: 16,
+                    color: Palette.backgroundColor,
+                    fontWeight: FontWeight.w500),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginSignupScreen(),
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

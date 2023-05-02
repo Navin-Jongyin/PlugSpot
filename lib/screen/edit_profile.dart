@@ -103,7 +103,7 @@ class _EditProfileState extends State<EditProfile> {
                     margin: EdgeInsets.only(top: 5),
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     decoration: BoxDecoration(
-                        border: Border.all(),
+                        border: Border.all(color: Palette.greyColor),
                         borderRadius: BorderRadius.circular(15)),
                     child: TextField(
                       cursorColor: Palette.yellowTheme,
@@ -129,7 +129,7 @@ class _EditProfileState extends State<EditProfile> {
                     margin: EdgeInsets.only(top: 5),
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     decoration: BoxDecoration(
-                        border: Border.all(),
+                        border: Border.all(color: Palette.greyColor),
                         borderRadius: BorderRadius.circular(15)),
                     child: TextField(
                       cursorColor: Palette.yellowTheme,
@@ -155,7 +155,7 @@ class _EditProfileState extends State<EditProfile> {
                     margin: EdgeInsets.only(top: 5),
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     decoration: BoxDecoration(
-                        border: Border.all(),
+                        border: Border.all(color: Palette.greyColor),
                         borderRadius: BorderRadius.circular(15)),
                     child: TextField(
                       keyboardType: TextInputType.number,
@@ -173,7 +173,7 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
       bottomNavigationBar: Container(
-        margin: EdgeInsets.symmetric(horizontal: 50, vertical: 25),
+        margin: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
         height: 50,
         child: FloatingActionButton(
           onPressed: () {},
