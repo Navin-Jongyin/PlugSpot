@@ -76,7 +76,7 @@ class MapSampleState extends State<MapSample> {
                   initialCameraPosition: CameraPosition(
                       target:
                           LatLng(userLocation.latitude, userLocation.longitude),
-                      zoom: 18),
+                      zoom: 17.85),
                 );
               } else {
                 return Center(
@@ -104,7 +104,7 @@ class MapSampleState extends State<MapSample> {
                         CameraPosition(
                             target:
                                 LatLng(position.latitude, position.longitude),
-                            zoom: 17.25),
+                            zoom: 17.85),
                       ),
                     );
                   },
@@ -122,7 +122,7 @@ class MapSampleState extends State<MapSample> {
           ),
           SafeArea(
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 25),
+              margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
               padding: EdgeInsets.all(10),
               height: 60,
               decoration: BoxDecoration(
