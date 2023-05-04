@@ -19,6 +19,7 @@ dependencies:
   qrscan: ^0.3.3
   geolocator: ^9.0.2
   lite_rolling_switch: ^1.0.1
+  scan: ^1.6.0
 
 dev_dependencies:
   flutter_test:

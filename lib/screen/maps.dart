@@ -8,7 +8,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/screen/qrScanner.dart';
 import 'package:plugspot/screen/sidebar.dart';
-import 'package:plugspot/screen/wallet.dart';
 
 import 'user_profile.dart';
 

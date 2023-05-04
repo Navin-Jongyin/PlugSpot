@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/screen/addCar.dart';
+import 'package:plugspot/screen/maps.dart';
 
 class MyCar extends StatefulWidget {
   const MyCar({super.key});
@@ -15,8 +16,20 @@ class _MyCarState extends State<MyCar> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: true,
-          iconTheme: IconThemeData(color: Palette.backgroundColor),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Palette.backgroundColor,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MapSample(),
+                ),
+              );
+            },
+          ),
           backgroundColor: Palette.yellowTheme,
           title: Text(
             "My Car",

@@ -4,7 +4,6 @@ import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/screen/accountSettings.dart';
 import 'package:plugspot/screen/edit_profile.dart';
 import 'package:plugspot/screen/login_signup.dart';
-import 'package:plugspot/screen/wallet.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});

@@ -16,6 +16,14 @@ class _AddCarState extends State<AddCar> {
   String _selectedBrand = "Select Brand";
   String _selectedModel = "Select Model";
   int _selectedBrandIndex = 0;
+  final TextEditingController _textController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +70,14 @@ class _AddCarState extends State<AddCar> {
                 children: [
                   Container(
                     margin: EdgeInsets.only(bottom: 10),
-                    child: Text("Car Brand"),
+                    child: Text(
+                      "Car Brand",
+                      style: GoogleFonts.montserrat(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Palette.backgroundColor,
+                      ),
+                    ),
                   ),
                   InkWell(
                     onTap: () {
@@ -101,15 +116,31 @@ class _AddCarState extends State<AddCar> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(_selectedBrand),
-                          Icon(Icons.arrow_drop_down_sharp)
+                          Text(
+                            _selectedBrand,
+                            style: GoogleFonts.montserrat(
+                              fontSize: 14,
+                              color: Palette.backgroundColor,
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_drop_down_sharp,
+                            color: Palette.yellowTheme,
+                          )
                         ],
                       ),
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.only(bottom: 10, top: 15),
-                    child: Text("Car Model"),
+                    child: Text(
+                      "Car Model",
+                      style: GoogleFonts.montserrat(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Palette.backgroundColor,
+                      ),
+                    ),
                   ),
                   InkWell(
                     onTap: () {
@@ -149,15 +180,31 @@ class _AddCarState extends State<AddCar> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(_selectedModel),
-                          Icon(Icons.arrow_drop_down_sharp)
+                          Text(
+                            _selectedModel,
+                            style: GoogleFonts.montserrat(
+                              fontSize: 14,
+                              color: Palette.backgroundColor,
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_drop_down_sharp,
+                            color: Palette.yellowTheme,
+                          )
                         ],
                       ),
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.only(bottom: 10, top: 15),
-                    child: Text("Car Plate"),
+                    child: Text(
+                      "Car Plate",
+                      style: GoogleFonts.montserrat(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Palette.backgroundColor,
+                      ),
+                    ),
                   ),
                   Container(
                     height: 50,
@@ -170,6 +217,7 @@ class _AddCarState extends State<AddCar> {
                         border: Border.all(color: Palette.greyColor),
                         borderRadius: BorderRadius.circular(15)),
                     child: TextField(
+                      controller: _textController,
                       cursorColor: Palette.yellowTheme,
                       decoration: InputDecoration(
                           border: InputBorder.none,
@@ -189,7 +237,14 @@ class _AddCarState extends State<AddCar> {
         height: 50,
         width: 400,
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyCar(),
+              ),
+            );
+          },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),

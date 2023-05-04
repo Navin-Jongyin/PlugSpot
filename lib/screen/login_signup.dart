@@ -3,7 +3,6 @@ import 'package:plugspot/config/palette.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/screen/maps.dart';
 import 'package:plugspot/screen/selectRole.dart';
-import 'package:plugspot/screen/wallet.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
@@ -27,7 +26,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             right: 0,
             left: 0,
             child: Container(
-              padding: EdgeInsets.only(top: 120),
+              padding: EdgeInsets.only(top: 75),
               height: 380,
               decoration: BoxDecoration(
                 color: Palette.backgroundColor,
@@ -56,7 +55,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           AnimatedPositioned(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeIn,
-            top: 200,
+            top: 150,
             child: AnimatedContainer(
               duration: Duration(milliseconds: 300),
               curve: Curves.easeIn,
@@ -142,7 +141,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           AnimatedPositioned(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeIn,
-            top: isSignupScreen ? 550 : 450,
+            top: isSignupScreen ? 500 : 410,
             right: 0,
             left: 0,
             child: Center(

@@ -7,7 +7,6 @@ import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/screen/login_signup.dart';
 import 'package:plugspot/screen/my_car.dart';
 import 'package:plugspot/screen/user_profile.dart';
-import 'package:plugspot/screen/wallet.dart';
 
 class SideBar extends StatefulWidget {
   @override
@@ -85,28 +84,25 @@ class _SideBarState extends State<SideBar> {
                 size: 35,
               ),
               title: Text(
-                'Wallet',
+                'Payment',
                 style: GoogleFonts.montserrat(
                     fontSize: 16,
                     color: Palette.backgroundColor,
                     fontWeight: FontWeight.w500),
               ),
-              onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Wallet()));
-              },
+              onTap: () {},
             ),
           ),
           Container(
             margin: EdgeInsets.only(bottom: 10),
             child: ListTile(
-              leading: Icon(
-                Icons.history,
-                color: Palette.yellowTheme,
+              leading: ImageIcon(
+                AssetImage("images/icon/appointment.png"),
                 size: 35,
+                color: Palette.yellowTheme,
               ),
               title: Text(
-                'Charging History',
+                'My Booking',
                 style: GoogleFonts.montserrat(
                     fontSize: 16,
                     color: Palette.backgroundColor,
@@ -132,12 +128,26 @@ class _SideBarState extends State<SideBar> {
               ),
               onTap: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MyCar(),
-                  ),
-                );
+                    context, MaterialPageRoute(builder: (context) => MyCar()));
               },
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: ListTile(
+              leading: Icon(
+                Icons.history,
+                color: Palette.yellowTheme,
+                size: 35,
+              ),
+              title: Text(
+                'Charging History',
+                style: GoogleFonts.montserrat(
+                    fontSize: 16,
+                    color: Palette.backgroundColor,
+                    fontWeight: FontWeight.w500),
+              ),
+              onTap: () => null,
             ),
           ),
           Container(
