@@ -152,12 +152,43 @@ class _SelectRoleState extends State<SelectRole> {
                             builder: (context) => MapSample(),
                           ),
                         );
-                      } else {
+                      } else if (isChargerProviderPressed) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => BookingQueue(),
                           ),
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(
+                                "Error",
+                                style: GoogleFonts.montserrat(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              content: Text(
+                                "Please Select a Role",
+                                style: GoogleFonts.montserrat(fontSize: 16),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    "OK",
+                                    style: GoogleFonts.montserrat(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Palette.yellowTheme),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         );
                       }
                     },
