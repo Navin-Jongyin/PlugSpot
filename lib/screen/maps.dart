@@ -169,6 +169,12 @@ class MapSampleState extends State<MapSample> {
                     thickness: 1.5,
                   ),
                   InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => QRCodeScannerPage()));
+                    },
                     child: Icon(
                       Icons.qr_code_scanner,
                       size: 30,
