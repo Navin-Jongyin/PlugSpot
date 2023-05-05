@@ -51,5 +51,7 @@
     <string>This app needs your location to test the location feature of the Google Maps plugin.</string>
     <key>io.flutter.embedded_views_preview</key>
     <true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera permission is required to scan QR codes.</string>
 </dict>
 </plist>

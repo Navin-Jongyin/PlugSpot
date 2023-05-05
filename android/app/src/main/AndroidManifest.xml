@@ -2,6 +2,7 @@
     package="com.example.plugspot">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOACTION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOACTION"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
     <application
         android:label="plugspot"
         android:name="${applicationName}"
