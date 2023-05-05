@@ -14,6 +14,20 @@ class BookingQueue extends StatefulWidget {
 class _BookingQueueState extends State<BookingQueue> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  int _notificationCount = 0;
+
+  void _incrementNotificationCount() {
+    setState(() {
+      _notificationCount++;
+    });
+  }
+
+  void _decrementNotification() {
+    setState(() {
+      _notificationCount--;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +53,50 @@ class _BookingQueueState extends State<BookingQueue> {
             _scaffoldKey.currentState!.openDrawer();
           },
         ),
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: 15),
+            child: Stack(
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.notifications,
+                    color: Palette.backgroundColor,
+                    size: 25,
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.red,
+                    radius: 8,
+                    child: Text(
+                      '$_notificationCount',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          FloatingActionButton(
+            onPressed: _incrementNotificationCount,
+            child: Icon(Icons.add),
+          ),
+          FloatingActionButton(
+            onPressed: _decrementNotification,
+            child: Icon(Icons.remove),
+          )
+        ],
       ),
     );
   }

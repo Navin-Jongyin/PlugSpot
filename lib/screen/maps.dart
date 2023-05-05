@@ -53,6 +53,12 @@ class MapSampleState extends State<MapSample> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final Marker newMarker = Marker(
+      markerId: MarkerId('new_marker'),
+      position: LatLng(13.726862, 100.76644),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+      infoWindow: InfoWindow(title: 'New Marker'),
+      onTap: () {});
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +74,7 @@ class MapSampleState extends State<MapSample> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 return GoogleMap(
+                  markers: Set<Marker>.of([newMarker]),
                   mapType: MapType.normal,
                   onMapCreated: _onMapCreated,
                   myLocationEnabled: true,

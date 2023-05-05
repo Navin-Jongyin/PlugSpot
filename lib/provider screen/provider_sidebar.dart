@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plugspot/provider%20screen/myCharger.dart';
 import 'package:plugspot/screen/login_signup.dart';
 
 import '../config/palette.dart';
@@ -88,6 +89,14 @@ class _ProviderSidebarState extends State<ProviderSidebar> {
                     color: Palette.backgroundColor,
                     fontWeight: FontWeight.w500),
               ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyCharger(),
+                  ),
+                );
+              },
             ),
           ),
           Container(
