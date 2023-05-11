@@ -20,6 +20,10 @@ dependencies:
   lite_rolling_switch: ^1.0.1
   qr_code_scanner: ^1.0.1
   permission_handler: ^10.2.0
+  flutter_stripe: ^9.2.0
+  http: ^0.13.6
+
+  
 
 dev_dependencies:
   flutter_test:

@@ -56,7 +56,7 @@ class MapSampleState extends State<MapSample> {
   final Marker newMarker = Marker(
       markerId: MarkerId('new_marker'),
       position: LatLng(13.726862, 100.76644),
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
       infoWindow: InfoWindow(title: 'New Marker'),
       onTap: () {});
 

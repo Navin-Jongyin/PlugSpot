@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lite_rolling_switch/lite_rolling_switch.dart';
+
 import 'package:plugspot/config/palette.dart';
 
 import 'package:plugspot/screen/login_signup.dart';
 import 'package:plugspot/screen/my_car.dart';
+
 import 'package:plugspot/screen/user_profile.dart';
 
 class SideBar extends StatefulWidget {
@@ -14,7 +15,6 @@ class SideBar extends StatefulWidget {
 }
 
 class _SideBarState extends State<SideBar> {
-  bool _isSwitchedOn = false;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -73,24 +73,6 @@ class _SideBarState extends State<SideBar> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => UserProfile()));
               },
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: 15),
-            child: ListTile(
-              leading: Icon(
-                Icons.wallet_outlined,
-                color: Palette.yellowTheme,
-                size: 35,
-              ),
-              title: Text(
-                'Payment',
-                style: GoogleFonts.montserrat(
-                    fontSize: 16,
-                    color: Palette.backgroundColor,
-                    fontWeight: FontWeight.w500),
-              ),
-              onTap: () {},
             ),
           ),
           Container(

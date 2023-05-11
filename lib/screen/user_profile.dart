@@ -4,6 +4,7 @@ import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/screen/accountSettings.dart';
 import 'package:plugspot/screen/edit_profile.dart';
 import 'package:plugspot/screen/login_signup.dart';
+import 'package:plugspot/screen/payment.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -185,6 +186,46 @@ class _UserProfileState extends State<UserProfile> {
                       ),
                       Text(
                         "Account Settings",
+                        style: GoogleFonts.montserrat(
+                            fontSize: 16, color: Palette.backgroundColor),
+                      ),
+                    ],
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: Palette.yellowTheme,
+                  )
+                ],
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(25, 0, 25, 15),
+            padding: EdgeInsets.all(15),
+            height: 70,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Palette.whiteBackgroundColor,
+                border: Border.all(color: Palette.greyColor)),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Payment()));
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.payment,
+                        color: Palette.yellowTheme,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Payment",
                         style: GoogleFonts.montserrat(
                             fontSize: 16, color: Palette.backgroundColor),
                       ),

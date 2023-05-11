@@ -3,6 +3,8 @@ import 'package:plugspot/config/palette.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/screen/maps.dart';
 import 'package:plugspot/screen/selectRole.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
@@ -14,6 +16,107 @@ class LoginSignupScreen extends StatefulWidget {
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
   bool isSignupScreen = true;
   bool isRememberMe = false;
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _login() async {
+    final String email = _emailController.text;
+    final String password = _passwordController.text;
+
+    // Construct the API URL with query parameters
+    final Uri apiUrl = Uri.parse(
+        'https://plugspot.onrender.com/userAccounts/?email=$email&password=$password');
+
+    try {
+      // Make the API request
+      final response = await http.get(apiUrl);
+
+      // Handle the API response
+      if (response.statusCode == 200) {
+        // Successful login
+        final responseBody = json.decode(response.body);
+
+        // Extract necessary information from the response
+        final bool loginSuccess = responseBody['success'];
+        final String message = responseBody['message'];
+
+        // Process the response as needed
+        if (loginSuccess) {
+          // Login success
+          // Navigate to the next screen
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MapSample()),
+          );
+        } else {
+          // Login failed
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Login Error'),
+                content: Text(message),
+                actions: [
+                  TextButton(
+                    child: Text('OK'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } else {
+        // Error handling
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Login Error'),
+              content: Text('Invalid credentials. Please try again.'),
+              actions: [
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (error) {
+      // Handle any network or request errors
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('An error occurred. Please try again later.'),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,8 +254,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => SelectRole()));
                   } else {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MapSample()));
+                    _login();
                   }
                 },
                 child: Container(
