@@ -35,7 +35,11 @@ class _LoginPageState extends State<LoginPage> {
               password.toString() == _passwordController.text) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => MapSample()),
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    MapSample(),
+                transitionDuration: Duration(seconds: 5),
+              ),
             );
           } else {
             showErrorMessage('Invalid email or password.');

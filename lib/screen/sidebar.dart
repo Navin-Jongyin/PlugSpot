@@ -70,7 +70,7 @@ class _SideBarState extends State<SideBar> {
                     fontWeight: FontWeight.w500),
               ),
               onTap: () {
-                Navigator.push(context,
+                Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => UserProfile()));
               },
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/screen/checkinScreen.dart';
+import 'package:plugspot/screen/maps.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -93,7 +94,14 @@ class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    MapSample(),
+                transitionDuration: Duration(seconds: 5),
+              ),
+            );
           },
           icon: Icon(Icons.close),
         ),

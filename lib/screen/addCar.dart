@@ -28,6 +28,15 @@ class _AddCarState extends State<AddCar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyCar()));
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Palette.backgroundColor,
+            )),
         backgroundColor: Palette.yellowTheme,
         iconTheme: IconThemeData(
           color: Palette.backgroundColor,

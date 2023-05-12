@@ -177,10 +177,15 @@ class MapSampleState extends State<MapSample> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => QRCodeScannerPage()));
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  QRCodeScannerPage(),
+                          transitionDuration: Duration(seconds: 5),
+                        ),
+                      );
                     },
                     child: Icon(
                       Icons.qr_code_scanner,

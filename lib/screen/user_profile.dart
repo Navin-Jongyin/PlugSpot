@@ -4,6 +4,7 @@ import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/screen/accountSettings.dart';
 import 'package:plugspot/screen/edit_profile.dart';
 import 'package:plugspot/screen/LoginPage.dart';
+import 'package:plugspot/screen/maps.dart';
 import 'package:plugspot/screen/payment.dart';
 
 class UserProfile extends StatefulWidget {
@@ -19,17 +20,26 @@ class _UserProfileState extends State<UserProfile> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        automaticallyImplyLeading: true,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      MapSample(),
+                  transitionDuration: Duration.zero,
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Palette.backgroundColor,
+            )),
         backgroundColor: Palette.yellowTheme,
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginPage(),
-                ),
-              );
+              Navigator.pop(context);
             },
             icon: Icon(
               Icons.logout,
@@ -129,7 +139,7 @@ class _UserProfileState extends State<UserProfile> {
                 border: Border.all(color: Palette.greyColor)),
             child: InkWell(
               onTap: () {
-                Navigator.push(context,
+                Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => EditProfile()));
               },
               child: Row(
@@ -169,7 +179,7 @@ class _UserProfileState extends State<UserProfile> {
                 border: Border.all(color: Palette.greyColor)),
             child: InkWell(
               onTap: () {
-                Navigator.push(context,
+                Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => AccountSetting()));
               },
               child: Row(

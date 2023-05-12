@@ -4,6 +4,7 @@ import 'package:plugspot/config/palette.dart';
 
 import 'package:plugspot/screen/addNewCard.dart';
 import 'package:plugspot/screen/maps.dart';
+import 'package:plugspot/screen/user_profile.dart';
 
 class Payment extends StatefulWidget {
   const Payment({super.key});
@@ -21,8 +22,8 @@ class _PaymentState extends State<Payment> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MapSample()));
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => UserProfile()));
           },
         ),
         iconTheme: IconThemeData(
