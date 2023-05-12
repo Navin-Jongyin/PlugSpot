@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/provider%20screen/myCharger.dart';
-import 'package:plugspot/screen/login_signup.dart';
+import 'package:plugspot/screen/LoginPage.dart';
 
 import '../config/palette.dart';
 import '../screen/user_profile.dart';
@@ -172,7 +172,7 @@ class _ProviderSidebarState extends State<ProviderSidebar> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LoginSignupScreen(),
+                    builder: (context) => LoginPage(),
                   ),
                 );
               },

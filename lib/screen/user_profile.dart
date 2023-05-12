@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/screen/accountSettings.dart';
 import 'package:plugspot/screen/edit_profile.dart';
-import 'package:plugspot/screen/login_signup.dart';
+import 'package:plugspot/screen/LoginPage.dart';
 import 'package:plugspot/screen/payment.dart';
 
 class UserProfile extends StatefulWidget {
@@ -27,7 +27,7 @@ class _UserProfileState extends State<UserProfile> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => LoginSignupScreen(),
+                  builder: (context) => LoginPage(),
                 ),
               );
             },

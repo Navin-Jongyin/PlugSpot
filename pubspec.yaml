@@ -22,6 +22,7 @@ dependencies:
   permission_handler: ^10.2.0
   flutter_stripe: ^9.2.0
   http: ^0.13.6
+  fluttertoast: ^8.2.1
 
   
 

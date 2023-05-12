@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:plugspot/config/palette.dart';
 
-import 'package:plugspot/screen/login_signup.dart';
+import 'package:plugspot/screen/LoginPage.dart';
 import 'package:plugspot/screen/my_car.dart';
 
 import 'package:plugspot/screen/user_profile.dart';
@@ -147,10 +147,8 @@ class _SideBarState extends State<SideBar> {
                     fontWeight: FontWeight.w500),
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LoginSignupScreen()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
               },
             ),
           ),
