@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
 
 import 'package:plugspot/screen/LoginPage.dart';
+import 'package:plugspot/screen/myBooking.dart';
 import 'package:plugspot/screen/my_car.dart';
 
 import 'package:plugspot/screen/user_profile.dart';
@@ -90,7 +91,10 @@ class _SideBarState extends State<SideBar> {
                     color: Palette.backgroundColor,
                     fontWeight: FontWeight.w500),
               ),
-              onTap: () => null,
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MyBooking()));
+              },
             ),
           ),
           Container(
