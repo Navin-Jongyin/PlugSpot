@@ -24,9 +24,8 @@ class MyApp extends StatelessWidget {
           child: Transform.scale(
               scale: 1.5, child: Image.asset('images/PlugSpot_logonew.png')),
         ),
-        duration: 3000,
+        duration: 2000,
         nextScreen: LoginPage(),
-        splashTransition: SplashTransition.scaleTransition,
         backgroundColor: Palette.backgroundColor,
       ),
     );

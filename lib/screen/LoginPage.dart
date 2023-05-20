@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/screen/maps.dart';
+import 'package:plugspot/screen/signupPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:plugspot/screen/maps.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:plugspot/screen/signupPage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,6 +15,21 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final FocusNode _focusNode = FocusNode();
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
+    });
+  }
+
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   void getData() async {
@@ -57,19 +72,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> deleteData(int id) async {
-    final apiUrl = 'https://plugspot.onrender.com/userAccounts/$id';
-    final response = await http.delete(Uri.parse(apiUrl));
-
-    if (response.statusCode == 200) {
-      print('Data deleted successfully');
-      // Perform any further actions after successful deletion
-    } else {
-      print('Failed to delete data');
-      print(response.statusCode); // Print the response status code
-    }
-  }
-
   void showErrorMessage(String message) {
     Fluttertoast.showToast(
       msg: message,
@@ -83,183 +85,190 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Palette.backgroundColor,
       body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            children: [
-              Center(
-                child: Container(
-                  margin: EdgeInsets.only(top: 50, bottom: 30),
-                  child: RichText(
-                    text: TextSpan(
-                      text: "Plug",
-                      style: GoogleFonts.audiowide(
-                          fontSize: 35, fontWeight: FontWeight.bold),
-                      children: [
-                        TextSpan(
-                          text: 'Spot',
-                          style: GoogleFonts.audiowide(
-                              fontSize: 38,
-                              fontWeight: FontWeight.bold,
-                              color: Palette.yellowTheme),
-                        ),
-                      ],
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(25),
+              height: 180,
+              width: 500,
+              color: Palette.backgroundColor,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "SIGN IN TO YOUR",
+                    style: GoogleFonts.montserrat(
+                      fontSize: 28,
+                      color: Palette.whiteBackgroundColor,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    "ACCOUNT",
+                    style: GoogleFonts.montserrat(
+                        fontSize: 28,
+                        color: Palette.yellowTheme,
+                        fontWeight: FontWeight.w500),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(25, 30, 25, 15),
+              child: TextFormField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                cursorColor: Palette.yellowTheme,
+                decoration: InputDecoration(
+                  labelText: "Email",
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  labelStyle: GoogleFonts.montserrat(
+                      fontSize: 20,
+                      color: _focusNode.hasFocus
+                          ? Palette.backgroundColor
+                          : Palette.greyColor),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.backgroundColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.backgroundColor),
+                  ),
+                  prefixIcon: Icon(
+                    Icons.mail,
+                    color: Palette.yellowTheme,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(25, 15, 25, 15),
+              child: TextFormField(
+                controller: _passwordController,
+                keyboardType: TextInputType.text,
+                cursorColor: Palette.yellowTheme,
+                obscureText: _obscurePassword,
+                decoration: InputDecoration(
+                  labelText: "Password",
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  labelStyle: GoogleFonts.montserrat(
+                      fontSize: 20,
+                      color: _focusNode.hasFocus
+                          ? Palette.backgroundColor
+                          : Palette.greyColor),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.backgroundColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.backgroundColor),
+                  ),
+                  prefixIcon: Icon(
+                    Icons.lock,
+                    color: Palette.yellowTheme,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Palette.greyColor,
+                    ),
+                    onPressed: _togglePasswordVisibility,
+                  ),
+                ),
+              ),
+            ),
+            Center(
+              child: Align(
+                alignment: Alignment.topRight, // or Alignment.bottomRight
+                child: InkWell(
+                  onTap: () {
+                    // Add your onTap logic here
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 25),
+                    child: Text(
+                      'Forgot Password?',
+                      style: GoogleFonts.montserrat(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Palette.yellowTheme),
                     ),
                   ),
                 ),
               ),
-              Container(
-                height: 350,
-                width: 400,
-                padding: EdgeInsets.all(25),
-                margin: EdgeInsets.symmetric(horizontal: 30),
+            ),
+            Center(
+              child: Container(
+                margin: EdgeInsets.only(top: 20, left: 25, right: 25),
+                height: 60,
+                width: 500,
                 decoration: BoxDecoration(
-                  color: Palette.whiteBackgroundColor,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(
+                    10,
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Text(
-                        "Sign In",
-                        style: GoogleFonts.montserrat(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w500,
-                          color: Palette.backgroundColor,
-                        ),
-                      ),
-                    ),
-                    //Email TextBox
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 25),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextField(
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            cursorColor: Palette.yellowTheme,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide:
-                                      BorderSide(color: Palette.greyColor)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide:
-                                      BorderSide(color: Palette.greyColor)),
-                              labelText: 'Email',
-                              labelStyle: GoogleFonts.montserrat(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Palette.greyColor),
-                              prefixIcon: const Icon(
-                                Icons.email_rounded,
-                                color: Palette.yellowTheme,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 30),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextField(
-                            controller: _passwordController,
-                            obscureText: false,
-                            cursorColor: Palette.yellowTheme,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide:
-                                      BorderSide(color: Palette.greyColor)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide:
-                                      BorderSide(color: Palette.greyColor)),
-                              labelText: 'Password',
-                              labelStyle: GoogleFonts.montserrat(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Palette.greyColor),
-                              prefixIcon: const Icon(
-                                Icons.email_rounded,
-                                color: Palette.yellowTheme,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: 60,
-                      width: 400,
-                      child: FloatingActionButton(
-                        backgroundColor: Palette.yellowTheme,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MapSample(),
-                            ),
-                          );
-                          // getData();
-                        },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Text(
-                          "SIGN IN",
-                          style: GoogleFonts.montserrat(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Palette.backgroundColor,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
+                child: FloatingActionButton(
+                  onPressed: () {
+                    getData();
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Palette.yellowTheme,
+                  child: Text(
+                    "Sign In",
+                    style: GoogleFonts.montserrat(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Palette.backgroundColor),
+                  ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Didn't have an account?",
-                      style: GoogleFonts.montserrat(
-                          fontSize: 15, color: Palette.whiteBackgroundColor),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignUpPage()));
-                      },
-                      child: Text(
-                        "Sign Up",
-                        style: GoogleFonts.montserrat(
-                            fontSize: 15,
-                            color: Palette.yellowTheme,
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    )
-                  ],
+            )
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 60,
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Don't have an account?",
+                style: GoogleFonts.montserrat(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Palette.backgroundColor,
                 ),
               ),
+              SizedBox(
+                width: 10,
+              ),
+              InkWell(
+                child: Text(
+                  "Sign Up",
+                  style: GoogleFonts.montserrat(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Palette.yellowTheme,
+                      decoration: TextDecoration.underline),
+                ),
+                onTap: () {
+                  Navigator.of(context).pushReplacement(
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          SignUpPage(),
+                    ),
+                  );
+                },
+              )
             ],
           ),
         ),

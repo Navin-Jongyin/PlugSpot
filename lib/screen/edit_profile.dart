@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/screen/user_profile.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -15,7 +16,13 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.yellowTheme,
-        automaticallyImplyLeading: true,
+        leading: InkWell(
+          child: Icon(Icons.arrow_back_ios),
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => UserProfile()));
+          },
+        ),
         iconTheme: IconThemeData(color: Palette.backgroundColor),
         elevation: 0,
         title: Text(

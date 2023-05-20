@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/provider%20screen/bookingQueue.dart';
 
 import 'package:plugspot/screen/LoginPage.dart';
 import 'package:plugspot/screen/myBooking.dart';
@@ -134,6 +135,27 @@ class _SideBarState extends State<SideBar> {
                     fontWeight: FontWeight.w500),
               ),
               onTap: () => null,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: ListTile(
+              leading: Icon(
+                Icons.history,
+                color: Palette.yellowTheme,
+                size: 35,
+              ),
+              title: Text(
+                'Charging History',
+                style: GoogleFonts.montserrat(
+                    fontSize: 16,
+                    color: Palette.backgroundColor,
+                    fontWeight: FontWeight.w500),
+              ),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => BookingQueue()));
+              },
             ),
           ),
           Container(
