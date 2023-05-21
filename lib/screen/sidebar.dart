@@ -8,6 +8,7 @@ import 'package:plugspot/provider%20screen/bookingQueue.dart';
 import 'package:plugspot/screen/LoginPage.dart';
 import 'package:plugspot/screen/myBooking.dart';
 import 'package:plugspot/screen/my_car.dart';
+import 'package:plugspot/provider screen/bookingQueue.dart';
 
 import 'package:plugspot/screen/user_profile.dart';
 
@@ -73,7 +74,7 @@ class _SideBarState extends State<SideBar> {
               ),
               onTap: () {
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => UserProfile()));
+                    MaterialPageRoute(builder: (context) => BookingQueue()));
               },
             ),
           ),

@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:plugspot/config/palette.dart';
 
 import '../screen/sidebar.dart';
+
 class AddCharger extends StatefulWidget {
   const AddCharger({Key? key}) : super(key: key);
 
@@ -15,7 +19,7 @@ class AddCharger extends StatefulWidget {
 class _AddChargerState extends State<AddCharger> {
   late Position userLocation;
   late GoogleMapController mapController;
-  List <Marker> myMarker =[];
+  List<Marker> myMarker = [];
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -55,17 +59,7 @@ class _AddChargerState extends State<AddCharger> {
       infoWindow: InfoWindow(title: 'New Marker'),
       onTap: () {});
 
-
-
-
-
-
-
-
-
-
   @override
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,9 +71,7 @@ class _AddChargerState extends State<AddCharger> {
         title: Text(
           'Add New Charger',
           style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
-
         ),
-
       ),
       body: Stack(
         children: [
@@ -97,7 +89,7 @@ class _AddChargerState extends State<AddCharger> {
                   markers: Set.from(myMarker),
                   initialCameraPosition: CameraPosition(
                       target:
-                      LatLng(userLocation.latitude, userLocation.longitude),
+                          LatLng(userLocation.latitude, userLocation.longitude),
                       zoom: 17.85),
                 );
               } else {
@@ -125,7 +117,7 @@ class _AddChargerState extends State<AddCharger> {
                       CameraUpdate.newCameraPosition(
                         CameraPosition(
                             target:
-                            LatLng(position.latitude, position.longitude),
+                                LatLng(position.latitude, position.longitude),
                             zoom: 17.85),
                       ),
                     );
@@ -214,30 +206,106 @@ class _AddChargerState extends State<AddCharger> {
                   //   onTap: handleTap,
                   //   markers: Set.from(myMarker),
                   // ),
-
                 ],
               ),
             ),
           ),
         ],
-
       ),
-
     );
   }
-  handleTap(LatLng tappedPoint){
+
+  // handleTap(LatLng tappedPoint) {
+  //   setState(() {
+  //     myMarker = [];
+  //     myMarker.add(Marker(
+  //         markerId: MarkerId(tappedPoint.toString()),
+  //         position: tappedPoint,
+  //         draggable: true,
+  //         onDragEnd: (dragEndPosition) {
+  //           print(dragEndPosition);
+  //         },
+  //         onTap: () => showModalBottomSheet(context: context, builder: builder)
+  //     ));
+  //   });
+  //
+  // }
+  handleTap(LatLng tappedPoint) {
     setState(() {
       myMarker = [];
       myMarker.add(
-          Marker(markerId: MarkerId(tappedPoint.toString()),
-            position: tappedPoint,
-            draggable: true,
-            onDragEnd: (dragEndPosition){
-              print(dragEndPosition);
-            }
-          )
-      );
+        Marker(
+          markerId: MarkerId(tappedPoint.toString()),
+          position: tappedPoint,
+          draggable: true,
+          onDragEnd: (dragEndPosition) {
+            print(dragEndPosition);
+          },
+          onTap: () => showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return Container(
+                height: 400,
+                padding: EdgeInsets.fromLTRB(15, 30, 10, 10),
+                alignment: Alignment.topLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
 
+                  children: [
+                    Text(
+                    'College Town',
+                    style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                      color: Palette.backgroundColor
+                    ),
+                  ),
+                    SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          size: 25,
+                          color: Palette.yellowTheme,
+                        ),
+                        SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                              '669/1 Chalong Krung 1 Alley, Chalongkrung Road Lat Krabang, Bangkok 10520',
+                            style: GoogleFonts.montserrat(fontSize: 15,color: Palette.backgroundColor),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.phone,
+                          size: 25,
+                          color: Palette.yellowTheme,
+                        ),
+                        SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            '0812345678',
+                            style: GoogleFonts.montserrat(fontSize: 15,color: Palette.backgroundColor),
+                          ),
+                        )
+                      ],
+                    ),
+
+
+                ],
+
+                ),
+              );
+            },
+          ),
+        ),
+      );
     });
   }
+
 }

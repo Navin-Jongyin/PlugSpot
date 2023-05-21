@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:ffi';
+import 'package:path/src/context.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -58,7 +60,69 @@ class MapSampleState extends State<MapSample> {
       position: LatLng(13.726862, 100.76644),
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
       infoWindow: InfoWindow(title: 'New Marker'),
-      onTap: () {});
+      onTap: () => showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 400,
+            padding: EdgeInsets.fromLTRB(15, 30, 10, 10),
+            alignment: Alignment.topLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+
+              children: [
+                Text(
+                  'College Town',
+                  style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                      color: Palette.backgroundColor
+                  ),
+                ),
+                SizedBox(height: 20),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.location_on,
+                      size: 25,
+                      color: Palette.yellowTheme,
+                    ),
+                    SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        '669/1 Chalong Krung 1 Alley, Chalongkrung Road Lat Krabang, Bangkok 10520',
+                        style: GoogleFonts.montserrat(fontSize: 15,color: Palette.backgroundColor),
+                      ),
+                    ),
+
+                  ],
+                ),
+                SizedBox(height: 20),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.phone,
+                      size: 25,
+                      color: Palette.yellowTheme,
+                    ),
+                    SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        '0812345678',
+                        style: GoogleFonts.montserrat(fontSize: 15,color: Palette.backgroundColor),
+                      ),
+                    )
+                  ],
+                ),
+
+
+              ],
+
+            ),
+          );
+        },
+      ));
+
 
   @override
   Widget build(BuildContext context) {

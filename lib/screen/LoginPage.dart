@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/provider%20screen/myCharger.dart';
 import 'package:plugspot/screen/maps.dart';
 import 'package:plugspot/screen/signupPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import '../provider screen/add_charger.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -215,6 +218,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 child: FloatingActionButton(
                   onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MapSample()));
                     getData();
                   },
                   shape: RoundedRectangleBorder(
