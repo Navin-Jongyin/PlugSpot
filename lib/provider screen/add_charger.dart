@@ -219,8 +219,15 @@ class _AddChargerState extends State<AddCharger> {
         ),
         child: FloatingActionButton(
           onPressed: () {},
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          backgroundColor: Palette.yellowTheme,
+          child: Text(
+            "Add Details",
+            style: GoogleFonts.montserrat(
+                fontSize: 16, color: Palette.backgroundColor),
+          ),
         ),
       ),
     );
