@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -212,6 +211,18 @@ class _AddChargerState extends State<AddCharger> {
           ),
         ],
       ),
+      bottomNavigationBar: Container(
+        height: 80,
+        padding: EdgeInsets.symmetric(
+          vertical: 15,
+          horizontal: 25,
+        ),
+        child: FloatingActionButton(
+          onPressed: () {},
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+      ),
     );
   }
 
@@ -241,71 +252,8 @@ class _AddChargerState extends State<AddCharger> {
           onDragEnd: (dragEndPosition) {
             print(dragEndPosition);
           },
-          onTap: () => showModalBottomSheet(
-            context: context,
-            builder: (BuildContext context) {
-              return Container(
-                height: 400,
-                padding: EdgeInsets.fromLTRB(15, 30, 10, 10),
-                alignment: Alignment.topLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-
-                  children: [
-                    Text(
-                    'College Town',
-                    style: GoogleFonts.montserrat(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                      color: Palette.backgroundColor
-                    ),
-                  ),
-                    SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.location_on,
-                          size: 25,
-                          color: Palette.yellowTheme,
-                        ),
-                        SizedBox(width: 8),
-                        Flexible(
-                          child: Text(
-                              '669/1 Chalong Krung 1 Alley, Chalongkrung Road Lat Krabang, Bangkok 10520',
-                            style: GoogleFonts.montserrat(fontSize: 15,color: Palette.backgroundColor),
-                          ),
-                        ),
-
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.phone,
-                          size: 25,
-                          color: Palette.yellowTheme,
-                        ),
-                        SizedBox(width: 8),
-                        Flexible(
-                          child: Text(
-                            '0812345678',
-                            style: GoogleFonts.montserrat(fontSize: 15,color: Palette.backgroundColor),
-                          ),
-                        )
-                      ],
-                    ),
-
-
-                ],
-
-                ),
-              );
-            },
-          ),
         ),
       );
     });
   }
-
 }
