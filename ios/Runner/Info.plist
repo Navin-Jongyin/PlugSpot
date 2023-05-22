@@ -53,5 +53,9 @@
     <true/>
     <key>NSCameraUsageDescription</key>
     <string>Camera permission is required to scan QR codes.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Access to the photo library is required to select images.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Access to the photo library is required to save images.</string>
 </dict>
 </plist>

@@ -74,7 +74,7 @@ class _SideBarState extends State<SideBar> {
               ),
               onTap: () {
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => BookingQueue()));
+                    MaterialPageRoute(builder: (context) => UserProfile()));
               },
             ),
           ),
