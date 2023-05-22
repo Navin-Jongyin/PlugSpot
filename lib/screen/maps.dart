@@ -1,17 +1,16 @@
 import 'dart:async';
 import 'dart:ffi';
-import 'package:path/src/context.dart';
-import 'package:flutter/widgets.dart';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/screen/timeSelection.dart';
 import 'package:plugspot/screen/qrScanner.dart';
 import 'package:plugspot/screen/sidebar.dart';
-
-import 'user_profile.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class MapSample extends StatefulWidget {
   const MapSample({Key? key}) : super(key: key);
@@ -21,6 +20,7 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
+  late BuildContext modalContext;
   late Position userLocation;
   late GoogleMapController mapController;
 
@@ -55,74 +55,8 @@ class MapSampleState extends State<MapSample> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final Marker newMarker = Marker(
-      markerId: MarkerId('new_marker'),
-      position: LatLng(13.726862, 100.76644),
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-      infoWindow: InfoWindow(title: 'New Marker'),
-      onTap: () => showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return Container(
-            height: 400,
-            padding: EdgeInsets.fromLTRB(15, 30, 10, 10),
-            alignment: Alignment.topLeft,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-
-              children: [
-                Text(
-                  'College Town',
-                  style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                      color: Palette.backgroundColor
-                  ),
-                ),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.location_on,
-                      size: 25,
-                      color: Palette.yellowTheme,
-                    ),
-                    SizedBox(width: 8),
-                    Flexible(
-                      child: Text(
-                        '669/1 Chalong Krung 1 Alley, Chalongkrung Road Lat Krabang, Bangkok 10520',
-                        style: GoogleFonts.montserrat(fontSize: 15,color: Palette.backgroundColor),
-                      ),
-                    ),
-
-                  ],
-                ),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.phone,
-                      size: 25,
-                      color: Palette.yellowTheme,
-                    ),
-                    SizedBox(width: 8),
-                    Flexible(
-                      child: Text(
-                        '0812345678',
-                        style: GoogleFonts.montserrat(fontSize: 15,color: Palette.backgroundColor),
-                      ),
-                    )
-                  ],
-                ),
-
-
-              ],
-
-            ),
-          );
-        },
-      ));
-
+//Navigation TODO
+  void _launchGoogleMapsNavigation(double lat, double lng) async {}
 
   @override
   Widget build(BuildContext context) {
@@ -138,15 +72,161 @@ class MapSampleState extends State<MapSample> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 return GoogleMap(
-                  markers: Set<Marker>.of([newMarker]),
                   mapType: MapType.normal,
                   onMapCreated: _onMapCreated,
                   myLocationEnabled: true,
                   myLocationButtonEnabled: false,
                   initialCameraPosition: CameraPosition(
-                      target:
-                          LatLng(userLocation.latitude, userLocation.longitude),
-                      zoom: 17.85),
+                    target:
+                        LatLng(userLocation.latitude, userLocation.longitude),
+                    zoom: 17.85,
+                  ),
+                  markers: {
+                    Marker(
+                      markerId: MarkerId("new_marker"),
+                      position: LatLng(13.726862, 100.76541),
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                              height: 250,
+                              padding: EdgeInsets.all(25),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "College Town, Ladkrabang",
+                                    style: GoogleFonts.montserrat(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(top: 25),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.location_on,
+                                          color: Palette.yellowTheme,
+                                          size: 20,
+                                        ),
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                        Text(
+                                          "Location",
+                                          style: GoogleFonts.montserrat(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(top: 25),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.phone_iphone,
+                                          color: Palette.yellowTheme,
+                                          size: 20,
+                                        ),
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                        Text(
+                                          "0812345678",
+                                          style: GoogleFonts.montserrat(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(top: 25),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          width: 170,
+                                          height: 50,
+                                          child: FloatingActionButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                PageRouteBuilder(
+                                                  pageBuilder: (context,
+                                                          animation,
+                                                          secondaryAnimation) =>
+                                                      TimeSelection(),
+                                                ),
+                                              );
+                                            },
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Text(
+                                              "Book Now",
+                                              style: GoogleFonts.montserrat(
+                                                fontSize: 18,
+                                                color: Palette.backgroundColor,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            backgroundColor:
+                                                Palette.yellowTheme,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 170,
+                                          height: 50,
+                                          child: FloatingActionButton(
+                                            onPressed: () {
+                                              _launchGoogleMapsNavigation(
+                                                  13.726862, 100.76541);
+                                            },
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.navigation_rounded,
+                                                  color: Palette.yellowTheme,
+                                                ),
+                                                Text(
+                                                  "Navigation",
+                                                  style: GoogleFonts.montserrat(
+                                                    fontSize: 18,
+                                                    color: Palette.yellowTheme,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            backgroundColor:
+                                                Palette.backgroundColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    )
+                  },
                 );
               } else {
                 return Center(
