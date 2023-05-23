@@ -26,12 +26,12 @@ class _UserProfileState extends State<UserProfile> {
                 context,
                 PageRouteBuilder(
                   pageBuilder: (context, animation, secondaryAnimation) =>
-                      MapSample(),
+                      const MapSample(),
                   transitionDuration: Duration.zero,
                 ),
               );
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back_ios,
               color: Palette.backgroundColor,
             )),
@@ -39,15 +39,20 @@ class _UserProfileState extends State<UserProfile> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.of(context).pushReplacement(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const LoginPage(),
+                ),
+              );
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.logout,
               color: Colors.red,
             ),
           ),
         ],
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Palette.backgroundColor,
         ),
         title: Text(
@@ -72,7 +77,7 @@ class _UserProfileState extends State<UserProfile> {
                   child: Container(
                     height: 1000,
                     width: 1000,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Palette.yellowTheme,
                       shape: BoxShape.circle,
                       boxShadow: [
@@ -90,14 +95,14 @@ class _UserProfileState extends State<UserProfile> {
                   left: 0,
                   right: 0,
                   child: Transform.translate(
-                    offset: Offset(0, 20),
+                    offset: const Offset(0, 20),
                     child: Column(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(bottom: 15),
+                          margin: const EdgeInsets.only(bottom: 15),
                           height: 130,
                           width: 130,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
@@ -108,7 +113,7 @@ class _UserProfileState extends State<UserProfile> {
                               ),
                             ],
                           ),
-                          child: ClipOval(
+                          child: const ClipOval(
                             child: Image(
                               image: AssetImage("images/nicky.png"),
                               fit: BoxFit.cover,
@@ -130,8 +135,8 @@ class _UserProfileState extends State<UserProfile> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(25, 30, 25, 15),
-            padding: EdgeInsets.all(15),
+            margin: const EdgeInsets.fromLTRB(25, 30, 25, 15),
+            padding: const EdgeInsets.all(15),
             height: 70,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
@@ -139,19 +144,23 @@ class _UserProfileState extends State<UserProfile> {
                 border: Border.all(color: Palette.greyColor)),
             child: InkWell(
               onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => EditProfile()));
+                Navigator.of(context).pushReplacement(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const EditProfile(),
+                  ),
+                );
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.edit,
                         color: Palette.yellowTheme,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Text(
@@ -161,7 +170,7 @@ class _UserProfileState extends State<UserProfile> {
                       ),
                     ],
                   ),
-                  Icon(
+                  const Icon(
                     Icons.arrow_forward_ios,
                     color: Palette.yellowTheme,
                   )
@@ -170,8 +179,8 @@ class _UserProfileState extends State<UserProfile> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(25, 0, 25, 15),
-            padding: EdgeInsets.all(15),
+            margin: const EdgeInsets.fromLTRB(25, 0, 25, 15),
+            padding: const EdgeInsets.all(15),
             height: 70,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
@@ -179,19 +188,23 @@ class _UserProfileState extends State<UserProfile> {
                 border: Border.all(color: Palette.greyColor)),
             child: InkWell(
               onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => AccountSetting()));
+                Navigator.of(context).pushReplacement(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const AccountSetting(),
+                  ),
+                );
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.settings,
                         color: Palette.yellowTheme,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Text(
@@ -201,7 +214,7 @@ class _UserProfileState extends State<UserProfile> {
                       ),
                     ],
                   ),
-                  Icon(
+                  const Icon(
                     Icons.arrow_forward_ios,
                     color: Palette.yellowTheme,
                   )
@@ -210,8 +223,8 @@ class _UserProfileState extends State<UserProfile> {
             ),
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(25, 0, 25, 15),
-            padding: EdgeInsets.all(15),
+            margin: const EdgeInsets.fromLTRB(25, 0, 25, 15),
+            padding: const EdgeInsets.all(15),
             height: 70,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
@@ -219,19 +232,23 @@ class _UserProfileState extends State<UserProfile> {
                 border: Border.all(color: Palette.greyColor)),
             child: InkWell(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Payment()));
+                Navigator.of(context).pushReplacement(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const Payment(),
+                  ),
+                );
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.payment,
                         color: Palette.yellowTheme,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Text(
@@ -241,7 +258,7 @@ class _UserProfileState extends State<UserProfile> {
                       ),
                     ],
                   ),
-                  Icon(
+                  const Icon(
                     Icons.arrow_forward_ios,
                     color: Palette.yellowTheme,
                   )

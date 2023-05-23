@@ -6,6 +6,7 @@ import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/provider%20screen/bookingQueue.dart';
 
 import 'package:plugspot/screen/LoginPage.dart';
+import 'package:plugspot/screen/chargingHistory.dart';
 import 'package:plugspot/screen/myBooking.dart';
 import 'package:plugspot/screen/my_car.dart';
 import 'package:plugspot/provider screen/bookingQueue.dart';
@@ -22,7 +23,7 @@ class _SideBarState extends State<SideBar> {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
@@ -50,7 +51,7 @@ class _SideBarState extends State<SideBar> {
                 ),
               ),
             ),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('images/backgroundheader.png'),
                 fit: BoxFit.cover,
@@ -58,9 +59,9 @@ class _SideBarState extends State<SideBar> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 10),
+            margin: const EdgeInsets.only(bottom: 10),
             child: ListTile(
-              leading: Icon(
+              leading: const Icon(
                 Icons.person,
                 color: Palette.yellowTheme,
                 size: 35,
@@ -73,15 +74,17 @@ class _SideBarState extends State<SideBar> {
                     fontWeight: FontWeight.w500),
               ),
               onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => UserProfile()));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const UserProfile()));
               },
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 10),
+            margin: const EdgeInsets.only(bottom: 10),
             child: ListTile(
-              leading: ImageIcon(
+              leading: const ImageIcon(
                 AssetImage("images/icon/appointment.png"),
                 size: 35,
                 color: Palette.yellowTheme,
@@ -95,14 +98,14 @@ class _SideBarState extends State<SideBar> {
               ),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MyBooking()));
+                    MaterialPageRoute(builder: (context) => const MyBooking()));
               },
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 15),
+            margin: const EdgeInsets.only(bottom: 15),
             child: ListTile(
-              leading: ImageIcon(
+              leading: const ImageIcon(
                 AssetImage('images/icon/car.png'),
                 size: 35,
                 color: Palette.yellowTheme,
@@ -115,33 +118,15 @@ class _SideBarState extends State<SideBar> {
                     fontWeight: FontWeight.w500),
               ),
               onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => MyCar()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const MyCar()));
               },
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 10),
+            margin: const EdgeInsets.only(bottom: 10),
             child: ListTile(
-              leading: Icon(
-                Icons.history,
-                color: Palette.yellowTheme,
-                size: 35,
-              ),
-              title: Text(
-                'Charging History',
-                style: GoogleFonts.montserrat(
-                    fontSize: 16,
-                    color: Palette.backgroundColor,
-                    fontWeight: FontWeight.w500),
-              ),
-              onTap: () => null,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: ListTile(
-              leading: Icon(
+              leading: const Icon(
                 Icons.history,
                 color: Palette.yellowTheme,
                 size: 35,
@@ -154,14 +139,41 @@ class _SideBarState extends State<SideBar> {
                     fontWeight: FontWeight.w500),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => BookingQueue()));
+                Navigator.of(context).pushReplacement(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const ChargingHistory(),
+                  ),
+                );
+              },
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            child: ListTile(
+              leading: const Icon(
+                Icons.history,
+                color: Palette.yellowTheme,
+                size: 35,
+              ),
+              title: Text(
+                'Provider',
+                style: GoogleFonts.montserrat(
+                    fontSize: 16,
+                    color: Palette.backgroundColor,
+                    fontWeight: FontWeight.w500),
+              ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const BookingQueue()));
               },
             ),
           ),
           Container(
             child: ListTile(
-              leading: Icon(
+              leading: const Icon(
                 Icons.logout,
                 size: 35,
                 color: Colors.red,
@@ -175,7 +187,7 @@ class _SideBarState extends State<SideBar> {
               ),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginPage()));
+                    MaterialPageRoute(builder: (context) => const LoginPage()));
               },
             ),
           ),

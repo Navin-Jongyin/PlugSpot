@@ -1,42 +1,99 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/screen/user_profile.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+  const EditProfile({Key? key}) : super(key: key);
 
   @override
   State<EditProfile> createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
+  File? _image;
+
+  Future<void> _getImageFromDevice(ImageSource source) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
+  void _showImageOptions() {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          title: Text('Change Profile Picture'),
+          actions: [
+            CupertinoActionSheetAction(
+              onPressed: () {
+                _getImageFromDevice(ImageSource.camera);
+                Navigator.pop(context);
+              },
+              child: Text('Take a Photo'),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                _getImageFromDevice(ImageSource.gallery);
+                Navigator.pop(context);
+              },
+              child: Text('Choose from Gallery'),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Cancel'),
+            isDefaultAction: true,
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.yellowTheme,
         leading: InkWell(
-          child: Icon(Icons.arrow_back_ios),
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: Palette.backgroundColor,
+          ),
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => UserProfile()));
+            Navigator.of(context).pushReplacement(
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    UserProfile(),
+              ),
+            );
           },
         ),
-        iconTheme: IconThemeData(color: Palette.backgroundColor),
         elevation: 0,
         title: Text(
           "Edit Profile",
           style: GoogleFonts.montserrat(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Palette.backgroundColor),
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Palette.backgroundColor,
+          ),
         ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: 180,
               child: Stack(
                 children: [
@@ -69,25 +126,30 @@ class _EditProfileState extends State<EditProfile> {
                       child: Column(
                         children: [
                           Container(
-                            margin: EdgeInsets.only(bottom: 10),
                             height: 130,
                             width: 130,
                             decoration: BoxDecoration(
-                                color: Palette.backgroundColor,
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    offset: Offset(0, 2),
-                                    blurRadius: 7.0,
-                                    spreadRadius: 1,
-                                  ),
-                                ]),
+                              color: Palette.backgroundColor,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  offset: Offset(0, 2),
+                                  blurRadius: 7.0,
+                                  spreadRadius: 1,
+                                ),
+                              ],
+                            ),
                             child: ClipOval(
-                              child: Image(
-                                image: AssetImage("images/nicky.png"),
-                                fit: BoxFit.cover,
-                              ),
+                              child: _image != null
+                                  ? Image.file(
+                                      _image!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      "images/avatarimage.png",
+                                      fit: BoxFit.cover,
+                                    ),
                             ),
                           ),
                         ],
@@ -97,85 +159,66 @@ class _EditProfileState extends State<EditProfile> {
                 ],
               ),
             ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "First Name",
-                    style: GoogleFonts.montserrat(fontSize: 14),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 5),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Palette.greyColor),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: TextField(
-                      cursorColor: Palette.yellowTheme,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                      ),
-                      style: GoogleFonts.montserrat(fontSize: 18),
-                    ),
-                  ),
-                ],
+            SizedBox(
+              height: 40,
+              width: 150,
+              child: FloatingActionButton(
+                onPressed: _showImageOptions,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                backgroundColor: Palette.yellowTheme,
+                child: Text(
+                  "Edit Picture",
+                  style: GoogleFonts.montserrat(
+                      fontSize: 14,
+                      color: Palette.backgroundColor,
+                      fontWeight: FontWeight.w500),
+                ),
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Last Name",
-                    style: GoogleFonts.montserrat(fontSize: 14),
+              margin: EdgeInsets.fromLTRB(25, 30, 25, 15),
+              child: TextFormField(
+                keyboardType: TextInputType.text,
+                cursorColor: Palette.yellowTheme,
+                decoration: InputDecoration(
+                  labelText: "Name",
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  labelStyle: GoogleFonts.montserrat(
+                      fontSize: 20, color: Palette.backgroundColor),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.backgroundColor),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: 5),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Palette.greyColor),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: TextField(
-                      cursorColor: Palette.yellowTheme,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                      ),
-                      style: GoogleFonts.montserrat(fontSize: 18),
-                    ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.backgroundColor),
                   ),
-                ],
+                ),
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Phone Number",
-                    style: GoogleFonts.montserrat(fontSize: 14),
+              margin: EdgeInsets.fromLTRB(25, 15, 25, 15),
+              child: TextFormField(
+                keyboardType: TextInputType.text,
+                cursorColor: Palette.yellowTheme,
+                decoration: InputDecoration(
+                  labelText: "Phone Number",
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  labelStyle: GoogleFonts.montserrat(
+                      fontSize: 20, color: Palette.backgroundColor),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.backgroundColor),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: 5),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Palette.greyColor),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: TextField(
-                      keyboardType: TextInputType.number,
-                      cursorColor: Palette.yellowTheme,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                      ),
-                      style: GoogleFonts.montserrat(fontSize: 18),
-                    ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.backgroundColor),
                   ),
-                ],
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -188,22 +231,26 @@ class _EditProfileState extends State<EditProfile> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Icon(
-              Icons.save,
-              color: Palette.backgroundColor,
-            ),
-            SizedBox(
-              width: 8,
-            ),
-            Text(
-              "Save",
-              style: GoogleFonts.montserrat(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.save,
+                color: Palette.backgroundColor,
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Text(
+                "Save",
+                style: GoogleFonts.montserrat(
                   fontSize: 18,
                   color: Palette.backgroundColor,
-                  fontWeight: FontWeight.bold),
-            )
-          ]),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

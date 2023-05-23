@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:plugspot/screen/LoginPage.dart';
-import 'package:plugspot/screen/selectRole.dart';
 import 'package:http/http.dart' as http;
+import 'package:plugspot/screen/LoginPage.dart';
 import 'dart:convert';
 import '../config/palette.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -15,6 +15,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final FocusNode _focusNode = FocusNode();
+  final FocusNode _textFieldFocusNode = FocusNode();
   bool _obscurePassword = true;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -22,12 +23,32 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController roleController = TextEditingController();
+  final phoneNumberFormatter = FilteringTextInputFormatter.digitsOnly;
+
+  List<String> _items = [
+    'Car User',
+    'Charger Provider',
+  ];
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
+    });
+  }
+
+  void initState() {
+    super.initState();
+    roleController.text = '';
+  }
 
   Future<void> createUser(
     String name,
     String email,
     String password,
     String confirmPassword,
+    int phoneNumber,
+    String role,
   ) async {
     if (password != confirmPassword) {
       showDialog(
@@ -36,11 +57,15 @@ class _SignUpPageState extends State<SignUpPage> {
           title: Text(
             "Error!",
             style: GoogleFonts.montserrat(
-                color: Palette.yellowTheme, fontWeight: FontWeight.bold),
+              color: Palette.yellowTheme,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           content: Text(
-            "Password do not match",
-            style: GoogleFonts.montserrat(color: Palette.backgroundColor),
+            "Password does not match",
+            style: GoogleFonts.montserrat(
+              color: Palette.backgroundColor,
+            ),
           ),
           actions: [
             TextButton(
@@ -48,9 +73,10 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Text(
                 'OK',
                 style: GoogleFonts.montserrat(
-                    fontSize: 15,
-                    color: Palette.yellowTheme,
-                    fontWeight: FontWeight.bold),
+                  fontSize: 15,
+                  color: Palette.yellowTheme,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
@@ -59,47 +85,56 @@ class _SignUpPageState extends State<SignUpPage> {
       return;
     }
 
-    const String apiUrl = 'https://plugspot.onrender.com/userAccounts';
+    const String apiUrl = 'https://plugspot.onrender.com/userAccount/signup';
     final Map<String, dynamic> userData = {
       'fullname': name,
       'email': email,
       'password': password,
+      'phonenumber': phoneNumber,
+      'role': role.replaceAll(" ", "").toLowerCase(),
     };
 
     final response = await http.post(
       Uri.parse(apiUrl),
-      headers: {'Content-Type': 'application/json'},
       body: jsonEncode(userData),
     );
 
     if (response.statusCode == 201) {
+      print(response.body);
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Success'),
-          content: Text('User created successfully.'),
+          title: const Text('Success'),
+          content: const Text('User created successfully.'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
+                Navigator.of(context).pushReplacement(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const LoginPage(),
+                  ),
+                );
                 // Navigate to another screen or perform any desired action
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         ),
       );
     } else {
       print(response.statusCode);
+      print(response.body);
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Error'),
-          content: Text('Failed to create user.'),
+          title: const Text('Error'),
+          content: const Text('Failed to create user.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         ),
@@ -110,13 +145,13 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   void dispose() {
     _focusNode.dispose();
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    phoneNumberController.dispose();
+    roleController.dispose();
     super.dispose();
-  }
-
-  void _togglePasswordVisibility() {
-    setState(() {
-      _obscurePassword = !_obscurePassword;
-    });
   }
 
   @override
@@ -126,7 +161,7 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(25),
+              padding: const EdgeInsets.all(25),
               height: 145,
               width: 500,
               color: Palette.backgroundColor,
@@ -145,15 +180,16 @@ class _SignUpPageState extends State<SignUpPage> {
                   Text(
                     "ACCOUNT",
                     style: GoogleFonts.montserrat(
-                        fontSize: 28,
-                        color: Palette.yellowTheme,
-                        fontWeight: FontWeight.w500),
-                  )
+                      fontSize: 28,
+                      color: Palette.yellowTheme,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ],
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(25, 30, 25, 10),
+              margin: const EdgeInsets.fromLTRB(25, 30, 25, 10),
               child: TextFormField(
                 controller: nameController,
                 keyboardType: TextInputType.text,
@@ -162,19 +198,24 @@ class _SignUpPageState extends State<SignUpPage> {
                   labelText: "Full Name",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   labelStyle: GoogleFonts.montserrat(
-                      fontSize: 20,
-                      color: _focusNode.hasFocus
-                          ? Palette.backgroundColor
-                          : Palette.greyColor),
+                    fontSize: 20,
+                    color: _focusNode.hasFocus
+                        ? Palette.backgroundColor
+                        : Palette.greyColor,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Palette.backgroundColor),
+                    borderSide: const BorderSide(
+                      color: Palette.backgroundColor,
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Palette.backgroundColor),
+                    borderSide: const BorderSide(
+                      color: Palette.backgroundColor,
+                    ),
                   ),
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.person,
                     color: Palette.yellowTheme,
                   ),
@@ -182,28 +223,37 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(25, 10, 25, 10),
+              margin: const EdgeInsets.fromLTRB(25, 10, 25, 10),
               child: TextFormField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 cursorColor: Palette.yellowTheme,
+                inputFormatters: [
+                  FilteringTextInputFormatter.deny(
+                      RegExp(r"\s")), // Disallow spaces
+                ],
                 decoration: InputDecoration(
                   labelText: "Email",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   labelStyle: GoogleFonts.montserrat(
-                      fontSize: 20,
-                      color: _focusNode.hasFocus
-                          ? Palette.backgroundColor
-                          : Palette.greyColor),
+                    fontSize: 20,
+                    color: _focusNode.hasFocus
+                        ? Palette.backgroundColor
+                        : Palette.greyColor,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Palette.backgroundColor),
+                    borderSide: const BorderSide(
+                      color: Palette.backgroundColor,
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Palette.backgroundColor),
+                    borderSide: const BorderSide(
+                      color: Palette.backgroundColor,
+                    ),
                   ),
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.mail,
                     color: Palette.yellowTheme,
                   ),
@@ -211,29 +261,38 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(25, 10, 25, 10),
+              margin: const EdgeInsets.fromLTRB(25, 10, 25, 10),
               child: TextFormField(
                 controller: passwordController,
                 keyboardType: TextInputType.text,
                 cursorColor: Palette.yellowTheme,
                 obscureText: _obscurePassword,
+                inputFormatters: [
+                  FilteringTextInputFormatter.deny(
+                      RegExp(r"\s")), // Disallow spaces
+                ],
                 decoration: InputDecoration(
                   labelText: "Password",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   labelStyle: GoogleFonts.montserrat(
-                      fontSize: 20,
-                      color: _focusNode.hasFocus
-                          ? Palette.backgroundColor
-                          : Palette.greyColor),
+                    fontSize: 20,
+                    color: _focusNode.hasFocus
+                        ? Palette.backgroundColor
+                        : Palette.greyColor,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Palette.backgroundColor),
+                    borderSide: const BorderSide(
+                      color: Palette.backgroundColor,
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Palette.backgroundColor),
+                    borderSide: const BorderSide(
+                      color: Palette.backgroundColor,
+                    ),
                   ),
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.password,
                     color: Palette.yellowTheme,
                   ),
@@ -250,29 +309,38 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(25, 10, 25, 10),
+              margin: const EdgeInsets.fromLTRB(25, 10, 25, 10),
               child: TextFormField(
                 controller: confirmPasswordController,
                 keyboardType: TextInputType.text,
                 cursorColor: Palette.yellowTheme,
                 obscureText: _obscurePassword,
+                inputFormatters: [
+                  FilteringTextInputFormatter.deny(
+                      RegExp(r"\s")), // Disallow spaces
+                ],
                 decoration: InputDecoration(
                   labelText: "Confirm Password",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   labelStyle: GoogleFonts.montserrat(
-                      fontSize: 20,
-                      color: _focusNode.hasFocus
-                          ? Palette.backgroundColor
-                          : Palette.greyColor),
+                    fontSize: 20,
+                    color: _focusNode.hasFocus
+                        ? Palette.backgroundColor
+                        : Palette.greyColor,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Palette.backgroundColor),
+                    borderSide: const BorderSide(
+                      color: Palette.backgroundColor,
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Palette.backgroundColor),
+                    borderSide: const BorderSide(
+                      color: Palette.backgroundColor,
+                    ),
                   ),
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.password,
                     color: Palette.yellowTheme,
                   ),
@@ -289,28 +357,104 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(25, 10, 25, 10),
+              margin: const EdgeInsets.fromLTRB(25, 10, 25, 10),
               child: TextFormField(
                 controller: phoneNumberController,
-                keyboardType: TextInputType.emailAddress,
+                keyboardType: TextInputType.phone,
                 cursorColor: Palette.yellowTheme,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(10),
+                  phoneNumberFormatter,
+                ],
                 decoration: InputDecoration(
-                  labelText: "Phone Numer",
+                  labelText: "Phone Number",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   labelStyle: GoogleFonts.montserrat(
-                      fontSize: 20,
-                      color: _focusNode.hasFocus
-                          ? Palette.backgroundColor
-                          : Palette.greyColor),
+                    fontSize: 20,
+                    color: _focusNode.hasFocus
+                        ? Palette.backgroundColor
+                        : Palette.greyColor,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Palette.backgroundColor),
+                    borderSide: const BorderSide(
+                      color: Palette.backgroundColor,
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Palette.backgroundColor),
+                    borderSide: const BorderSide(
+                      color: Palette.backgroundColor,
+                    ),
                   ),
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
+                    Icons.phone_iphone,
+                    color: Palette.yellowTheme,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+              child: TextFormField(
+                controller: roleController,
+                onTap: () {
+                  FocusScope.of(context).requestFocus(_textFieldFocusNode);
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: 200,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _items.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(
+                                _items[index],
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              onTap: () {
+                                setState(
+                                  () {
+                                    roleController.text = _items[index];
+                                    Navigator.pop(context);
+
+                                    print(roleController.text);
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  );
+                },
+                keyboardType: TextInputType.text,
+                cursorColor: Palette.yellowTheme,
+                showCursor: false,
+                decoration: InputDecoration(
+                  labelText: 'Role',
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  labelStyle: TextStyle(
+                    fontSize: 20,
+                    color: roleController.text.isNotEmpty
+                        ? Colors.black
+                        : Colors.grey,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Colors.black),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Colors.black),
+                  ),
+                  prefixIcon: const Icon(
                     Icons.phone_iphone,
                     color: Palette.yellowTheme,
                   ),
@@ -319,23 +463,24 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             Center(
               child: Container(
-                margin: EdgeInsets.only(top: 10, left: 25, right: 25),
+                margin: const EdgeInsets.only(top: 10, left: 25, right: 25),
                 height: 60,
                 width: 500,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    10,
-                  ),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: FloatingActionButton(
                   heroTag: 'signup',
                   onPressed: () {
+                    int phoneNumber =
+                        int.tryParse(phoneNumberController.text) ?? 0;
                     createUser(
-                      nameController.text,
-                      emailController.text,
-                      passwordController.text,
-                      confirmPasswordController.text,
-                    );
+                        nameController.text,
+                        emailController.text,
+                        passwordController.text,
+                        confirmPasswordController.text,
+                        phoneNumber,
+                        roleController.text);
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -344,9 +489,10 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: Text(
                     "Sign Up",
                     style: GoogleFonts.montserrat(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Palette.backgroundColor),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Palette.backgroundColor,
+                    ),
                   ),
                 ),
               ),
@@ -354,7 +500,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar: SizedBox(
         height: 60,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -362,11 +508,12 @@ class _SignUpPageState extends State<SignUpPage> {
             Text(
               "Already have an account?",
               style: GoogleFonts.montserrat(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Palette.backgroundColor),
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Palette.backgroundColor,
+              ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             InkWell(
@@ -387,7 +534,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

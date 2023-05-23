@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/screen/user_profile.dart';
 
 class AccountSetting extends StatefulWidget {
   const AccountSetting({super.key});
@@ -14,7 +15,17 @@ class _AccountSettingState extends State<AccountSetting> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.of(context).pushReplacement(
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    UserProfile(),
+              ),
+            );
+          },
+        ),
         backgroundColor: Palette.yellowTheme,
         title: Text(
           "Account Settings",
