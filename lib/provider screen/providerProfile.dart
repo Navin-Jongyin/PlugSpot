@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/provider%20screen/bookingQueue.dart';
 import 'package:plugspot/screen/accountSettings.dart';
 import 'package:plugspot/screen/edit_profile.dart';
 import 'package:plugspot/screen/LoginPage.dart';
-import 'package:plugspot/screen/maps.dart';
-import 'package:plugspot/screen/payment.dart';
 
-class UserProfile extends StatefulWidget {
-  const UserProfile({super.key});
+class ProviderProfile extends StatefulWidget {
+  const ProviderProfile({super.key});
 
   @override
-  State<UserProfile> createState() => _UserProfileState();
+  State<ProviderProfile> createState() => _ProviderProfileState();
 }
 
-class _UserProfileState extends State<UserProfile> {
+class _ProviderProfileState extends State<ProviderProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,12 +21,10 @@ class _UserProfileState extends State<UserProfile> {
         elevation: 0,
         leading: IconButton(
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
+              Navigator.of(context).pushReplacement(
                 PageRouteBuilder(
                   pageBuilder: (context, animation, secondaryAnimation) =>
-                      const MapSample(),
-                  transitionDuration: Duration.zero,
+                      BookingQueue(),
                 ),
               );
             },

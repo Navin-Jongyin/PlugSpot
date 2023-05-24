@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/provider%20screen/bookingQueue.dart';
 import 'package:plugspot/screen/maps.dart';
 import 'package:plugspot/screen/signupPage.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
+  String? _userRole;
 
   @override
   void dispose() {
@@ -88,10 +90,12 @@ class _LoginPageState extends State<LoginPage> {
         final responseData = jsonDecode(response.body);
         print(responseData);
         print(response.statusCode);
+        _userRole = responseData['role'];
         return true; // Login successful
       } else {
         print('Failed, with: ${response.statusCode}');
         print(response.body);
+        print(response.statusCode);
         return false; // Login failed
       }
     } catch (e) {
@@ -251,16 +255,33 @@ class _LoginPageState extends State<LoginPage> {
                     String password = _passwordController.text;
                     bool logInSuccessful = await _logIn(email, password);
 
-                    if (logInSuccessful) {
-                      // Navigate to another page upon successful login
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MapSample()),
-                      );
-                    } else {
-                      // Show an error message upon failed login
-                      _showErrorMessage('Invalid Email or Password');
-                    }
+                    // if (logInSuccessful) {
+                    //   if (_userRole == 'caruser') {
+                    //     Navigator.of(context).pushReplacement(
+                    //       PageRouteBuilder(
+                    //         pageBuilder:
+                    //             (context, animation, secondaryAnimation) =>
+                    //                 MapSample(),
+                    //       ),
+                    //     );
+                    //   } else if (_userRole == 'provider') {
+                    //     Navigator.of(context).pushReplacement(
+                    //       PageRouteBuilder(
+                    //         pageBuilder:
+                    //             (context, animation, secondaryAnimation) =>
+                    //                 BookingQueue(),
+                    //       ),
+                    //     );
+                    //   }
+                    // } else {
+                    //   _showErrorMessage('Invalid Email or Password');
+                    // }
+                    Navigator.of(context).pushReplacement(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            MapSample(),
+                      ),
+                    );
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),

@@ -54,9 +54,26 @@ class MapSampleState extends State<MapSample> {
     return userLocation;
   }
 
+  @override
+  void initState() {
+    addCustomIcon();
+    super.initState();
+  }
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 //Navigation TODO
   void _launchGoogleMapsNavigation(double lat, double lng) async {}
+
+  BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
+  void addCustomIcon() {
+    BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(), 'images/locationpin.png')
+        .then((icon) {
+      setState(() {
+        markerIcon = icon;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +102,7 @@ class MapSampleState extends State<MapSample> {
                     Marker(
                       markerId: MarkerId("new_marker"),
                       position: LatLng(13.726862, 100.76541),
+                      icon: markerIcon,
                       onTap: () {
                         showModalBottomSheet(
                           context: context,
@@ -225,7 +243,7 @@ class MapSampleState extends State<MapSample> {
                           },
                         );
                       },
-                    )
+                    ),
                   },
                 );
               } else {

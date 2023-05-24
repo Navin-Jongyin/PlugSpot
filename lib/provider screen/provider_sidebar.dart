@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/provider%20screen/myCharger.dart';
+import 'package:plugspot/provider%20screen/providerProfile.dart';
 import 'package:plugspot/screen/LoginPage.dart';
 
 import '../config/palette.dart';
@@ -69,8 +70,12 @@ class _ProviderSidebarState extends State<ProviderSidebar> {
                     fontWeight: FontWeight.w500),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => UserProfile()));
+                Navigator.of(context).pushReplacement(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        ProviderProfile(),
+                  ),
+                );
               },
             ),
           ),
@@ -127,24 +132,6 @@ class _ProviderSidebarState extends State<ProviderSidebar> {
               ),
               title: Text(
                 'Services',
-                style: GoogleFonts.montserrat(
-                    fontSize: 16,
-                    color: Palette.backgroundColor,
-                    fontWeight: FontWeight.w500),
-              ),
-              // onTap: () => null,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: ListTile(
-              leading: Icon(
-                Icons.history,
-                color: Palette.yellowTheme,
-                size: 35,
-              ),
-              title: Text(
-                'Charging History',
                 style: GoogleFonts.montserrat(
                     fontSize: 16,
                     color: Palette.backgroundColor,
