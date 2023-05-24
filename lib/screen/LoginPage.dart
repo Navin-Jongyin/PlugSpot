@@ -21,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
   String? _userRole;
+  String? _userName;
 
   @override
   void dispose() {
@@ -91,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
         print(responseData);
         print(response.statusCode);
         _userRole = responseData['role'];
+        _userName = responseData['fullname'];
         return true; // Login successful
       } else {
         print('Failed, with: ${response.statusCode}');
@@ -255,33 +257,33 @@ class _LoginPageState extends State<LoginPage> {
                     String password = _passwordController.text;
                     bool logInSuccessful = await _logIn(email, password);
 
-                    // if (logInSuccessful) {
-                    //   if (_userRole == 'caruser') {
-                    //     Navigator.of(context).pushReplacement(
-                    //       PageRouteBuilder(
-                    //         pageBuilder:
-                    //             (context, animation, secondaryAnimation) =>
-                    //                 MapSample(),
-                    //       ),
-                    //     );
-                    //   } else if (_userRole == 'provider') {
-                    //     Navigator.of(context).pushReplacement(
-                    //       PageRouteBuilder(
-                    //         pageBuilder:
-                    //             (context, animation, secondaryAnimation) =>
-                    //                 BookingQueue(),
-                    //       ),
-                    //     );
-                    //   }
-                    // } else {
-                    //   _showErrorMessage('Invalid Email or Password');
-                    // }
-                    Navigator.of(context).pushReplacement(
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation, secondaryAnimation) =>
-                            MapSample(),
-                      ),
-                    );
+                    if (logInSuccessful) {
+                      if (_userRole == 'caruser') {
+                        Navigator.of(context).pushReplacement(
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    MapSample(),
+                          ),
+                        );
+                      } else if (_userRole == 'chargerprovider') {
+                        Navigator.of(context).pushReplacement(
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    BookingQueue(),
+                          ),
+                        );
+                      }
+                    } else {
+                      _showErrorMessage('Invalid Email or Password');
+                    }
+                    // Navigator.of(context).pushReplacement(
+                    //   PageRouteBuilder(
+                    //     pageBuilder: (context, animation, secondaryAnimation) =>
+                    //         MapSample(),
+                    //   ),
+                    // );
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),

@@ -67,7 +67,7 @@ class MapSampleState extends State<MapSample> {
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
   void addCustomIcon() {
     BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(), 'images/icon/marker.png')
+            const ImageConfiguration(), 'images/marker.png')
         .then((icon) {
       setState(() {
         markerIcon = icon;

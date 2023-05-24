@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/screen/LoginPage.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());

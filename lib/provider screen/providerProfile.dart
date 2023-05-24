@@ -7,7 +7,9 @@ import 'package:plugspot/screen/edit_profile.dart';
 import 'package:plugspot/screen/LoginPage.dart';
 
 class ProviderProfile extends StatefulWidget {
-  const ProviderProfile({super.key});
+  const ProviderProfile({
+    super.key,
+  });
 
   @override
   State<ProviderProfile> createState() => _ProviderProfileState();
@@ -118,7 +120,7 @@ class _ProviderProfileState extends State<ProviderProfile> {
                           ),
                         ),
                         Text(
-                          "Navin Jongyin",
+                          "",
                           style: GoogleFonts.montserrat(
                               fontSize: 20,
                               color: Palette.backgroundColor,

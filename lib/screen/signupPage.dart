@@ -24,7 +24,6 @@ class _SignUpPageState extends State<SignUpPage> {
       TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController roleController = TextEditingController();
-  final phoneNumberFormatter = FilteringTextInputFormatter.digitsOnly;
 
   List<String> _items = [
     'Car User',
@@ -90,7 +89,7 @@ class _SignUpPageState extends State<SignUpPage> {
       'fullname': name,
       'email': email,
       'password': password,
-      'phonenumber': phoneNumber,
+      'phonenumber': phoneNumber.toString(),
       'role': role.replaceAll(" ", "").toLowerCase(),
     };
 
@@ -364,7 +363,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 cursorColor: Palette.yellowTheme,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(10),
-                  phoneNumberFormatter,
                 ],
                 decoration: InputDecoration(
                   labelText: "Phone Number",
