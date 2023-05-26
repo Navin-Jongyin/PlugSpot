@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,6 +7,11 @@ import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/screen/user_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../data/cookie_storage.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -16,6 +22,14 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   File? _image;
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  String? userId;
+  Uint8List? userIdUint;
+  int? userIdInt;
+  String? imageUrl;
+  String baseUrl = 'https://plugspot.onrender.com';
+  String? endpointUrl;
 
   Future<void> _getImageFromDevice(ImageSource source) async {
     final picker = ImagePicker();
@@ -59,6 +73,101 @@ class _EditProfileState extends State<EditProfile> {
         );
       },
     );
+  }
+
+  Future<String?> fetchUserId() async {
+    final apiUrl =
+        'https://plugspot.onrender.com/userAccount/currentuser'; // Replace with your API URL
+    final cookie = await CookieStorage.getCookie(); // Retrieve the cookie
+
+    try {
+      final response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {'Cookie': cookie ?? ''}, // Include the cookie in the headers
+      );
+
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        final id = jsonData['message']['ID'].toString();
+        final imageUrl = jsonData['message']['ProfileImage'];
+        setState(() {
+          this.imageUrl = endpointUrl;
+        });
+        endpointUrl = baseUrl + imageUrl.toString().replaceFirst('.', '');
+
+        print('$id');
+        print('$imageUrl');
+        userId = id;
+        userIdUint = Uint8List.fromList(utf8.encode(userId!));
+        return userId;
+      } else {
+        // Handle the error case if the request fails
+        print('Failed to fetch user ID. Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Error occurred during the request
+      print('Error fetching data: $error');
+    }
+
+    return null; // Return null if the user ID retrieval fails
+  }
+
+  Future<void> updateUserProfile() async {
+    final apiUrl = 'https://plugspot.onrender.com/userAccount/update';
+
+    final prefs = await SharedPreferences.getInstance();
+    final cookie = prefs.getString('cookie');
+
+    var request = http.MultipartRequest('PATCH', Uri.parse(apiUrl));
+    request.headers['Cookie'] = cookie ?? '';
+
+    try {
+      // Add form fields
+      request.fields['userId'] = userId!;
+      if (_nameController.text.isNotEmpty)
+        request.fields['fullname'] = _nameController.text;
+      if (_phoneController.text.isNotEmpty)
+        request.fields['phoneNumber'] = _phoneController.text;
+
+      // Add image file
+      if (_image != null) {
+        final file = await http.MultipartFile.fromPath(
+          'ProfileImage',
+          _image!.path,
+          contentType: MediaType(
+              'image', 'jpeg'), // Replace with the appropriate content type
+        );
+        request.files.add(file);
+      }
+
+      final response = await request.send();
+      final responseData = await response.stream.bytesToString();
+
+      if (response.statusCode == 200) {
+        print('Profile updated successfully');
+
+        // Perform any additional actions or navigate to another screen
+      } else {
+        print('Failed to update profile. Error: ${response.statusCode}');
+        print(responseData);
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    // Clean up the text controllers when the widget is disposed
+    _nameController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserId(); // Call fetchUserId to populate the userIdUint
   }
 
   @override
@@ -180,6 +289,7 @@ class _EditProfileState extends State<EditProfile> {
             Container(
               margin: EdgeInsets.fromLTRB(25, 30, 25, 15),
               child: TextFormField(
+                controller: _nameController,
                 keyboardType: TextInputType.text,
                 cursorColor: Palette.yellowTheme,
                 decoration: InputDecoration(
@@ -201,6 +311,7 @@ class _EditProfileState extends State<EditProfile> {
             Container(
               margin: EdgeInsets.fromLTRB(25, 15, 25, 15),
               child: TextFormField(
+                controller: _phoneController,
                 keyboardType: TextInputType.text,
                 cursorColor: Palette.yellowTheme,
                 decoration: InputDecoration(
@@ -226,7 +337,7 @@ class _EditProfileState extends State<EditProfile> {
         margin: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
         height: 50,
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: updateUserProfile,
           backgroundColor: Palette.yellowTheme,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),

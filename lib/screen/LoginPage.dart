@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
-import 'package:plugspot/provider%20screen/bookingQueue.dart';
+import 'package:plugspot/provider screen/bookingQueue.dart';
 import 'package:plugspot/screen/maps.dart';
 import 'package:plugspot/screen/signupPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -21,7 +22,23 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
   String? _userRole;
-  String? _userName;
+
+  String cookieString = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCookie();
+  }
+
+  Future<void> _loadCookie() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? cookie = prefs.getString('cookie');
+    setState(() {
+      cookieString = cookie ?? '';
+      print('$cookieString');
+    });
+  }
 
   @override
   void dispose() {
@@ -92,13 +109,50 @@ class _LoginPageState extends State<LoginPage> {
         print(responseData);
         print(response.statusCode);
         _userRole = responseData['role'];
-        _userName = responseData['fullname'];
-        return true; // Login successful
+
+        String? cookie = response.headers['set-cookie'];
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('cookie', cookie ?? '');
+        String? storedCookie = prefs.getString('cookie');
+        print('Cookie: $storedCookie');
+
+        bool apiSuccess = await _performAuthenticatedRequest(storedCookie);
+
+        return apiSuccess;
       } else {
         print('Failed, with: ${response.statusCode}');
         print(response.body);
         print(response.statusCode);
-        return false; // Login failed
+        return false;
+      }
+    } catch (e) {
+      print('Error: $e');
+      return false;
+    }
+  }
+
+  Future<bool> _performAuthenticatedRequest(String? cookie) async {
+    const String apiEndpoint =
+        'https://plugspot.onrender.com/userAccount/currentuser';
+
+    try {
+      final response = await http.get(
+        Uri.parse(apiEndpoint),
+        headers: {
+          'Cookie':
+              cookie ?? '', // Pass the stored cookie in the request headers
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Process the response data
+        final responseData = jsonDecode(response.body);
+        print(responseData);
+        return true; // API request successful
+      } else {
+        print('API request failed, with: ${response.statusCode}');
+        print(response.body);
+        return false; // API request failed
       }
     } catch (e) {
       print('Error: $e');
@@ -258,7 +312,7 @@ class _LoginPageState extends State<LoginPage> {
                     bool logInSuccessful = await _logIn(email, password);
 
                     if (logInSuccessful) {
-                      if (_userRole == 'caruser') {
+                      if (_userRole == 'customer') {
                         Navigator.of(context).pushReplacement(
                           PageRouteBuilder(
                             pageBuilder:
@@ -266,7 +320,7 @@ class _LoginPageState extends State<LoginPage> {
                                     MapSample(),
                           ),
                         );
-                      } else if (_userRole == 'chargerprovider') {
+                      } else if (_userRole == 'provider') {
                         Navigator.of(context).pushReplacement(
                           PageRouteBuilder(
                             pageBuilder:
@@ -278,12 +332,6 @@ class _LoginPageState extends State<LoginPage> {
                     } else {
                       _showErrorMessage('Invalid Email or Password');
                     }
-                    // Navigator.of(context).pushReplacement(
-                    //   PageRouteBuilder(
-                    //     pageBuilder: (context, animation, secondaryAnimation) =>
-                    //         MapSample(),
-                    //   ),
-                    // );
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),

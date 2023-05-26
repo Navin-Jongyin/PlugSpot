@@ -90,7 +90,7 @@ class _SignUpPageState extends State<SignUpPage> {
       'email': email,
       'password': password,
       'phonenumber': phoneNumber.toString(),
-      'role': role.replaceAll(" ", "").toLowerCase(),
+      'role': role.toLowerCase() == 'car user' ? 'customer' : 'provider',
     };
 
     final response = await http.post(

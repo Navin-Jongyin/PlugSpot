@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/screen/timeSelection.dart';
-import 'package:plugspot/screen/qrScanner.dart';
+
 import 'package:plugspot/screen/sidebar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -333,28 +333,6 @@ class MapSampleState extends State<MapSample> {
                           color: Palette.backgroundColor),
                     ),
                   ),
-                  VerticalDivider(
-                    color: Palette.greyColor,
-                    thickness: 1.5,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  QRCodeScannerPage(),
-                          transitionDuration: Duration(seconds: 5),
-                        ),
-                      );
-                    },
-                    child: Icon(
-                      Icons.qr_code_scanner,
-                      size: 30,
-                      color: Palette.backgroundColor,
-                    ),
-                  )
                 ],
               ),
             ),

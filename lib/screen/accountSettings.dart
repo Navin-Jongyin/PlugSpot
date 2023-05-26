@@ -1,16 +1,60 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/screen/user_profile.dart';
+import 'package:plugspot/data/cookie_storage.dart';
 
 class AccountSetting extends StatefulWidget {
-  const AccountSetting({super.key});
+  const AccountSetting({Key? key}) : super(key: key);
 
   @override
   State<AccountSetting> createState() => _AccountSettingState();
 }
 
 class _AccountSettingState extends State<AccountSetting> {
+  String data = '';
+  int statusCode = 0;
+  String responseBody = '';
+  String userEmail = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final url = 'https://plugspot.onrender.com/userAccount/currentuser';
+    try {
+      final cookie = await CookieStorage.getCookie(); // Retrieve the cookie
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Cookie': cookie ?? ''},
+      );
+
+      setState(() {
+        if (response.statusCode == 200) {
+          // Request successful, parse the response body
+          data = response.body;
+          statusCode = response.statusCode;
+          responseBody = response.body;
+          final jsonData = jsonDecode(responseBody);
+          final email = jsonData['message']['Email'];
+          userEmail = email ?? '';
+        } else {
+          // Request failed, store the error code
+          statusCode = response.statusCode;
+        }
+      });
+    } catch (error) {
+      // Error occurred during the request
+      print('Error: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,9 +63,8 @@ class _AccountSettingState extends State<AccountSetting> {
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.of(context).pushReplacement(
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    UserProfile(),
+              MaterialPageRoute(
+                builder: (context) => UserProfile(),
               ),
             );
           },
@@ -69,7 +112,7 @@ class _AccountSettingState extends State<AccountSetting> {
                     ],
                   ),
                   child: Text(
-                    "Nicky220245@gmail.com",
+                    "$userEmail",
                     style: GoogleFonts.montserrat(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
