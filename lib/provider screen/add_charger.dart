@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/provider%20screen/addChrgerDetail.dart';
+import 'package:plugspot/provider%20screen/addChrgerDetail.dart';
 
 class AddCharger extends StatefulWidget {
   const AddCharger({Key? key}) : super(key: key);
@@ -89,18 +90,16 @@ class _AddChargerState extends State<AddCharger> {
                   onTap: handleTap,
                   markers: Set.from(myMarker),
                   initialCameraPosition: CameraPosition(
-                      target:
-                          LatLng(userLocation.latitude, userLocation.longitude),
-                      zoom: 17.85),
+                    target: LatLng(
+                      userLocation.latitude,
+                      userLocation.longitude,
+                    ),
+                    zoom: 17.85,
+                  ),
                 );
               } else {
                 return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      CircularProgressIndicator(),
-                    ],
-                  ),
+                  child: CircularProgressIndicator(),
                 );
               }
             },
@@ -117,9 +116,12 @@ class _AddChargerState extends State<AddCharger> {
                     mapController.animateCamera(
                       CameraUpdate.newCameraPosition(
                         CameraPosition(
-                            target:
-                                LatLng(position.latitude, position.longitude),
-                            zoom: 17.85),
+                          target: LatLng(
+                            position.latitude,
+                            position.longitude,
+                          ),
+                          zoom: 17.85,
+                        ),
                       ),
                     );
                   },
@@ -145,9 +147,36 @@ class _AddChargerState extends State<AddCharger> {
             borderRadius: BorderRadius.circular(10),
           ),
           onPressed: () {
-            Navigator.of(context).pushReplacement(PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    ChargerDetail()));
+            if (myMarker.isNotEmpty) {
+              final tappedPoint = myMarker[0].position;
+
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => ChargerDetail(
+                    latitude: tappedPoint.latitude,
+                    longitude: tappedPoint.longitude,
+                  ),
+                ),
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('No Marker Set'),
+                    content: Text('Please set a marker on the map.'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
           },
           backgroundColor: Palette.yellowTheme,
           child: Text(
