@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/provider%20screen/myCharger.dart';
-import 'package:plugspot/provider%20screen/providerProfile.dart';
 import 'package:plugspot/screen/LoginPage.dart';
-
 import '../config/palette.dart';
 import '../screen/user_profile.dart';
 
