@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/provider%20screen/bookingQueue.dart';
 import 'package:plugspot/screen/accountSettings.dart';
 import 'package:plugspot/screen/edit_profile.dart';
 import 'package:plugspot/screen/LoginPage.dart';
@@ -25,6 +26,7 @@ class _UserProfileState extends State<UserProfile> {
   String? imageUrl;
   String? endpointUrl;
   String baseUrl = 'https://plugspot.onrender.com';
+  String? userRole;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -54,6 +56,7 @@ class _UserProfileState extends State<UserProfile> {
           print(statusCode);
 
           final jsonData = jsonDecode(responseBody);
+          final role = jsonData['message']['Role'];
           final fullname = jsonData['message']['Fullname'];
           final imageUrl = jsonData['message'][
               'ProfileImage']; // Replace 'image_url' with the actual key for the image URL in the API response
@@ -62,9 +65,13 @@ class _UserProfileState extends State<UserProfile> {
           });
           endpointUrl = baseUrl + imageUrl.toString().replaceFirst('.', '');
           userName = fullname ?? '';
+          userRole = role;
+
           print(userName);
           print('$imageUrl');
           print(endpointUrl);
+          print(endpointUrl);
+          print(userRole);
         } else {
           // Request failed, store the error code
           statusCode = response.statusCode;
@@ -90,9 +97,6 @@ class _UserProfileState extends State<UserProfile> {
                 "Profile",
               ),
             ),
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
           );
         } else if (snapshot.hasError) {
           // If an error occurred while fetching the cookie, display an error message
@@ -100,9 +104,6 @@ class _UserProfileState extends State<UserProfile> {
             appBar: AppBar(
               backgroundColor: Palette.yellowTheme,
               title: const Text("Profile", style: TextStyle()),
-            ),
-            body: Center(
-              child: Text('Error: ${snapshot.error}'),
             ),
           );
         } else {
@@ -115,14 +116,21 @@ class _UserProfileState extends State<UserProfile> {
               elevation: 0,
               leading: IconButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          const MapSample(),
-                      transitionDuration: Duration.zero,
-                    ),
-                  );
+                  if (userRole == 'customer') {
+                    Navigator.of(context).pushReplacement(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const MapSample(),
+                      ),
+                    );
+                  } else if (userRole == 'provider') {
+                    Navigator.of(context).pushReplacement(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const BookingQueue(),
+                      ),
+                    );
+                  }
                 },
                 icon: const Icon(
                   Icons.arrow_back_ios,
@@ -213,7 +221,9 @@ class _UserProfileState extends State<UserProfile> {
                                           endpointUrl!,
                                           fit: BoxFit.cover,
                                         )
-                                      : const Placeholder(), // Placeholder image or loading indicator while the image is being fetched
+                                      : Image(
+                                          image: AssetImage(
+                                              "images/avatarimage.png")), // Placeholder image or loading indicator while the image is being fetched
                                 ),
                               ),
                               Text(

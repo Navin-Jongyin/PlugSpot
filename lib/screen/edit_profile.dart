@@ -97,6 +97,7 @@ class _EditProfileState extends State<EditProfile> {
 
         print('$id');
         print('$imageUrl');
+        print(response.body);
         userId = id;
         userIdUint = Uint8List.fromList(utf8.encode(userId!));
         return userId;
@@ -132,7 +133,7 @@ class _EditProfileState extends State<EditProfile> {
       // Add image file
       if (_image != null) {
         final file = await http.MultipartFile.fromPath(
-          'ProfileImage',
+          'profileImage',
           _image!.path,
           contentType: MediaType(
               'image', 'jpeg'), // Replace with the appropriate content type
@@ -145,6 +146,7 @@ class _EditProfileState extends State<EditProfile> {
 
       if (response.statusCode == 200) {
         print('Profile updated successfully');
+        print(responseData);
 
         // Perform any additional actions or navigate to another screen
       } else {

@@ -73,7 +73,7 @@ class _ProviderSidebarState extends State<ProviderSidebar> {
                 Navigator.of(context).pushReplacement(
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        ProviderProfile(),
+                        UserProfile(),
                   ),
                 );
               },

@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/data/carBrands.dart';
 import 'package:plugspot/data/carModels.dart';
 import 'package:plugspot/screen/my_car.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import '../data/cookie_storage.dart';
 
 class AddCar extends StatefulWidget {
   const AddCar({super.key});
@@ -16,12 +21,124 @@ class _AddCarState extends State<AddCar> {
   String _selectedBrand = "Select Brand";
   String _selectedModel = "Select Model";
   int _selectedBrandIndex = 0;
-  final TextEditingController _textController = TextEditingController();
+  final TextEditingController _carPlateController = TextEditingController();
+  String data = '';
+  int statusCode = 0;
+  String responseBody = '';
+
+  int? userID;
 
   @override
   void dispose() {
-    _textController.dispose();
+    _carPlateController.dispose();
     super.dispose();
+  }
+
+  Future<void> fetchData() async {
+    final url = 'https://plugspot.onrender.com/userAccount/currentuser';
+    try {
+      final cookie = await CookieStorage.getCookie(); // Retrieve the cookie
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Cookie': cookie ?? ''},
+      );
+
+      setState(() {
+        if (response.statusCode == 200) {
+          // Request successful, parse the response body
+          data = response.body;
+          statusCode = response.statusCode;
+          responseBody = response.body;
+          final jsonData = jsonDecode(responseBody);
+          final id = jsonData['message']['ID'];
+
+          userID = id;
+          print(userID);
+        } else {
+          // Request failed, store the error code
+          statusCode = response.statusCode;
+        }
+      });
+    } catch (error) {
+      // Error occurred during the request
+      print('Error: $error');
+    }
+  }
+
+  Future<void> addCar() async {
+    final apiUrl = 'https://plugspot.onrender.com/car/addnewcar';
+    final prefs = await SharedPreferences.getInstance();
+    final cookie = prefs.getString('cookie');
+
+    final data = {
+      'userId': userID,
+      'carPlate': _carPlateController.text,
+      'carBrand': _selectedBrand,
+      'carModel': _selectedModel,
+    };
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Cookie': cookie ?? '',
+        },
+        body: json.encode(data),
+      );
+
+      if (response.statusCode == 201) {
+        // Car saved successfully
+        // Perform any additional actions or show a success message
+        print('Car saved successfully');
+        print(response.body);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                'Success',
+                style: GoogleFonts.montserrat(
+                    fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              content: Text(
+                'Car Added Succesfully!',
+                style: GoogleFonts.montserrat(
+                  fontSize: 14,
+                ),
+              ),
+              actions: [
+                ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Palette.yellowTheme)),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            MyCar(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'OK',
+                    style: GoogleFonts.montserrat(
+                        fontSize: 16, color: Palette.backgroundColor),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        // Failed to save car
+        // Handle the error case, display an error message, etc.
+        print('Failed to save car. Error: ${response.statusCode}');
+        print(response.body);
+      }
+    } catch (error) {
+      // Error occurred during the request
+      print('Error saving car: $error');
+    }
   }
 
   @override
@@ -226,7 +343,7 @@ class _AddCarState extends State<AddCar> {
                         border: Border.all(color: Palette.greyColor),
                         borderRadius: BorderRadius.circular(15)),
                     child: TextField(
-                      controller: _textController,
+                      controller: _carPlateController,
                       cursorColor: Palette.yellowTheme,
                       decoration: InputDecoration(
                           border: InputBorder.none,
@@ -247,12 +364,14 @@ class _AddCarState extends State<AddCar> {
         width: 400,
         child: FloatingActionButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyCar(),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => MyCar(),
+            //   ),
+            // );
+            fetchData();
+            addCar();
           },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
