@@ -21,11 +21,14 @@ class TimeSelection extends StatefulWidget {
     this.stationName,
     this.stationImageUrl,
   });
-  State<TimeSelection> createState() => _TimeSelectionState();
+
+  @override
+  _TimeSelectionState createState() => _TimeSelectionState();
 }
 
 class _TimeSelectionState extends State<TimeSelection> {
   String baseUrl = 'https://plugspot.onrender.com';
+  List<Map<String, dynamic>> timeSlots = [];
 
   Future<void> getAllStation() async {
     final apiUrl = 'https://plugspot.onrender.com/station/getallstation';
@@ -41,35 +44,106 @@ class _TimeSelectionState extends State<TimeSelection> {
       if (responseData is List) {
         for (var item in responseData) {
           if (widget.stationId == item['ID']) {
-            final timeSlots = item['Timeslots'];
-
-            if (timeSlots is List) {
-              for (var slot in timeSlots) {
-                final stationId = slot['StationId'];
-                final timeSlotNo = slot['TimeSlotNo'];
-                final status = slot['Status'];
-
-                print('Station ID: $stationId');
-                print('Time Slot No: $timeSlotNo');
-                print('Status: $status');
-              }
-            } else {
-              print('Invalid timeSlots data');
-            }
+            timeSlots = List<Map<String, dynamic>>.from(item['Timeslots']);
           }
         }
-      } else {
-        print('Invalid response data');
       }
     } else {
       print('Request failed with status code: ${response.statusCode}');
     }
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
     getAllStation();
+  }
+
+  bool isSlotFree(int timeSlotNo) {
+    for (var slot in timeSlots) {
+      if (slot['TimeSlotNo'] == timeSlotNo && slot['Status'] == 'booked') {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  Widget _buildTimeSlots() {
+    final startTime = TimeOfDay(hour: 8, minute: 0);
+    final endTime = TimeOfDay(hour: 20, minute: 0);
+    final timeSlots = [];
+
+    final now = DateTime.now();
+    final startDate = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      startTime.hour,
+      startTime.minute,
+    );
+    final endDate = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      endTime.hour,
+      endTime.minute,
+    );
+
+    final interval = Duration(hours: 1);
+
+    for (var dateTime = startDate;
+        dateTime.isBefore(endDate);
+        dateTime = dateTime.add(interval)) {
+      final time = TimeOfDay.fromDateTime(dateTime);
+      timeSlots.add(time);
+    }
+
+    return Column(
+      children: timeSlots.map(
+        (time) {
+          final formattedStartTime =
+              '${time.hour.toString().padLeft(2, '0')}:00';
+          final formattedEndTime = '${time.hour + 1}:00';
+
+          final slotNumber = timeSlots.indexOf(time) + 1;
+          final isFree = isSlotFree(slotNumber);
+
+          return GestureDetector(
+            onTap: isFree
+                ? () {
+                    final selectedSlot =
+                        '$formattedStartTime - $formattedEndTime';
+                    final status = isFree ? 'free' : 'booked';
+                    print('Selected Slot: $selectedSlot');
+                    print('Status: $status');
+                  }
+                : null,
+            child: Container(
+              width: double.infinity,
+              height: 50,
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: isFree ? Palette.yellowTheme : Colors.grey,
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  '$formattedStartTime - $formattedEndTime',
+                  style: GoogleFonts.montserrat(
+                    fontSize: 16,
+                    color: isFree ? Palette.backgroundColor : Colors.grey,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ).toList(),
+    );
   }
 
   @override
@@ -86,7 +160,7 @@ class _TimeSelectionState extends State<TimeSelection> {
           ),
         ),
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios,
             color: Palette.backgroundColor,
           ),
@@ -104,13 +178,15 @@ class _TimeSelectionState extends State<TimeSelection> {
               height: 200,
               color: Palette.greyColor,
               child: Center(
-                child: Text(baseUrl +
-                    widget.stationImageUrl.toString().replaceFirst('.', '')),
+                child: Text(
+                  baseUrl +
+                      widget.stationImageUrl.toString().replaceFirst('.', ''),
+                ),
               ),
             ),
             FloatingActionButton(
               onPressed: () {
-                print(getAllStation());
+                getAllStation();
               },
             ),
             Container(
@@ -204,64 +280,6 @@ class _TimeSelectionState extends State<TimeSelection> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildTimeSlots() {
-    final startTime = TimeOfDay(hour: 8, minute: 0);
-    final endTime = TimeOfDay(hour: 20, minute: 0);
-    final timeSlots = [];
-
-    final now = DateTime.now();
-    final startDate = DateTime(
-        now.year, now.month, now.day, startTime.hour, startTime.minute);
-    final endDate =
-        DateTime(now.year, now.month, now.day, endTime.hour, endTime.minute);
-
-    final interval = Duration(hours: 1);
-
-    for (var dateTime = startDate;
-        dateTime.isBefore(endDate);
-        dateTime = dateTime.add(interval)) {
-      final time = TimeOfDay.fromDateTime(dateTime);
-      timeSlots.add(time);
-    }
-
-    return Column(
-      children: timeSlots.map(
-        (time) {
-          final formattedStartTime =
-              '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
-          final formattedEndTime =
-              '${time.hour + 1}:${time.minute.toString().padLeft(2, '0')}';
-
-          return GestureDetector(
-            onTap: () {
-              final slotNumber = timeSlots.indexOf(time) + 1;
-              print('Selected Slot: $slotNumber');
-            },
-            child: Container(
-              width: double.infinity,
-              height: 50,
-              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Palette.yellowTheme),
-              ),
-              child: Center(
-                child: Text(
-                  '$formattedStartTime - $formattedEndTime',
-                  style: GoogleFonts.montserrat(
-                    fontSize: 16,
-                    color: Palette.backgroundColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ).toList(),
     );
   }
 }
