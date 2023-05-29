@@ -95,6 +95,63 @@ class _MyBookingState extends State<MyBooking> {
     }
   }
 
+  Future<void> showConfirmationDialog(int contractId, int customerId) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Confirm Cancellation',
+            style: GoogleFonts.montserrat(
+                fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          content: SingleChildScrollView(
+            child: Text(
+              'Are you sure you want to cancel this booking?',
+              style: GoogleFonts.montserrat(
+                  fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Palette.yellowTheme)),
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.montserrat(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Palette.backgroundColor),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.red)),
+              child: Text(
+                'Confirm',
+                style: GoogleFonts.montserrat(
+                    fontSize: 14, fontWeight: FontWeight.bold),
+              ),
+              onPressed: () {
+                deleteContract(contractId, customerId);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> updateTimeSlot() async {
+    final apiUrl = "https://plugspot.onrender.com/station/timeslotupdate";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -207,7 +264,7 @@ class _MyBookingState extends State<MyBooking> {
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     child: ElevatedButton(
                       onPressed: () {
-                        deleteContract(
+                        showConfirmationDialog(
                             contract.contractId, contract.customerId);
                       },
                       style: ButtonStyle(
