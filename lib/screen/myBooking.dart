@@ -15,6 +15,9 @@ class Contract {
   final String carPlate;
   final String status;
   final int customerId;
+  final int providerId;
+  final int timeSlot;
+  final int stationId;
 
   Contract({
     required this.contractId,
@@ -23,6 +26,9 @@ class Contract {
     required this.carPlate,
     required this.status,
     required this.customerId,
+    required this.providerId,
+    required this.timeSlot,
+    required this.stationId,
   });
 }
 
@@ -63,6 +69,9 @@ class _MyBookingState extends State<MyBooking> {
                 carPlate: item['carPlate'] ?? 'N/A',
                 status: item['status'],
                 customerId: item['customerId'],
+                providerId: item['providerId'],
+                timeSlot: item['timeSlot'],
+                stationId: item['stationId'],
               )),
         );
       });
@@ -104,26 +113,31 @@ class _MyBookingState extends State<MyBooking> {
           title: Text(
             'Confirm Cancellation',
             style: GoogleFonts.montserrat(
-                fontSize: 18, fontWeight: FontWeight.bold),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           content: SingleChildScrollView(
             child: Text(
               'Are you sure you want to cancel this booking?',
               style: GoogleFonts.montserrat(
-                  fontSize: 14, fontWeight: FontWeight.bold),
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           actions: [
             ElevatedButton(
               style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(Palette.yellowTheme)),
+                backgroundColor: MaterialStateProperty.all(Palette.yellowTheme),
+              ),
               child: Text(
                 'Cancel',
                 style: GoogleFonts.montserrat(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Palette.backgroundColor),
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Palette.backgroundColor,
+                ),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -131,15 +145,27 @@ class _MyBookingState extends State<MyBooking> {
             ),
             ElevatedButton(
               style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.red)),
+                backgroundColor: MaterialStateProperty.all(Colors.red),
+              ),
               child: Text(
                 'Confirm',
                 style: GoogleFonts.montserrat(
-                    fontSize: 14, fontWeight: FontWeight.bold),
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              onPressed: () {
-                deleteContract(contractId, customerId);
+              onPressed: () async {
                 Navigator.of(context).pop();
+                if (contracts.isNotEmpty) {
+                  final contract = contracts.firstWhere(
+                    (contract) => contract.contractId == contractId,
+                  );
+                  await deleteContract(contractId, customerId);
+                  updateTimeSlot(contract);
+                } else {
+                  // Handle the case when contracts list is empty
+                  // Display an error message or handle it accordingly
+                }
               },
             ),
           ],
@@ -148,8 +174,27 @@ class _MyBookingState extends State<MyBooking> {
     );
   }
 
-  Future<void> updateTimeSlot() async {
+  Future<void> updateTimeSlot(Contract contract) async {
     final apiUrl = "https://plugspot.onrender.com/station/timeslotupdate";
+    final cookie = await CookieStorage.getCookie();
+    var data = {
+      'providerId': contract.providerId,
+      'stationId': contract.stationId,
+      'timeSlotNo': contract.timeSlot,
+      'status': "free",
+    };
+    final response = await http.patch(
+      Uri.parse(apiUrl),
+      headers: {'Cookie': cookie ?? ""},
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      print(responseData);
+    } else {
+      print(response.statusCode);
+      print(response.body);
+    }
   }
 
   @override
