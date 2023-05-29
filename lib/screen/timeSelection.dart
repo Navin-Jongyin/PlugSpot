@@ -120,7 +120,31 @@ class _TimeSelectionState extends State<TimeSelection> {
     if (response.statusCode == 201) {
       // Contract creation successful
       final responseData = json.decode(response.body);
-      // Handle the response data as needed
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Booking Successful'),
+            content: Text(responseData['message']),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          MapSample(),
+                    ),
+                  );
+                  // Add any additional actions after the dialog is closed
+                },
+              ),
+            ],
+          );
+        },
+      );
+      timeSlotUpdate();
+      updateCarStatus();
       return responseData[
           'message']; // Return a success message or relevant data
     } else {
