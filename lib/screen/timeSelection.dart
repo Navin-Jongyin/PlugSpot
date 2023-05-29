@@ -7,12 +7,31 @@ import 'package:plugspot/data/cookie_storage.dart';
 
 import 'package:http/http.dart' as http;
 
+import 'maps.dart';
+
+class Car {
+  final int id;
+  final String plate;
+  final String brand;
+  final String model;
+  final String status;
+
+  Car({
+    required this.id,
+    required this.plate,
+    required this.brand,
+    required this.model,
+    required this.status,
+  });
+}
+
 class TimeSelection extends StatefulWidget {
   final int? stationId;
   final String? stationName;
   final String? stationDetail;
   final String? providerPhone;
   final String? stationImageUrl;
+  final int? providerId;
 
   TimeSelection({
     this.stationId,
@@ -20,6 +39,7 @@ class TimeSelection extends StatefulWidget {
     this.stationDetail,
     this.stationName,
     this.stationImageUrl,
+    this.providerId,
   });
 
   @override
@@ -30,6 +50,31 @@ class _TimeSelectionState extends State<TimeSelection> {
   String baseUrl = 'https://plugspot.onrender.com';
   List<Map<String, dynamic>> timeSlots = [];
   TimeOfDay? selectedSlot;
+  int? selectedTime;
+  List<Car> carData = [];
+  Car? selectedCar;
+  String buttonText = "Select Car";
+  int? customerId;
+  int? selectedCarid;
+
+  Future<int?> getUserId() async {
+    final apiUrl = 'https://plugspot.onrender.com/userAccount/currentuser';
+    final cookie = await CookieStorage.getCookie();
+
+    final response = await http.get(
+      Uri.parse(apiUrl),
+      headers: {'Cookie': cookie ?? ""},
+    );
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      final userId = responseData['message']['ID'];
+      customerId = userId;
+      print(customerId);
+    } else {
+      print(response.statusCode);
+      print(response.body);
+    }
+  }
 
   Future<void> getAllStation() async {
     final apiUrl = 'https://plugspot.onrender.com/station/getallstation';
@@ -55,10 +100,123 @@ class _TimeSelectionState extends State<TimeSelection> {
     setState(() {});
   }
 
+  Future<String?> createContract() async {
+    final apiUrl = 'https://plugspot.onrender.com/contract/createcontract';
+    final cookie = await CookieStorage.getCookie();
+    var data = {
+      'customerId': customerId,
+      'providerId': widget.providerId,
+      'stationId': widget.stationId,
+      'carId': selectedCarid,
+      'timeSlot': selectedTime,
+    };
+
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {'Cookie': cookie ?? ""},
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 201) {
+      // Contract creation successful
+      final responseData = json.decode(response.body);
+      // Handle the response data as needed
+      return responseData[
+          'message']; // Return a success message or relevant data
+    } else {
+      // Contract creation failed
+      print('Request failed with status code: ${response.statusCode}');
+      print(response.body);
+      return null; // Return null or an error message
+    }
+  }
+
+  Future<void> updateCarStatus() async {
+    final apiUrl = "https://plugspot.onrender.com/car/update";
+    final cookie = await CookieStorage.getCookie();
+    var data = {
+      'userId': customerId,
+      'carId': selectedCarid,
+      'carStatus': "in contract",
+    };
+    final response = await http.patch(
+      Uri.parse(apiUrl),
+      headers: {'Cookie': cookie ?? ""},
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else {
+      print(response.statusCode);
+      print(response.body);
+    }
+  }
+
+  Future<void> timeSlotUpdate() async {
+    final apiUrl = 'https://plugspot.onrender.com/station/timeslotupdate';
+    final cookie = await CookieStorage.getCookie();
+    var data = {
+      'providerId': widget.providerId,
+      'stationId': widget.stationId,
+      'timeSlotNo': selectedTime,
+      'status': "booked",
+    };
+
+    final response = await http.patch(
+      Uri.parse(apiUrl),
+      headers: {'Cookie': cookie ?? ""},
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else {
+      print(response.statusCode);
+      print(response.body);
+    }
+  }
+
+  Future<List<Car>> getCarData() async {
+    final apiUrl = "https://plugspot.onrender.com/car/getallusercars";
+    final cookie = await CookieStorage.getCookie();
+
+    final response = await http.get(
+      Uri.parse(apiUrl),
+      headers: {'Cookie': cookie ?? ""},
+    );
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      List<Car> cars = [];
+      for (var carItem in responseData) {
+        final id = carItem['carId'];
+        final plate = carItem['carPlate'];
+        final brand = carItem['carBrand'];
+        final model = carItem['carModel'];
+        final status = carItem['carStatus'];
+        cars.add(Car(
+          id: id,
+          plate: plate,
+          brand: brand,
+          model: model,
+          status: status,
+        ));
+      }
+      return cars;
+    } else {
+      print('Request failed with status code: ${response.statusCode}');
+      return [];
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    getUserId();
     getAllStation();
+    getCarData().then((cars) {
+      setState(() {
+        carData = cars;
+      });
+    });
   }
 
   bool isSlotFree(int timeSlotNo) {
@@ -115,6 +273,7 @@ class _TimeSelectionState extends State<TimeSelection> {
                 ? () {
                     setState(() {
                       selectedSlot = time;
+                      selectedTime = slotNumber;
                     });
                     final status = isFree ? 'free' : 'booked';
                     print(
@@ -149,6 +308,56 @@ class _TimeSelectionState extends State<TimeSelection> {
           );
         },
       ).toList(),
+    );
+  }
+
+  void _showCarSelectionModal() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 300,
+          child: ListView.builder(
+            itemCount: carData.length,
+            itemBuilder: (BuildContext context, int index) {
+              final car = carData[index];
+              final statusColor =
+                  car.status == 'free' ? Colors.green : Colors.red;
+
+              return ListTile(
+                title: Text(
+                  '${car.brand} - ${car.model}',
+                  style: GoogleFonts.montserrat(fontSize: 16),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Plate: ${car.plate}'),
+                    Text(
+                      'Status: ${car.status}',
+                      style: TextStyle(
+                        color: statusColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                onTap: car.status == 'free'
+                    ? () {
+                        setState(() {
+                          selectedCar = car;
+                          selectedCarid = car.id;
+                          buttonText =
+                              '${car.brand} - ${car.plate}'; // Update button text
+                        });
+                        Navigator.of(context).pop(); // Close the modal
+                      }
+                    : null,
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -242,6 +451,30 @@ class _TimeSelectionState extends State<TimeSelection> {
                       ],
                     ),
                   ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    height: 50,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        _showCarSelectionModal();
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      backgroundColor: Palette.backgroundColor,
+                      child: Text(
+                        buttonText,
+                        style: GoogleFonts.montserrat(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -267,7 +500,11 @@ class _TimeSelectionState extends State<TimeSelection> {
         height: 80,
         color: Color(0xfff2f2f2),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            createContract();
+            timeSlotUpdate();
+            updateCarStatus();
+          },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
