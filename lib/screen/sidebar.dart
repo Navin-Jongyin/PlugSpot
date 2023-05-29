@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
 
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/data/cookie_storage.dart';
 import 'package:plugspot/provider%20screen/bookingQueue.dart';
 
 import 'package:plugspot/screen/LoginPage.dart';
@@ -10,7 +14,7 @@ import 'package:plugspot/screen/chargingHistory.dart';
 import 'package:plugspot/screen/myBooking.dart';
 import 'package:plugspot/screen/my_car.dart';
 import 'package:plugspot/provider screen/bookingQueue.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:plugspot/screen/user_profile.dart';
 
 class SideBar extends StatefulWidget {
@@ -19,6 +23,42 @@ class SideBar extends StatefulWidget {
 }
 
 class _SideBarState extends State<SideBar> {
+  String? fullName;
+  String? userEmail;
+  String baseUrl = "https://plugspot.onrender.com";
+  String? imageUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    getuserName();
+  }
+
+  Future<void> getuserName() async {
+    final apiUrl = "https://plugspot.onrender.com/userAccount/currentuser";
+    final cookie = await CookieStorage.getCookie();
+
+    final response = await http.get(
+      Uri.parse(apiUrl),
+      headers: {'Cookie': cookie ?? ""},
+    );
+    setState(() {
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        final name = responseData['message']['Fullname'];
+        final email = responseData['message']['Email'];
+        final image = responseData['message']['ProfileImage'];
+
+        fullName = name;
+        userEmail = email;
+        imageUrl = image;
+      } else {
+        print(response.statusCode);
+        print(response.body);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -28,27 +68,23 @@ class _SideBarState extends State<SideBar> {
         children: [
           UserAccountsDrawerHeader(
             accountName: Text(
-              'Navin Jongyin',
+              fullName.toString(),
               style: GoogleFonts.montserrat(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                   color: Palette.whiteBackgroundColor),
             ),
             accountEmail: Text(
-              '63011210@kmitl.ac.th',
+              userEmail.toString(),
               style: GoogleFonts.montserrat(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: Palette.whiteBackgroundColor),
             ),
-            currentAccountPicture: CircleAvatar(
-              child: ClipOval(
-                child: Image.asset(
-                  'images/nicky.png',
-                  fit: BoxFit.cover,
-                  width: 90,
-                  height: 90,
-                ),
+            currentAccountPicture: ClipOval(
+              child: Image.network(
+                baseUrl + imageUrl.toString().replaceFirst('.', ''),
+                fit: BoxFit.cover,
               ),
             ),
             decoration: const BoxDecoration(
@@ -74,10 +110,12 @@ class _SideBarState extends State<SideBar> {
                     fontWeight: FontWeight.w500),
               ),
               onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const UserProfile()));
+                Navigator.of(context).pushReplacement(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const UserProfile(),
+                  ),
+                );
               },
             ),
           ),
@@ -97,8 +135,12 @@ class _SideBarState extends State<SideBar> {
                     fontWeight: FontWeight.w500),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const MyBooking()));
+                Navigator.of(context).pushReplacement(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        MyBooking(),
+                  ),
+                );
               },
             ),
           ),
@@ -118,8 +160,12 @@ class _SideBarState extends State<SideBar> {
                     fontWeight: FontWeight.w500),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const MyCar()));
+                Navigator.of(context).pushReplacement(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        MyCar(),
+                  ),
+                );
               },
             ),
           ),
@@ -163,8 +209,12 @@ class _SideBarState extends State<SideBar> {
                     fontWeight: FontWeight.w500),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()));
+                Navigator.of(context).pushReplacement(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        LoginPage(),
+                  ),
+                );
               },
             ),
           ),

@@ -210,10 +210,10 @@ class _MyCarState extends State<MyCar> {
             color: Palette.backgroundColor,
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MapSample(),
+            Navigator.of(context).pushReplacement(
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    MapSample(),
               ),
             );
           },
