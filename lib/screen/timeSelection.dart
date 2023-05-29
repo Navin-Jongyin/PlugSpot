@@ -26,6 +26,52 @@ class TimeSelection extends StatefulWidget {
 
 class _TimeSelectionState extends State<TimeSelection> {
   String baseUrl = 'https://plugspot.onrender.com';
+
+  Future<void> getAllStation() async {
+    final apiUrl = 'https://plugspot.onrender.com/station/getallstation';
+    final cookie = await CookieStorage.getCookie();
+
+    final response = await http.get(
+      Uri.parse(apiUrl),
+      headers: {'Cookie': cookie ?? ""},
+    );
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+
+      if (responseData is List) {
+        for (var item in responseData) {
+          if (widget.stationId == item['ID']) {
+            final timeSlots = item['Timeslots'];
+
+            if (timeSlots is List) {
+              for (var slot in timeSlots) {
+                final stationId = slot['StationId'];
+                final timeSlotNo = slot['TimeSlotNo'];
+                final status = slot['Status'];
+
+                print('Station ID: $stationId');
+                print('Time Slot No: $timeSlotNo');
+                print('Status: $status');
+              }
+            } else {
+              print('Invalid timeSlots data');
+            }
+          }
+        }
+      } else {
+        print('Invalid response data');
+      }
+    } else {
+      print('Request failed with status code: ${response.statusCode}');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAllStation();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,6 +107,11 @@ class _TimeSelectionState extends State<TimeSelection> {
                 child: Text(baseUrl +
                     widget.stationImageUrl.toString().replaceFirst('.', '')),
               ),
+            ),
+            FloatingActionButton(
+              onPressed: () {
+                print(getAllStation());
+              },
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 25),
