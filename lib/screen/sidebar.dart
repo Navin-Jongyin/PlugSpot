@@ -149,29 +149,6 @@ class _SideBarState extends State<SideBar> {
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            child: ListTile(
-              leading: const Icon(
-                Icons.history,
-                color: Palette.yellowTheme,
-                size: 35,
-              ),
-              title: Text(
-                'Provider',
-                style: GoogleFonts.montserrat(
-                    fontSize: 16,
-                    color: Palette.backgroundColor,
-                    fontWeight: FontWeight.w500),
-              ),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const BookingQueue()));
-              },
-            ),
-          ),
-          Container(
             child: ListTile(
               leading: const Icon(
                 Icons.logout,

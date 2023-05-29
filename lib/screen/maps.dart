@@ -1,16 +1,18 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:plugspot/config/palette.dart';
+import 'package:plugspot/data/cookie_storage.dart';
 import 'package:plugspot/screen/timeSelection.dart';
-
 import 'package:plugspot/screen/sidebar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:http/http.dart' as http;
 
 class MapSample extends StatefulWidget {
   const MapSample({Key? key}) : super(key: key);
@@ -23,6 +25,9 @@ class MapSampleState extends State<MapSample> {
   late BuildContext modalContext;
   late Position userLocation;
   late GoogleMapController mapController;
+  Set<Marker> _stationMarkers = {};
+  int? stationId;
+  String? stationName;
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -57,21 +62,95 @@ class MapSampleState extends State<MapSample> {
   @override
   void initState() {
     addCustomIcon();
+    getStation();
     super.initState();
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-//Navigation TODO
-  void _launchGoogleMapsNavigation(double lat, double lng) async {}
-
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
+
   void addCustomIcon() {
     BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(), 'images/marker.png')
-        .then((icon) {
-      setState(() {
-        markerIcon = icon;
-      });
+      const ImageConfiguration(),
+      'images/marker.png',
+    ).then(
+      (icon) {
+        setState(
+          () {
+            markerIcon = icon;
+          },
+        );
+      },
+    );
+  }
+
+  Future<int?> getStation() async {
+    final apiUrl = 'https://plugspot.onrender.com/station/getallstation';
+    final cookie = await CookieStorage.getCookie();
+
+    final response = await http.get(
+      Uri.parse(apiUrl),
+      headers: {'Cookie': cookie ?? ""},
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      for (var item in responseData) {
+        final stationId = item['ID'];
+        final stationImage = item['StationImage'];
+        print(stationId);
+        print(stationImage);
+      }
+
+      _addMarkers(responseData);
+      return stationId;
+    }
+
+    return null;
+  }
+
+  Future<void> _addMarkers(List<dynamic> responseData) async {
+    final markers = Set<Marker>();
+    for (var item in responseData) {
+      final stationId = item['ID'];
+      final latitude = double.parse(
+        item['Latitude'],
+      );
+      final longitude = double.parse(
+        item['Longitude'],
+      );
+      final stationName = item['StationName'];
+      final stationDetail = item['StationDetail'];
+      final providerPhone = item['ProviderPhone'];
+      final stationImageUrl = item['StationImage'];
+
+      markers.add(
+        Marker(
+          markerId: MarkerId(
+            stationId.toString(),
+          ),
+          position: LatLng(latitude, longitude),
+          icon: markerIcon,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TimeSelection(
+                  stationId: stationId,
+                  stationName: stationName,
+                  stationDetail: stationDetail,
+                  providerPhone: providerPhone,
+                  stationImageUrl: stationImageUrl,
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    }
+
+    setState(() {
+      _stationMarkers = markers;
     });
   }
 
@@ -94,166 +173,17 @@ class MapSampleState extends State<MapSample> {
                   myLocationEnabled: true,
                   myLocationButtonEnabled: false,
                   initialCameraPosition: CameraPosition(
-                    target:
-                        LatLng(userLocation.latitude, userLocation.longitude),
+                    target: LatLng(
+                      userLocation.latitude,
+                      userLocation.longitude,
+                    ),
                     zoom: 17.85,
                   ),
-                  markers: {
-                    Marker(
-                      markerId: MarkerId("new_marker"),
-                      position: LatLng(13.726862, 100.76541),
-                      icon: markerIcon,
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Container(
-                              height: 250,
-                              padding: EdgeInsets.all(25),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "College Town, Ladkrabang",
-                                    style: GoogleFonts.montserrat(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(top: 25),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.location_on,
-                                          color: Palette.yellowTheme,
-                                          size: 20,
-                                        ),
-                                        SizedBox(
-                                          width: 15,
-                                        ),
-                                        Text(
-                                          "Location",
-                                          style: GoogleFonts.montserrat(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(top: 25),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.phone_iphone,
-                                          color: Palette.yellowTheme,
-                                          size: 20,
-                                        ),
-                                        SizedBox(
-                                          width: 15,
-                                        ),
-                                        Text(
-                                          "0812345678",
-                                          style: GoogleFonts.montserrat(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(top: 25),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                          width: 170,
-                                          height: 50,
-                                          child: FloatingActionButton(
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pushReplacement(
-                                                PageRouteBuilder(
-                                                  pageBuilder: (context,
-                                                          animation,
-                                                          secondaryAnimation) =>
-                                                      TimeSelection(),
-                                                ),
-                                              );
-                                            },
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: Text(
-                                              "Book Now",
-                                              style: GoogleFonts.montserrat(
-                                                fontSize: 18,
-                                                color: Palette.backgroundColor,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            backgroundColor:
-                                                Palette.yellowTheme,
-                                          ),
-                                        ),
-                                        Container(
-                                          width: 170,
-                                          height: 50,
-                                          child: FloatingActionButton(
-                                            onPressed: () {
-                                              _launchGoogleMapsNavigation(
-                                                  13.726862, 100.76541);
-                                            },
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.navigation_rounded,
-                                                  color: Palette.yellowTheme,
-                                                ),
-                                                Text(
-                                                  "Navigation",
-                                                  style: GoogleFonts.montserrat(
-                                                    fontSize: 18,
-                                                    color: Palette.yellowTheme,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            backgroundColor:
-                                                Palette.backgroundColor,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  },
+                  markers: _stationMarkers,
                 );
               } else {
                 return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      CircularProgressIndicator(),
-                    ],
-                  ),
+                  child: CircularProgressIndicator(),
                 );
               }
             },
@@ -270,9 +200,12 @@ class MapSampleState extends State<MapSample> {
                     mapController.animateCamera(
                       CameraUpdate.newCameraPosition(
                         CameraPosition(
-                            target:
-                                LatLng(position.latitude, position.longitude),
-                            zoom: 17.85),
+                          target: LatLng(
+                            position.latitude,
+                            position.longitude,
+                          ),
+                          zoom: 17.85,
+                        ),
                       ),
                     );
                   },
@@ -294,15 +227,17 @@ class MapSampleState extends State<MapSample> {
               padding: EdgeInsets.all(10),
               height: 60,
               decoration: BoxDecoration(
-                  color: Palette.whiteBackgroundColor,
-                  boxShadow: [
-                    BoxShadow(
-                        offset: Offset(0, 3),
-                        blurRadius: 7,
-                        spreadRadius: 3,
-                        color: Palette.greyColor),
-                  ],
-                  borderRadius: BorderRadius.circular(15)),
+                color: Palette.whiteBackgroundColor,
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 3),
+                    blurRadius: 7,
+                    spreadRadius: 3,
+                    color: Palette.greyColor,
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(15),
+              ),
               child: Row(
                 children: [
                   InkWell(
@@ -323,14 +258,18 @@ class MapSampleState extends State<MapSample> {
                     child: TextField(
                       cursorColor: Palette.yellowTheme,
                       decoration: InputDecoration(
-                          hintText: 'Search',
-                          prefixIcon: Icon(Icons.search),
-                          prefixIconColor: Palette.yellowTheme,
-                          border: InputBorder.none,
-                          hintStyle: GoogleFonts.montserrat(
-                              fontSize: 16, color: Palette.greyColor)),
+                        hintText: 'Search',
+                        prefixIcon: Icon(Icons.search),
+                        prefixIconColor: Palette.yellowTheme,
+                        border: InputBorder.none,
+                        hintStyle: GoogleFonts.montserrat(
+                          fontSize: 16,
+                          color: Palette.greyColor,
+                        ),
+                      ),
                       style: GoogleFonts.montserrat(
-                          color: Palette.backgroundColor),
+                        color: Palette.backgroundColor,
+                      ),
                     ),
                   ),
                 ],

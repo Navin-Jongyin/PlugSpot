@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/provider%20screen/addChrgerDetail.dart';
-import 'package:plugspot/provider%20screen/addChrgerDetail.dart';
+import 'package:plugspot/provider%20screen/myCharger.dart';
 
 class AddCharger extends StatefulWidget {
   const AddCharger({Key? key}) : super(key: key);
@@ -17,6 +17,8 @@ class _AddChargerState extends State<AddCharger> {
   late Position userLocation;
   late GoogleMapController mapController;
   List<Marker> myMarker = [];
+  double? latitude;
+  double? longitude;
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -59,7 +61,7 @@ class _AddChargerState extends State<AddCharger> {
       appBar: AppBar(
         backgroundColor: Palette.yellowTheme,
         title: Text(
-          'Add New Charger',
+          'Select Location',
           style: GoogleFonts.montserrat(
             fontWeight: FontWeight.bold,
             fontSize: 18,
@@ -72,7 +74,12 @@ class _AddChargerState extends State<AddCharger> {
             color: Palette.backgroundColor,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context).pushReplacement(
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    MyCharger(),
+              ),
+            );
           },
         ),
       ),
@@ -148,13 +155,12 @@ class _AddChargerState extends State<AddCharger> {
           ),
           onPressed: () {
             if (myMarker.isNotEmpty) {
-              final tappedPoint = myMarker[0].position;
-
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => ChargerDetail(
-                    latitude: tappedPoint.latitude,
-                    longitude: tappedPoint.longitude,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      ChargerDetail(
+                    latitude: latitude,
+                    longitude: longitude,
                   ),
                 ),
               );
@@ -163,14 +169,32 @@ class _AddChargerState extends State<AddCharger> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('No Marker Set'),
-                    content: Text('Please set a marker on the map.'),
+                    title: Text(
+                      'No Location Selected',
+                      style: GoogleFonts.montserrat(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    content: Text(
+                      'Please set a marker on the map.',
+                      style: GoogleFonts.montserrat(
+                        fontSize: 15,
+                      ),
+                    ),
                     actions: [
-                      TextButton(
+                      ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Palette.yellowTheme)),
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text('OK'),
+                        child: Text(
+                          'OK',
+                          style: GoogleFonts.montserrat(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Palette.backgroundColor),
+                        ),
                       ),
                     ],
                   );
@@ -198,15 +222,12 @@ class _AddChargerState extends State<AddCharger> {
         Marker(
           markerId: MarkerId(tappedPoint.toString()),
           position: tappedPoint,
-          draggable: true,
-          onDragEnd: (dragEndPosition) {
-            print(dragEndPosition);
-          },
         ),
       ];
-
-      // Print the latitude and longitude of the tapped location
-      print(tappedPoint);
+      latitude = tappedPoint.latitude;
+      longitude = tappedPoint.longitude;
+      print(latitude);
+      print(longitude);
     });
   }
 }

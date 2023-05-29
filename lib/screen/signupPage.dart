@@ -106,7 +106,10 @@ class _SignUpPageState extends State<SignUpPage> {
           title: const Text('Success'),
           content: const Text('User created successfully.'),
           actions: [
-            TextButton(
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(Palette.yellowTheme)),
               onPressed: () {
                 Navigator.pop(context);
                 Navigator.of(context).pushReplacement(

@@ -1,16 +1,31 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
-import 'package:plugspot/screen/booking_Confirmation.dart';
+import 'package:plugspot/data/cookie_storage.dart';
+
+import 'package:http/http.dart' as http;
 
 class TimeSelection extends StatefulWidget {
-  const TimeSelection({super.key});
+  final int? stationId;
+  final String? stationName;
+  final String? stationDetail;
+  final String? providerPhone;
+  final String? stationImageUrl;
 
-  @override
+  TimeSelection({
+    this.stationId,
+    this.providerPhone,
+    this.stationDetail,
+    this.stationName,
+    this.stationImageUrl,
+  });
   State<TimeSelection> createState() => _TimeSelectionState();
 }
 
 class _TimeSelectionState extends State<TimeSelection> {
+  String baseUrl = 'https://plugspot.onrender.com';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,10 +55,11 @@ class _TimeSelectionState extends State<TimeSelection> {
           children: [
             Container(
               margin: EdgeInsets.only(bottom: 20),
-              height: 250,
+              height: 200,
               color: Palette.greyColor,
               child: Center(
-                child: Text("For image"),
+                child: Text(baseUrl +
+                    widget.stationImageUrl.toString().replaceFirst('.', '')),
               ),
             ),
             Container(
@@ -52,7 +68,7 @@ class _TimeSelectionState extends State<TimeSelection> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "College Town Ladkrabang",
+                    widget.stationName.toString(),
                     style: GoogleFonts.montserrat(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -68,7 +84,7 @@ class _TimeSelectionState extends State<TimeSelection> {
                           width: 15,
                         ),
                         Text(
-                          "Address",
+                          widget.stationDetail.toString(),
                           style: GoogleFonts.montserrat(
                             fontSize: 16,
                             color: Palette.backgroundColor,
@@ -89,7 +105,7 @@ class _TimeSelectionState extends State<TimeSelection> {
                           width: 15,
                         ),
                         Text(
-                          "0812345678",
+                          widget.providerPhone.toString(),
                           style: GoogleFonts.montserrat(
                             fontSize: 16,
                             color: Palette.backgroundColor,
@@ -123,14 +139,7 @@ class _TimeSelectionState extends State<TimeSelection> {
         height: 80,
         color: Color(0xfff2f2f2),
         child: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).pushReplacement(
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    BookingConfirmation(),
-              ),
-            );
-          },
+          onPressed: () {},
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -175,25 +184,27 @@ class _TimeSelectionState extends State<TimeSelection> {
           final formattedEndTime =
               '${time.hour + 1}:${time.minute.toString().padLeft(2, '0')}';
 
-          return Container(
-            width: double.infinity,
-            height: 50,
-            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-            decoration: BoxDecoration(
+          return GestureDetector(
+            onTap: () {
+              final slotNumber = timeSlots.indexOf(time) + 1;
+              print('Selected Slot: $slotNumber');
+            },
+            child: Container(
+              width: double.infinity,
+              height: 50,
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Palette.yellowTheme)),
-            child: FloatingActionButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              onPressed: () {},
-              backgroundColor: Palette.whiteBackgroundColor,
+                border: Border.all(color: Palette.yellowTheme),
+              ),
               child: Center(
                 child: Text(
                   '$formattedStartTime - $formattedEndTime',
                   style: GoogleFonts.montserrat(
-                      fontSize: 16,
-                      color: Palette.backgroundColor,
-                      fontWeight: FontWeight.w500),
+                    fontSize: 16,
+                    color: Palette.backgroundColor,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
