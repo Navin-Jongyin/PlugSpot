@@ -29,6 +29,7 @@ class TimeSelection extends StatefulWidget {
 class _TimeSelectionState extends State<TimeSelection> {
   String baseUrl = 'https://plugspot.onrender.com';
   List<Map<String, dynamic>> timeSlots = [];
+  TimeOfDay? selectedSlot;
 
   Future<void> getAllStation() async {
     final apiUrl = 'https://plugspot.onrender.com/station/getallstation';
@@ -112,10 +113,12 @@ class _TimeSelectionState extends State<TimeSelection> {
           return GestureDetector(
             onTap: isFree
                 ? () {
-                    final selectedSlot =
-                        '$formattedStartTime - $formattedEndTime';
+                    setState(() {
+                      selectedSlot = time;
+                    });
                     final status = isFree ? 'free' : 'booked';
-                    print('Selected Slot: $selectedSlot');
+                    print(
+                        'Selected Slot: $formattedStartTime - $formattedEndTime');
                     print('Status: $status');
                   }
                 : null,
@@ -125,6 +128,9 @@ class _TimeSelectionState extends State<TimeSelection> {
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
+                color: selectedSlot == time
+                    ? Palette.yellowTheme
+                    : Palette.whiteBackgroundColor,
                 border: Border.all(
                   color: isFree ? Palette.yellowTheme : Colors.grey,
                 ),
@@ -183,11 +189,6 @@ class _TimeSelectionState extends State<TimeSelection> {
                       widget.stationImageUrl.toString().replaceFirst('.', ''),
                 ),
               ),
-            ),
-            FloatingActionButton(
-              onPressed: () {
-                getAllStation();
-              },
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 25),
