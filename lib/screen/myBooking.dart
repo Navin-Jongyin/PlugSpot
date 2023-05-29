@@ -4,49 +4,26 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:http/http.dart' as http;
 import 'package:plugspot/data/cookie_storage.dart';
+import 'package:intl/intl.dart';
+
+import 'maps.dart';
 
 class Contract {
   final int contractId;
   final String stationName;
-  final String customerName;
-  final String providerName;
-  final String date;
-  final int timeSlot;
+  final DateTime date;
+  final String carPlate;
   final String status;
-  final int totalPrice;
-  final String paymentMethod;
+  final int customerId;
 
   Contract({
     required this.contractId,
     required this.stationName,
-    required this.customerName,
-    required this.providerName,
     required this.date,
-    required this.timeSlot,
+    required this.carPlate,
     required this.status,
-    required this.totalPrice,
-    required this.paymentMethod,
+    required this.customerId,
   });
-
-  factory Contract.fromJson(Map<String, dynamic> json) {
-    return Contract(
-      contractId: json['contractId'],
-      stationName: json['stationName'],
-      customerName: json['customerName'],
-      providerName: json['providerName'],
-      date: json['date'],
-      timeSlot: json['timeSlot'],
-      status: json['status'],
-      totalPrice: json['totalPrice'],
-      paymentMethod: json['paymentMethod'],
-    );
-  }
-
-  String get formattedDate {
-    final dateTime = DateTime.parse(date);
-    final formattedDate = '${dateTime.day}-${dateTime.month}-${dateTime.year}';
-    return formattedDate;
-  }
 }
 
 class MyBooking extends StatefulWidget {
@@ -57,21 +34,64 @@ class MyBooking extends StatefulWidget {
 }
 
 class _MyBookingState extends State<MyBooking> {
-  Future<List<Contract>> getContract() async {
-    final apiUrl = 'https://plugspot.onrender.com/contract/getusercontract';
+  List<Contract> contracts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getContract();
+  }
+
+  Future<void> getContract() async {
+    final apiUrl = "https://plugspot.onrender.com/contract/getusercontract";
     final cookie = await CookieStorage.getCookie();
+
     final response = await http.get(
       Uri.parse(apiUrl),
-      headers: {'Cookie': cookie ?? ''},
+      headers: {'Cookie': cookie ?? ""},
     );
+
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
+      setState(() {
+        contracts = List<Contract>.from(
+          responseData.map((item) => Contract(
+                contractId: item['contractId'],
+                stationName: item['stationName'],
+                date: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                    .parse(item['date']),
+                carPlate: item['carPlate'] ?? 'N/A',
+                status: item['status'],
+                customerId: item['customerId'],
+              )),
+        );
+      });
+    }
+  }
+
+  Future<void> deleteContract(int contractId, int customerId) async {
+    final apiUrl = "https://plugspot.onrender.com/contract/deletecontract";
+    final cookie = await CookieStorage.getCookie();
+
+    final data = {
+      'contractId': contractId,
+      'customerId': customerId,
+    };
+
+    final response = await http.delete(
+      Uri.parse(apiUrl),
+      headers: {'Cookie': cookie ?? ""},
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        contracts.removeWhere((contract) => contract.contractId == contractId);
+      });
       print(response.body);
-      final contracts =
-          List<Contract>.from(responseData.map((x) => Contract.fromJson(x)));
-      return contracts;
     } else {
-      throw Exception('Failed to fetch contracts');
+      print(response.statusCode);
+      print(response.body);
     }
   }
 
@@ -80,77 +100,144 @@ class _MyBookingState extends State<MyBooking> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.yellowTheme,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Palette.backgroundColor,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         title: Text(
-          'My Booking',
+          "My Booking",
           style: GoogleFonts.montserrat(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Palette.backgroundColor,
           ),
         ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Palette.backgroundColor,
+          ),
+          onPressed: () {
+            Navigator.of(context).pushReplacement(
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    MapSample(),
+              ),
+            );
+          },
+        ),
       ),
-      body: FutureBuilder<List<Contract>>(
-        future: getContract(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          } else if (snapshot.hasData) {
-            final contracts = snapshot.data!;
-            return ListView.builder(
-              itemCount: contracts.length,
-              itemBuilder: (context, index) {
-                final contract = contracts[index];
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        offset: Offset(0, 2),
-                        blurRadius: 4,
-                      ),
-                    ],
-                  ),
-                  child: ListTile(
-                    title: Text('Station: ${contract.stationName}'),
-                    subtitle: Text('Date: ${contract.formattedDate}'),
-                    trailing: ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.red)),
-                      onPressed: () {
-                        // Perform action on button press
-                      },
-                      child: Text('Cancel'),
+      body: ListView.builder(
+        itemCount: contracts.length,
+        itemBuilder: (context, index) {
+          final contract = contracts[index];
+          final formattedDate = DateFormat.yMd().add_jm().format(contract.date);
+
+          return Container(
+            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  offset: Offset(0, 2),
+                  blurRadius: 4,
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Station: ${contract.stationName}',
+                          style: GoogleFonts.montserrat(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Date: $formattedDate',
+                          style: GoogleFonts.montserrat(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Car Plate: ${contract.carPlate}',
+                          style: GoogleFonts.montserrat(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Status: ${contract.status}',
+                          style: GoogleFonts.montserrat(
+                            color: _getStatusColor(contract.status),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                );
-              },
-            );
-          } else {
-            return Center(
-              child: Text('No contracts found'),
-            );
-          }
+                ),
+                if (contract.status == 'on going')
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: ElevatedButton(
+                      onPressed: null,
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.grey),
+                      ),
+                      child: Text(
+                        'Cancel',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  )
+                else
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        deleteContract(
+                            contract.contractId, contract.customerId);
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.red),
+                      ),
+                      child: Text(
+                        'Cancel',
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          );
         },
       ),
     );
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'in queue':
+        return Colors.orange;
+      case 'on going':
+        return Colors.blue;
+      default:
+        return Colors.black;
+    }
   }
 }
