@@ -100,7 +100,28 @@ class _TimeSelectionState extends State<TimeSelection> {
     setState(() {});
   }
 
-  Future<String?> createContract() async {
+  Future<void> createContract() async {
+    if (selectedCar == null || selectedTime == null) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Please select a car and a time slot.'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
     final apiUrl = 'https://plugspot.onrender.com/contract/createcontract';
     final cookie = await CookieStorage.getCookie();
     var data = {
@@ -145,13 +166,10 @@ class _TimeSelectionState extends State<TimeSelection> {
       );
       timeSlotUpdate();
       updateCarStatus();
-      return responseData[
-          'message']; // Return a success message or relevant data
     } else {
       // Contract creation failed
       print('Request failed with status code: ${response.statusCode}');
       print(response.body);
-      return null; // Return null or an error message
     }
   }
 
@@ -526,8 +544,6 @@ class _TimeSelectionState extends State<TimeSelection> {
         child: FloatingActionButton(
           onPressed: () {
             createContract();
-            timeSlotUpdate();
-            updateCarStatus();
           },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
