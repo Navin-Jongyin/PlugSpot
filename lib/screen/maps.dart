@@ -84,7 +84,7 @@ class MapSampleState extends State<MapSample> {
     );
   }
 
-  Future<int?> getStation() async {
+  Future<void> getStation() async {
     final apiUrl = 'https://plugspot.onrender.com/station/getallstation';
     final cookie = await CookieStorage.getCookie();
 
@@ -95,59 +95,46 @@ class MapSampleState extends State<MapSample> {
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
-      for (var item in responseData) {
-        final stationId = item['ID'];
-        final stationImage = item['StationImage'];
-        print(stationId);
-        print(stationImage);
-      }
+      List<dynamic> stations = responseData as List<dynamic>;
 
-      _addMarkers(responseData);
-      return stationId;
+      _addMarkers(stations);
+    } else {
+      print('Request failed with status code: ${response.statusCode}');
     }
-
-    return null;
   }
 
-  Future<void> _addMarkers(List<dynamic> responseData) async {
-    final markers = Set<Marker>();
-    for (var item in responseData) {
-      final stationId = item['ID'];
-      final latitude = double.parse(
-        item['Latitude'],
-      );
-      final longitude = double.parse(
-        item['Longitude'],
-      );
-      final stationName = item['StationName'];
-      final stationDetail = item['StationDetail'];
-      final providerPhone = item['ProviderPhone'];
-      final stationImageUrl = item['StationImage'];
+  Future<void> _addMarkers(List<dynamic> stations) async {
+    final markers = stations.map((station) {
+      final stationId = station['ID'];
+      final latitude = double.parse(station['Latitude']);
+      final longitude = double.parse(station['Longitude']);
+      final stationName = station['StationName'];
+      final stationDetail = station['StationDetail'];
+      final providerPhone = station['ProviderPhone'];
+      final stationImageUrl = station['StationImage'];
+      final userId = station['UserId'];
 
-      markers.add(
-        Marker(
-          markerId: MarkerId(
-            stationId.toString(),
-          ),
-          position: LatLng(latitude, longitude),
-          icon: markerIcon,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => TimeSelection(
-                  stationId: stationId,
-                  stationName: stationName,
-                  stationDetail: stationDetail,
-                  providerPhone: providerPhone,
-                  stationImageUrl: stationImageUrl,
-                ),
+      return Marker(
+        markerId: MarkerId(stationId.toString()),
+        position: LatLng(latitude, longitude),
+        icon: markerIcon,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TimeSelection(
+                stationId: stationId,
+                stationName: stationName,
+                stationDetail: stationDetail,
+                providerPhone: providerPhone,
+                stationImageUrl: stationImageUrl,
+                providerId: userId,
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       );
-    }
+    }).toSet();
 
     setState(() {
       _stationMarkers = markers;
