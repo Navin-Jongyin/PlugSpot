@@ -148,6 +148,16 @@ class MapSampleState extends State<MapSample> {
       key: _scaffoldKey,
       extendBodyBehindAppBar: true,
       drawer: SideBar(),
+      appBar: AppBar(
+        title: Text(
+          "Maps",
+          style: GoogleFonts.montserrat(
+              fontSize: 18,
+              color: Palette.backgroundColor,
+              fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Palette.yellowTheme,
+      ),
       body: Stack(
         children: [
           FutureBuilder(
@@ -206,61 +216,6 @@ class MapSampleState extends State<MapSample> {
                   height: 15,
                 ),
               ],
-            ),
-          ),
-          SafeArea(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-              padding: EdgeInsets.all(10),
-              height: 60,
-              decoration: BoxDecoration(
-                color: Palette.whiteBackgroundColor,
-                boxShadow: [
-                  BoxShadow(
-                    offset: Offset(0, 3),
-                    blurRadius: 7,
-                    spreadRadius: 3,
-                    color: Palette.greyColor,
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      _scaffoldKey.currentState!.openDrawer();
-                    },
-                    child: Icon(
-                      Icons.menu,
-                      size: 30,
-                      color: Palette.yellowTheme,
-                    ),
-                  ),
-                  VerticalDivider(
-                    color: Palette.greyColor,
-                    thickness: 1.5,
-                  ),
-                  Expanded(
-                    child: TextField(
-                      cursorColor: Palette.yellowTheme,
-                      decoration: InputDecoration(
-                        hintText: 'Search',
-                        prefixIcon: Icon(Icons.search),
-                        prefixIconColor: Palette.yellowTheme,
-                        border: InputBorder.none,
-                        hintStyle: GoogleFonts.montserrat(
-                          fontSize: 16,
-                          color: Palette.greyColor,
-                        ),
-                      ),
-                      style: GoogleFonts.montserrat(
-                        color: Palette.backgroundColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ),
           ),
         ],

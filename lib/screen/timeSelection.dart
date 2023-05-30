@@ -435,9 +435,10 @@ class _TimeSelectionState extends State<TimeSelection> {
               height: 200,
               color: Palette.greyColor,
               child: Center(
-                child: Text(
+                child: Image.network(
                   baseUrl +
                       widget.stationImageUrl.toString().replaceFirst('.', ''),
+                  fit: BoxFit.fitWidth,
                 ),
               ),
             ),
@@ -462,13 +463,15 @@ class _TimeSelectionState extends State<TimeSelection> {
                         SizedBox(
                           width: 15,
                         ),
-                        Text(
-                          widget.stationDetail.toString(),
-                          style: GoogleFonts.montserrat(
-                            fontSize: 16,
-                            color: Palette.backgroundColor,
+                        Expanded(
+                          child: Text(
+                            widget.stationDetail.toString(),
+                            style: GoogleFonts.montserrat(
+                              fontSize: 16,
+                              color: Palette.backgroundColor,
+                            ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),

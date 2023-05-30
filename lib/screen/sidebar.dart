@@ -55,6 +55,7 @@ class _SideBarState extends State<SideBar> {
       } else {
         print(response.statusCode);
         print(response.body);
+        print(imageUrl);
       }
     });
   }
