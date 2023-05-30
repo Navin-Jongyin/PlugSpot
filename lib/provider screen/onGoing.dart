@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/provider%20screen/bookingQueue.dart';
+import 'package:plugspot/provider%20screen/end_charging.dart';
 
 import '../data/cookie_storage.dart';
 import 'package:http/http.dart' as http;
@@ -73,27 +74,42 @@ class _OnGoingState extends State<OnGoing> {
         itemCount: contracts.length,
         itemBuilder: (context, index) {
           final contract = contracts[index];
-          final contractId = contract['contractId'];
+          final contractId = contract['contractId'].toString();
           final customerName = contract['customerName'];
-          final bookingDate = contract['date'];
+          final bookingDate = DateTime.parse(contract['date']);
           final contractStatus = contract['status'];
 
-          return Container(
-            margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            padding: EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: ListTile(
-              title: Text('Contract ID: $contractId'),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Customer Name: $customerName'),
-                  Text('Booking Date: $bookingDate'),
-                  Text('Contract Status: $contractStatus'),
-                ],
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EndCharging(
+                    contractId: contractId,
+                    customerName: customerName,
+                    bookingDate: bookingDate,
+                    contractStatus: contractStatus,
+                  ),
+                ),
+              );
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: ListTile(
+                title: Text('Contract ID: $contractId'),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Customer Name: $customerName'),
+                    Text('Booking Date: $bookingDate'),
+                    Text('Contract Status: $contractStatus'),
+                  ],
+                ),
               ),
             ),
           );

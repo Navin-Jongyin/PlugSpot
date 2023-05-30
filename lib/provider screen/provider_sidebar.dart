@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/data/cookie_storage.dart';
 import 'package:plugspot/provider%20screen/myCharger.dart';
 import 'package:plugspot/provider%20screen/onGoing.dart';
-import 'package:plugspot/provider%20screen/service.dart';
+
 import 'package:plugspot/screen/LoginPage.dart';
 import '../config/palette.dart';
 import '../screen/user_profile.dart';

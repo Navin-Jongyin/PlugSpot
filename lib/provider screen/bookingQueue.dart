@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:plugspot/data/cookie_storage.dart';
 import 'package:plugspot/provider%20screen/provider_sidebar.dart';
-import 'package:plugspot/provider%20screen/service.dart';
+
 import 'package:plugspot/provider%20screen/startCharging.dart';
 // import 'package:plugspot/provider%20screen/startCharging.dart';
 import '../config/palette.dart';
