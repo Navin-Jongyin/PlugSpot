@@ -217,13 +217,15 @@ class _UserProfileState extends State<UserProfile> {
                                 ),
                                 child: ClipOval(
                                   child: endpointUrl != null
-                                      ? Image.network(
-                                          endpointUrl!,
+                                      ? FadeInImage.assetNetwork(
+                                          placeholder: 'images/avatarimage.png',
+                                          image: endpointUrl!,
                                           fit: BoxFit.cover,
                                         )
-                                      : Image(
-                                          image: AssetImage(
-                                              "images/avatarimage.png")), // Placeholder image or loading indicator while the image is being fetched
+                                      : Image.asset(
+                                          'images/avatarimage.png',
+                                          fit: BoxFit.cover,
+                                        ),
                                 ),
                               ),
                               Text(

@@ -148,7 +148,35 @@ class _EditProfileState extends State<EditProfile> {
         print('Profile updated successfully');
         print(responseData);
 
-        // Perform any additional actions or navigate to another screen
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Profile Updated'),
+              content: Text('Your profile has been updated successfully.'),
+              actions: [
+                ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Palette.yellowTheme)),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            UserProfile(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'OK',
+                    style: GoogleFonts.montserrat(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
       } else {
         print('Failed to update profile. Error: ${response.statusCode}');
         print(responseData);
