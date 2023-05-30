@@ -1,9 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:plugspot/config/palette.dart';
-import 'package:plugspot/data/cookie_storage.dart';
 import 'package:plugspot/provider%20screen/bookingQueue.dart';
 import 'package:plugspot/provider%20screen/end_charging.dart';
 
@@ -13,6 +10,7 @@ class Contract {
   final DateTime bookingDate;
   final String carPlate;
   final String status;
+  final int timeSlot;
 
   Contract({
     required this.contractId,
@@ -20,6 +18,7 @@ class Contract {
     required this.bookingDate,
     required this.carPlate,
     required this.status,
+    required this.timeSlot,
   });
 }
 
@@ -36,36 +35,55 @@ class _OnGoingServiceState extends State<OnGoingService> {
   @override
   void initState() {
     super.initState();
-    getContract();
+    getContracts();
   }
 
-  Future<void> getContract() async {
-    final apiUrl = 'https://plugspot.onrender.com/contract/getusercontract';
-    final cookie = await CookieStorage.getCookie();
-    final response = await http.get(
-      Uri.parse(apiUrl),
-      headers: {'Cookie': cookie ?? ""},
-    );
+  Future<void> getContracts() async {
+    // Simulated data fetch
+    await Future.delayed(Duration(seconds: 2));
 
-    if (response.statusCode == 200) {
-      final List<dynamic> responseData = json.decode(response.body);
+    setState(() {
+      contracts = [
+        Contract(
+          contractId: 1,
+          customerName: 'John Doe',
+          bookingDate: DateTime.now(),
+          carPlate: 'ABC123',
+          status: 'On Going',
+          timeSlot: 1,
+        ),
+        Contract(
+          contractId: 2,
+          customerName: 'Jane Smith',
+          bookingDate: DateTime.now(),
+          carPlate: 'DEF456',
+          status: 'On Going',
+          timeSlot: 2,
+        ),
+        Contract(
+          contractId: 3,
+          customerName: 'Robert Johnson',
+          bookingDate: DateTime.now(),
+          carPlate: 'GHI789',
+          status: 'On Going',
+          timeSlot: 3,
+        ),
+      ];
+    });
+  }
 
-      setState(() {
-        contracts = responseData
-            .map((item) => Contract(
-                  contractId: item['contractId'],
-                  customerName: item['customerName'],
-                  bookingDate:
-                      DateTime.tryParse(item['date']) ?? DateTime.now(),
-                  carPlate: item['carPlate'],
-                  status: item['status'].toLowerCase(),
-                ))
-            .where((contract) =>
-                contract.status ==
-                'on going') // Filter contracts with status 'on going'
-            .toList();
-      });
+  String getTimeRange(int timeSlot) {
+    if (timeSlot < 1 || timeSlot > 12) {
+      return "Invalid Time Slot";
     }
+
+    int startHour = 7 + timeSlot;
+    int endHour = 8 + timeSlot;
+
+    String startTime = startHour.toString().padLeft(2, '0') + ":00";
+    String endTime = endHour.toString().padLeft(2, '0') + ":00";
+
+    return "$startTime - $endTime";
   }
 
   @override
@@ -80,9 +98,8 @@ class _OnGoingServiceState extends State<OnGoingService> {
           ),
           onPressed: () {
             Navigator.of(context).pushReplacement(
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    BookingQueue(),
+              MaterialPageRoute(
+                builder: (context) => BookingQueue(),
               ),
             );
           },
@@ -107,9 +124,8 @@ class _OnGoingServiceState extends State<OnGoingService> {
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).pushReplacement(
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          EndCharging(contract: contract),
+                    MaterialPageRoute(
+                      builder: (context) => EndCharging(contract: contract),
                     ),
                   );
                 },
@@ -152,6 +168,14 @@ class _OnGoingServiceState extends State<OnGoingService> {
                             SizedBox(height: 5),
                             Text(
                               'Booking Date: ${contract.bookingDate.toString().substring(0, 10)}',
+                              style: GoogleFonts.montserrat(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              'Time: ${getTimeRange(contract.timeSlot)}',
                               style: GoogleFonts.montserrat(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
