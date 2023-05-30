@@ -276,13 +276,22 @@ class _MyBookingState extends State<MyBooking> {
                           ),
                         ),
                         SizedBox(height: 4),
-                        Text(
-                          'Status: ${contract.status}',
-                          style: GoogleFonts.montserrat(
-                            color: _getStatusColor(contract.status),
-                            fontWeight: FontWeight.bold,
+                        if (contract.status == 'in queue')
+                          Text(
+                            'Status: ${contract.status}',
+                            style: GoogleFonts.montserrat(
+                              color: Colors.orange,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        else if (contract.status == 'on going')
+                          Text(
+                            'Status: ${contract.status}',
+                            style: GoogleFonts.montserrat(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
                       ],
                     ),
                   ),
@@ -298,8 +307,8 @@ class _MyBookingState extends State<MyBooking> {
                       child: Text(
                         'Cancel',
                         style: GoogleFonts.montserrat(
-                          fontSize: 14,
                           fontWeight: FontWeight.bold,
+                          fontSize: 14,
                         ),
                       ),
                     ),
@@ -330,16 +339,5 @@ class _MyBookingState extends State<MyBooking> {
         },
       ),
     );
-  }
-
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'in queue':
-        return Colors.orange;
-      case 'on going':
-        return Colors.blue;
-      default:
-        return Colors.black;
-    }
   }
 }

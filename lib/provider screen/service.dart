@@ -1,11 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:plugspot/config/palette.dart';
 import 'package:plugspot/data/cookie_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:plugspot/provider%20screen/bookingQueue.dart';
+import 'package:plugspot/provider%20screen/end_charging.dart';
 
 class Contract {
   final int contractId;
@@ -97,72 +97,89 @@ class _OnGoingServiceState extends State<OnGoingService> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 16.0), // Add top padding
-        child: ListView.builder(
-          itemCount: contracts.length,
-          itemBuilder: (context, index) {
-            final contract = contracts[index];
+        padding: const EdgeInsets.only(top: 16.0),
+        child: GestureDetector(
+          child: ListView.builder(
+            itemCount: contracts.length,
+            itemBuilder: (context, index) {
+              final contract = contracts[index];
 
-            return Container(
-              margin: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-              padding: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.4),
-                    offset: Offset(0, 2),
-                    blurRadius: 4,
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushReplacement(
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          EndCharging(contract: contract),
+                    ),
+                  );
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                  padding: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.4),
+                        offset: Offset(0, 2),
+                        blurRadius: 4,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${contract.customerName}',
-                          style: GoogleFonts.montserrat(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                          ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${contract.customerName}',
+                              style: GoogleFonts.montserrat(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              'Car Plate: ${contract.carPlate}',
+                              style: GoogleFonts.montserrat(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              'Booking Date: ${contract.bookingDate.toString().substring(0, 10)}',
+                              style: GoogleFonts.montserrat(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 5),
-                        Text(
-                          'Car Plate: ${contract.carPlate}',
+                      ),
+                      Container(
+                        child: Text(
+                          '${contract.status.toUpperCase()}',
                           style: GoogleFonts.montserrat(
                             fontSize: 14,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.bold,
+                            color: (contract.status == 'in queue')
+                                ? Colors.orange
+                                : (contract.status == 'on going')
+                                    ? Colors.blue
+                                    : Colors.black,
                           ),
                         ),
-                        SizedBox(height: 5),
-                        Text(
-                          'Booking Date: ${contract.bookingDate.toString().substring(0, 10)}',
-                          style: GoogleFonts.montserrat(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Container(
-                    child: Text(
-                      '${contract.status.toUpperCase()}',
-                      style: GoogleFonts.montserrat(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue[500]),
-                    ),
-                  )
-                ],
-              ),
-            );
-          },
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

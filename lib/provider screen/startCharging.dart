@@ -18,14 +18,14 @@ class StartCharging extends StatefulWidget {
 }
 
 class _StartChargingState extends State<StartCharging> {
-  int? provierId;
+  int? providerId;
 
   Future<void> updateContract() async {
     final apiUrl = 'https://plugspot.onrender.com/contract/update';
     final cookie = await CookieStorage.getCookie();
 
     var data = {
-      'providerId': provierId,
+      'providerId': providerId,
       'contractId': widget.contract.contractId,
       'status': "on Going",
     };
@@ -53,7 +53,7 @@ class _StartChargingState extends State<StartCharging> {
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         final id = responseData['message']['ID'];
-        provierId = id;
+        providerId = id;
       }
     });
   }

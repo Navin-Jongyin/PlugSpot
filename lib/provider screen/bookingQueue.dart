@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:plugspot/data/cookie_storage.dart';
 import 'package:plugspot/provider%20screen/provider_sidebar.dart';
+import 'package:plugspot/provider%20screen/service.dart';
 import 'package:plugspot/provider%20screen/startCharging.dart';
 // import 'package:plugspot/provider%20screen/startCharging.dart';
 import '../config/palette.dart';
@@ -53,41 +54,39 @@ class _BookingQueueState extends State<BookingQueue> {
       headers: {'Cookie': cookie ?? ""},
     );
 
-    setState(() {
-      if (response.statusCode == 200) {
-        final List<dynamic> responseData = json.decode(response.body);
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = json.decode(response.body);
 
-        setState(() {
-          contracts = responseData
-              .map((item) => Contract(
-                    customerName: item['customerName'],
-                    stationName: item['stationName'],
-                    timeSlot: item['timeSlot'],
-                    carPlate: item['carPlate'],
-                    contractId: item['contractId'],
-                    bookingDate:
-                        DateTime.tryParse(item['date']) ?? DateTime.now(),
-                    status: item['status'],
-                  ))
-              .toList();
-        });
+      setState(() {
+        contracts = responseData
+            .map((item) => Contract(
+                  customerName: item['customerName'],
+                  stationName: item['stationName'],
+                  timeSlot: item['timeSlot'],
+                  carPlate: item['carPlate'],
+                  contractId: item['contractId'],
+                  bookingDate:
+                      DateTime.tryParse(item['date']) ?? DateTime.now(),
+                  status: item['status'],
+                ))
+            .toList();
+      });
 
-        // Print the fetched data
-        contracts.forEach((contract) {
-          print('Customer Name: ${contract.customerName}');
-          print('Station Name: ${contract.stationName}');
-          print('Time Slot: ${contract.timeSlot}');
-          print('Booking Date: ${contract.bookingDate}');
-          print('Car Plate: ${contract.carPlate}');
-          print('Status: ${contract.status}');
-          print('Time Range: ${getTimeRange(contract.timeSlot)}');
-          print('-----------------------------------');
-        });
-      } else {
-        print(response.statusCode);
-        print(response.body);
-      }
-    });
+      // Print the fetched data
+      contracts.forEach((contract) {
+        print('Customer Name: ${contract.customerName}');
+        print('Station Name: ${contract.stationName}');
+        print('Time Slot: ${contract.timeSlot}');
+        print('Booking Date: ${contract.bookingDate}');
+        print('Car Plate: ${contract.carPlate}');
+        print('Status: ${contract.status}');
+        print('Time Range: ${getTimeRange(contract.timeSlot)}');
+        print('-----------------------------------');
+      });
+    } else {
+      print(response.statusCode);
+      print(response.body);
+    }
   }
 
   String getTimeRange(int timeSlot) {
@@ -102,16 +101,6 @@ class _BookingQueueState extends State<BookingQueue> {
     String endTime = endHour.toString().padLeft(2, '0') + ":00";
 
     return "$startTime - $endTime";
-  }
-
-  void navigateToStartCharging(Contract contract) {
-    Navigator.of(context).pushReplacement(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => StartCharging(
-          contract: contract,
-        ),
-      ),
-    );
   }
 
   @override
@@ -151,7 +140,14 @@ class _BookingQueueState extends State<BookingQueue> {
             if (contract.status == 'in queue') {
               return GestureDetector(
                 onTap: () {
-                  navigateToStartCharging(contract);
+                  Navigator.of(context).pushReplacement(
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          StartCharging(
+                        contract: contract,
+                      ),
+                    ),
+                  );
                 },
                 child: Container(
                   margin: EdgeInsets.symmetric(vertical: 15, horizontal: 25),
