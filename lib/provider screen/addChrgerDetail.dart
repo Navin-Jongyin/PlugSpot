@@ -155,139 +155,141 @@ class _ChargerDetailState extends State<ChargerDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Palette.backgroundColor,
-          ),
-          onPressed: () {
-            Navigator.of(context).pushReplacement(
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    AddCharger(),
-              ),
-            );
-          },
-        ),
-        backgroundColor: Palette.yellowTheme,
-        title: Text(
-          "Charger Details",
-          style: GoogleFonts.montserrat(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Palette.backgroundColor,
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.fromLTRB(25, 35, 10, 25),
-            child: TextFormField(
-              controller: locationNameController,
-              keyboardType: TextInputType.text,
-              cursorColor: Palette.yellowTheme,
-              decoration: InputDecoration(
-                labelText: "Location Name",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                labelStyle: GoogleFonts.montserrat(
-                  fontSize: 20,
-                  color: Palette.backgroundColor,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Palette.backgroundColor),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Palette.backgroundColor),
-                ),
-              ),
+    return SingleChildScrollView(
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Palette.backgroundColor,
             ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(25, 10, 10, 25),
-            child: TextFormField(
-              controller: addressController,
-              keyboardType: TextInputType.text,
-              cursorColor: Palette.yellowTheme,
-              decoration: InputDecoration(
-                labelText: "Address Details",
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                labelStyle: GoogleFonts.montserrat(
-                  fontSize: 20,
-                  color: Palette.backgroundColor,
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      AddCharger(),
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Palette.backgroundColor),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Palette.backgroundColor),
-                ),
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(
-              vertical: 10,
-              horizontal: 25,
-            ),
-            width: 1000,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Add Location Image",
-                  style: GoogleFonts.montserrat(
-                      fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 15),
-                  height: 250,
-                  width: 400,
-                  color: Palette.greyColor,
-                  child: InkWell(
-                    onTap: _selectImage,
-                    child: _selectedImage != null
-                        ? Image.file(
-                            _selectedImage!,
-                            fit: BoxFit.cover,
-                          )
-                        : Icon(
-                            Icons.add_photo_alternate,
-                            size: 50,
-                            color: Colors.white,
-                          ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(vertical: 25, horizontal: 30),
-        height: 100,
-        width: 500,
-        child: FloatingActionButton(
-          onPressed: () {
-            addCharger();
-            print(widget.latitude);
-          },
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+              );
+            },
           ),
           backgroundColor: Palette.yellowTheme,
-          child: Text(
-            "Add Charger",
+          title: Text(
+            "Charger Details",
             style: GoogleFonts.montserrat(
-                fontSize: 16,
-                color: Palette.backgroundColor,
-                fontWeight: FontWeight.w600),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Palette.backgroundColor,
+            ),
+          ),
+        ),
+        body: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.fromLTRB(25, 35, 10, 25),
+              child: TextFormField(
+                controller: locationNameController,
+                keyboardType: TextInputType.text,
+                cursorColor: Palette.yellowTheme,
+                decoration: InputDecoration(
+                  labelText: "Location Name",
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  labelStyle: GoogleFonts.montserrat(
+                    fontSize: 20,
+                    color: Palette.backgroundColor,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.backgroundColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.backgroundColor),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(25, 10, 10, 25),
+              child: TextFormField(
+                controller: addressController,
+                keyboardType: TextInputType.text,
+                cursorColor: Palette.yellowTheme,
+                decoration: InputDecoration(
+                  labelText: "Address Details",
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  labelStyle: GoogleFonts.montserrat(
+                    fontSize: 20,
+                    color: Palette.backgroundColor,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.backgroundColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Palette.backgroundColor),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(
+                vertical: 10,
+                horizontal: 25,
+              ),
+              width: 1000,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Add Location Image",
+                    style: GoogleFonts.montserrat(
+                        fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 15),
+                    height: 250,
+                    width: 400,
+                    color: Palette.greyColor,
+                    child: InkWell(
+                      onTap: _selectImage,
+                      child: _selectedImage != null
+                          ? Image.file(
+                              _selectedImage!,
+                              fit: BoxFit.cover,
+                            )
+                          : Icon(
+                              Icons.add_photo_alternate,
+                              size: 50,
+                              color: Colors.white,
+                            ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.symmetric(vertical: 25, horizontal: 30),
+          height: 100,
+          width: 500,
+          child: FloatingActionButton(
+            onPressed: () {
+              addCharger();
+              print(widget.latitude);
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            backgroundColor: Palette.yellowTheme,
+            child: Text(
+              "Add Charger",
+              style: GoogleFonts.montserrat(
+                  fontSize: 16,
+                  color: Palette.backgroundColor,
+                  fontWeight: FontWeight.w600),
+            ),
           ),
         ),
       ),
