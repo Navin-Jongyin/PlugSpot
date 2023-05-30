@@ -18,6 +18,7 @@ class Contract {
   final int providerId;
   final int timeSlot;
   final int stationId;
+  final int carId;
 
   Contract({
     required this.contractId,
@@ -29,6 +30,7 @@ class Contract {
     required this.providerId,
     required this.timeSlot,
     required this.stationId,
+    required this.carId,
   });
 }
 
@@ -72,13 +74,34 @@ class _MyBookingState extends State<MyBooking> {
                 providerId: item['providerId'],
                 timeSlot: item['timeSlot'],
                 stationId: item['stationId'],
+                carId: item['carId'],
               )),
         );
       });
     }
   }
 
-  Future<void> deleteContract(int contractId, int customerId) async {
+  Future<void> updateCarStatus(int customerId, int carId) async {
+    final apiUrl = "https://plugspot.onrender.com/car/update";
+    final cookie = await CookieStorage.getCookie();
+    var data = {'userId': customerId, 'carId': carId, 'carStatus': "free"};
+
+    final response = await http.patch(
+      Uri.parse(apiUrl),
+      headers: {'Cookie': cookie ?? ""},
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+      print('Car status updated');
+    } else {
+      print('Failed to update car status');
+      print(response.body);
+      print(carId);
+    }
+  }
+
+  Future<void> deleteContract(int contractId, int customerId, int carId) async {
     final apiUrl = "https://plugspot.onrender.com/contract/deletecontract";
     final cookie = await CookieStorage.getCookie();
 
@@ -98,6 +121,9 @@ class _MyBookingState extends State<MyBooking> {
         contracts.removeWhere((contract) => contract.contractId == contractId);
       });
       print(response.body);
+
+      // Call updateCarStatus after successful deletion
+      updateCarStatus(customerId, carId);
     } else {
       print(response.statusCode);
       print(response.body);
@@ -158,9 +184,8 @@ class _MyBookingState extends State<MyBooking> {
                 Navigator.of(context).pop();
                 if (contracts.isNotEmpty) {
                   final contract = contracts.firstWhere(
-                    (contract) => contract.contractId == contractId,
-                  );
-                  await deleteContract(contractId, customerId);
+                      (contract) => contract.contractId == contractId);
+                  await deleteContract(contractId, customerId, contract.carId);
                   updateTimeSlot(contract);
                 } else {
                   // Handle the case when contracts list is empty

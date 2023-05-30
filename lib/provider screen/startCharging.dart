@@ -217,6 +217,12 @@ class _StartChargingState extends State<StartCharging> {
         child: FloatingActionButton(
           onPressed: () {
             updateContract();
+            Navigator.of(context).pushReplacement(
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    BookingQueue(),
+              ),
+            );
           },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),

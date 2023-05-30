@@ -34,6 +34,12 @@ class _AddCarState extends State<AddCar> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
   Future<void> fetchData() async {
     final url = 'https://plugspot.onrender.com/userAccount/currentuser';
     try {
@@ -364,13 +370,6 @@ class _AddCarState extends State<AddCar> {
         width: 400,
         child: FloatingActionButton(
           onPressed: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => MyCar(),
-            //   ),
-            // );
-            fetchData();
             addCar();
           },
           shape: RoundedRectangleBorder(
