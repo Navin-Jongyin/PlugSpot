@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plugspot/data/cookie_storage.dart';
 import 'package:plugspot/provider%20screen/myCharger.dart';
+import 'package:plugspot/provider%20screen/onGoing.dart';
 import 'package:plugspot/provider%20screen/service.dart';
 import 'package:plugspot/screen/LoginPage.dart';
 import '../config/palette.dart';
@@ -139,30 +140,12 @@ class _ProviderSidebarState extends State<ProviderSidebar> {
             margin: EdgeInsets.only(bottom: 10),
             child: ListTile(
               leading: Icon(
-                Icons.notifications,
-                color: Palette.yellowTheme,
-                size: 35,
-              ),
-              title: Text(
-                'Notification',
-                style: GoogleFonts.montserrat(
-                    fontSize: 16,
-                    color: Palette.backgroundColor,
-                    fontWeight: FontWeight.w500),
-              ),
-              // onTap: () => null,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: ListTile(
-              leading: Icon(
                 Icons.electrical_services,
                 color: Palette.yellowTheme,
                 size: 35,
               ),
               title: Text(
-                'Services',
+                'On Going Service',
                 style: GoogleFonts.montserrat(
                     fontSize: 16,
                     color: Palette.backgroundColor,
@@ -172,7 +155,7 @@ class _ProviderSidebarState extends State<ProviderSidebar> {
                 Navigator.of(context).pushReplacement(
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        OnGoingService(),
+                        OnGoing(),
                   ),
                 );
               },

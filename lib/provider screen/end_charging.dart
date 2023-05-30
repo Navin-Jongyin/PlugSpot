@@ -81,8 +81,12 @@ class _EndChargingState extends State<EndCharging> {
         headers: {'Cookie': cookie ?? ''}, body: jsonEncode(data));
     if (response.statusCode == 200) {
       print(response.body);
+      updateTimeSlot();
+      updateCarStatus();
     } else {
       print(response.body);
+      updateTimeSlot();
+      updateCarStatus();
     }
   }
 
